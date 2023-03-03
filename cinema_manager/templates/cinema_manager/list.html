@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Cinema Manager</title>
+{% endblock title %}
+
+{% block content %}
+    <h1 style="text-align: center; padding-top: 1em; padding-bottom: 1em;">Cinema Manager</h1>
+
+    <!-- Search section  -->
+    <div class="center-form" style="display: flex; justify-content: center;">
+        <form action="{% url 'clubs-list' %}" method="GET" style="width: 500px;">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Search by club or representative name" aria-label="" aria-describedby="basic-addon1" style="margin-right: 10px;"
+              name="search_query" value="{{ search_query }}"/>
+    
+              <input class="btn btn-success" type="submit" value="Search"/>
+            </div>
+        </form>
+    </div>
+    <br>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Image</th>
+                <th scope="col">Club Name</th>
+                <th scope="col">Address No.</th>
+                <th scope="col">Address Street</th>
+                <th scope="col">Address City</th>
+                <th scope="col">Address Postcode</th>
+                <th scope="col">Telephone No.</th>
+                <th scope="col">Phone No.</th>
+                <th scope="col">Email</th>
+                <th scope="col">Rep First Name</th>
+                <th scope="col">Rep Last Name</th>
+                <th scope="col">Rep DOB</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for club in clubs %}
+                <tr>
+                    <th scope="row">
+                        <img style="height: 100px; width: auto;" src="{{ club.imageURL }}" class="card-img-top" alt="...">
+                    </th>
+                    <th scope="row">{{ club.club_name }}</th>
+                    <td>{{ club.club_address_number }}</td>
+                    <td>{{ club.club_address_street }}</td>
+                    <td>{{ club.club_address_city }}</td>
+                    <td>{{ club.club_address_postcode }}</td>
+                    <td>{{ club.club_tphone }}</td>
+                    <td>{{ club.club_phone }}</td>
+                    <td>{{ club.club_email }}</td>
+                    <td>{{ club.rep_first_name }}</td>
+                    <td>{{ club.rep_last_name }}</td>
+                    <td>{{ club.rep_dob }}</td>
+                    <td>
+                        <a style="margin-right: 30px;" href="{% url 'edit-club' club.id %}">Edit</a>
+                        <a href="{% url 'delete-club' club.id %}">Remove</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-center">
+        <a href="{% url 'create-club' %}"><button type="button" class="btn btn-primary">Add New Info</button></a>
+    </div>
+{% endblock content %}
