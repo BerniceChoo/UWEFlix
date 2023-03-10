@@ -1,11 +1,10 @@
-How to run?
+## Files are inside main folder
 
-go inside folder
-[docker build -t main .]
-[docker run -p 8000:8000 main]
+## How to run?
+0) go inside folder
+1) [docker build -t main .]
+2) [docker run -p 8000:8000 main]  
 
-
-if theres any problems, use
-
-[python manage.py makemigrations]
-[python manage.py migrate  ]
+## if theres any problems, use 
+1) [python manage.py makemigrations]
+2) [python manage.py migrate  ]    
