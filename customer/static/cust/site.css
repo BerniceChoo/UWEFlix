@@ -1,0 +1,37 @@
+.message {
+    font-weight: 600;
+    color: rgb(83, 144, 229);
+}
+
+.navbar {
+    background-color: rgb(248, 12, 12);
+    font-size: 1em;
+    font-family: 'Times New Roman', Tahoma, Verdana, sans-serif;
+    color: white;
+    padding: 6px 6px 6px 6px;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.navbar-item {
+    margin-left: 40px;
+    
+}
+
+.navbar-item:hover {
+    color: rgb(211, 194, 194);
+}
+
+.body-content {
+    padding: 5px;
+    font-family:'Times New Roman', Tahoma, Verdana, sans-serif;
+}
+
+
+.account_list th,td {
+    text-align: left;
+    padding-right: 15px;
+}

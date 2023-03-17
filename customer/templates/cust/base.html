@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>{% block title %}{% endblock %}</title>
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'cust/site.css' %}"/>
+    </head>
+
+    <body>
+        <h1 style="font-size:10vw"><center>UWEFlix</center></h1>
+        <div class="navbar">
+            <a href="{% url 'selectDate' %}" class="navbar-item" style="font-family:'Times New Roman', sans-serif;">Purchase Advance Tickets</a>
+        </div>
+
+        <div class="body-content">
+            {% block content %}
+            {% endblock %}
+            <br/>
+            <footer>
+            <div class="navbar">
+                <p style="font-family:'Times New Roman';"><center> @created by Foon Yee Choo 21000802 </center></p>
+            </div>
+            </footer>
+        </div>
+    </body>
+</html>
