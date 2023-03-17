@@ -8,3 +8,13 @@
 ## if theres any problems, use 
 1) [python manage.py makemigrations]
 2) [python manage.py migrate  ]    
+
+source /Users/danielfernandes/.local/share/virtualenvs/django_docker_demo-fWAxXL5O/bin/activate
+
+python -m pip install 'pymongo[snappy,gssapi,srv,tls]'
+
+sudo pip install 'pymongo[snappy,gssapi,srv,tls]' -t /usr/local/lib/python3.10.4/site-packages/
+
+python -m pip install dnspython
+
+https://www.youtube.com/watch?v=qWYx5neOh2s

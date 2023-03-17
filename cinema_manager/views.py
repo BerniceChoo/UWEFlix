@@ -1,8 +1,35 @@
 from django.shortcuts import render, redirect
-from .models import Club
-from .forms import ClubForm
-from django.db.models import Q
+from pymongo import MongoClient
+import pymongo
+import datetime
 
+client = pymongo.MongoClient("mongodb+srv://daniel2fernandes:skelJ6UzCVlG36Ei@uweflix.l8xahep.mongodb.net/?retryWrites=true&w=majority")
+# database
+db = client.test
+# collection 
+todos = db.todos
+
+
+def clubs_list(request):
+
+    search_query = ""
+
+    if request.GET.get('search_query'):
+        search_query = request.GET.get('search_query')
+
+    cursor = todos.find({})
+    for document in cursor:
+          print(document)
+
+    context = {
+        'document': document,
+        'search_query': search_query,
+    }
+    return render(request, 'cinema_manager/list.html', context)
+
+
+
+"""
 def clubs_list(request):
 
     search_query = ""
@@ -21,9 +48,9 @@ def clubs_list(request):
         'search_query': search_query,
     }
     return render(request, 'cinema_manager/list.html', context)
+"""
 
-
-
+"""
 def create_club(request):
     form = ClubForm()
 
@@ -66,3 +93,4 @@ def delete_club(request, pk):
         'club': club,
     }
     return render(request, 'cinema_manager/delete.html', context)
+    """
