@@ -38,19 +38,19 @@
             </tr>
         </thead>
         <tbody>
-            {% for club in document %}
+            {% for i in cursor %}
                 <tr>
                     <th scope="row">
                         <img style="height: 100px; width: auto;" src="{{ todos.name }}" class="card-img-top" alt="...">
                     </th>
                     <th scope="row">{{ todos.name }}</th>
-                    <td>{{ club.club_name }}</td>
+                    <td>{{ document.name }}</td>
+                    <td>{{ i.name }}</td>
+                    <td>{{ i.name }}</td>
                     <td>{{ todos.name }}</td>
-                    <td>{{ todos.name }}</td>
-                    <td>{{ todos.name }}</td>
-                    <td>{{ todos.name }}</td>
-                    <td>{{ todos.name }}</td>
-                    <td>{{ todos.name }}</td>
+                    <td>{{ document.text }}</td>
+                    <td>{{ club.name }}</td>
+                    <td>{{ i.name }}</td>
                     <td>{{ todos.name }}</td>
                     <td>{{ todos.name }}</td>
                     <td>{{ todos.name }}</td>

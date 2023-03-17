@@ -16,13 +16,15 @@ def clubs_list(request):
 
     if request.GET.get('search_query'):
         search_query = request.GET.get('search_query')
+    
+    print("lol")
 
     cursor = todos.find({})
-    for document in cursor:
-          print(document)
+    #for document in cursor:
+    #      print(document)
 
     context = {
-        'document': document,
+        'cursor': cursor,
         'search_query': search_query,
     }
     return render(request, 'cinema_manager/list.html', context)
