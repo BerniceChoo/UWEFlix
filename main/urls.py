@@ -7,8 +7,9 @@ urlpatterns = [
 
 path('admin/', admin.site.urls),
 
-#path('', include('cinema_manager.urls')),
-path('', include('cust.urls')),
+path('', include('homepage.urls')),
+path('1/', include('cinema_manager.urls')),
+path('2/', include('cust.urls')),
 ]
 
 if settings.DEBUG:

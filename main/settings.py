@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     ## apps
     'pymongo',
      
+    'homepage.apps.HomePageConfig',
     'cinema_manager.apps.CinemaManagerConfig',
     'cust',
 ]
