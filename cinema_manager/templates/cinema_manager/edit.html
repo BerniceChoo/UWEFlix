@@ -5,34 +5,36 @@
 {% endblock title %}
 
 {% block content %}
-    <h1 style="text-align: center; padding-top: 1em; padding-bottom: 1em;">Edit Employee Information</h1>
+    <h1 style="text-align: center; padding-top: 1em; padding-bottom: 1em;">Edit Club Information</h1>
 
     <form action="" method="POST" enctype="multipart/form-data">
+        {% for i in club %}
         {% csrf_token %}
-        <label for="clubname">First name:</label><br>
-        <input type="text" name="clubname" id="clubname" value="ManchesterUnited"><br><br>
+        <label for="clubname">Club Name:</label><br>
+        <input type="text" name="clubname" id="clubname" value="{{ i.Name }}"><br><br>
 
         <label for="city">city:</label><br>
-        <input type="text" name="city" id="city" value="manchester"><br><br>
+        <input type="text" name="city" id="city" value="{{ i.City }}"><br><br>
 
         <label for="street">street:</label><br>
-        <input type="text" name="street" id="street" value="king street"><br><br>
+        <input type="text" name="street" id="street" value="{{ i.Street }}"><br><br>
 
         <label for="email">email:</label><br>
-        <input type="text" name="email" id="email" value="club@live.uwe.ac.uk"><br><br>
+        <input type="text" name="email" id="email" value="{{ i.Email }}"><br><br>
 
         <label for="houseno">houseno:</label><br>
-        <input type="text" name="houseno" id="houseno" value="5"><br><br>
+        <input type="text" name="houseno" id="houseno" value="{{ i.HouseNumber }}"><br><br>
 
         <label for="phoneno">phoneno:</label><br>
-        <input type="text" name="phoneno" id="phoneno" value="1234567890"><br><br>
+        <input type="text" name="phoneno" id="phoneno" value="{{ i.PhoneNumber }}"><br><br>
 
         <label for="postcode">postcode:</label><br>
-        <input type="text" name="postcode" id="postcode" value="df4 8tr"><br><br>
+        <input type="text" name="postcode" id="postcode" value="{{ i.PostCode }}"><br><br>
 
         <label for="telephoneno">telephoneno:</label><br>
-        <input type="text" name="telephoneno" id="telephoneno" value="123456789"><br><br>
+        <input type="text" name="telephoneno" id="telephoneno" value="{{ i.TelephoneNumber }}"><br><br>
 
         <input type="submit" class="btn btn-success">
+        {% endfor %}
     </form>
 {% endblock content %}

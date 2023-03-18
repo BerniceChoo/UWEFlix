@@ -10,7 +10,9 @@
 
         <br><br>
         <div class="alert alert-danger" role="alert">
+            {% for i in club %}
             Are you sure you want to delete "{{ i.Name }}"?
+            {% endfor %}
         </div>
         
         <p>

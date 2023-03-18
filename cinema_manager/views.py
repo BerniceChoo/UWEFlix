@@ -32,28 +32,6 @@ def clubs_list(request):
 
 
 
-"""
-def clubs_list(request):
-
-    search_query = ""
-
-    if request.GET.get('search_query'):
-        search_query = request.GET.get('search_query')
-
-    clubs = Club.objects.filter(
-        Q(club_name__icontains=search_query) | 
-        Q(rep_first_name__icontains=search_query) |
-        Q(rep_last_name__icontains=search_query)
-    )
-
-    context = {
-        'clubs': clubs,
-        'search_query': search_query,
-    }
-    return render(request, 'cinema_manager/list.html', context)
-"""
-
-
 def create_club(request):
 
     if request.method == 'POST':
@@ -79,10 +57,7 @@ def create_club(request):
 
         return redirect('clubs-list')
 
-    context = {
-        'form': 1,
-    }
-    return render(request, 'cinema_manager/create.html', context)
+    return render(request, 'cinema_manager/create.html')
 
 
 def edit_club(request, pk):
@@ -121,10 +96,9 @@ def edit_club(request, pk):
 
         return redirect('clubs-list')
    
-
+    cursor = Clubs.find({"_id" : club_id})
     context = {
-        'club': 1,
-        'form': 1,
+        'club': cursor,
     }
     return render(request, 'cinema_manager/edit.html', context)
 
@@ -148,9 +122,10 @@ def delete_club(request, pk):
             print(f"No document found with _id '{club_id}'.")
 
         return redirect('clubs-list')
-
+    
+    cursor = Clubs.find({"_id" : club_id})
     context = {
-        'club': 1,
+        'club': cursor,
     }
     return render(request, 'cinema_manager/delete.html', context)
     
