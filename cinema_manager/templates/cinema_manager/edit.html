@@ -9,7 +9,30 @@
 
     <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
+        <label for="clubname">First name:</label><br>
+        <input type="text" name="clubname" id="clubname" value="ManchesterUnited"><br><br>
+
+        <label for="city">city:</label><br>
+        <input type="text" name="city" id="city" value="manchester"><br><br>
+
+        <label for="street">street:</label><br>
+        <input type="text" name="street" id="street" value="king street"><br><br>
+
+        <label for="email">email:</label><br>
+        <input type="text" name="email" id="email" value="club@live.uwe.ac.uk"><br><br>
+
+        <label for="houseno">houseno:</label><br>
+        <input type="text" name="houseno" id="houseno" value="5"><br><br>
+
+        <label for="phoneno">phoneno:</label><br>
+        <input type="text" name="phoneno" id="phoneno" value="1234567890"><br><br>
+
+        <label for="postcode">postcode:</label><br>
+        <input type="text" name="postcode" id="postcode" value="df4 8tr"><br><br>
+
+        <label for="telephoneno">telephoneno:</label><br>
+        <input type="text" name="telephoneno" id="telephoneno" value="123456789"><br><br>
+
         <input type="submit" class="btn btn-success">
     </form>
 {% endblock content %}
