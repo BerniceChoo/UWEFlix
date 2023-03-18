@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from pymongo import MongoClient
 import pymongo
+from bson.objectid import ObjectId
 import datetime
 
 client = pymongo.MongoClient("mongodb+srv://daniel2fernandes:skelJ6UzCVlG36Ei@uweflix.l8xahep.mongodb.net/?retryWrites=true&w=majority")
@@ -99,16 +100,30 @@ def edit_club(request, pk):
         'form': form,
     }
     return render(request, 'cinema_manager/edit.html', context)
+"""
+
 
 def delete_club(request, pk):
-    club = Club.objects.get(id=pk)
+    
+    #convert string to objectId (format of mongoDB _id variable)
+    club_id = ObjectId(pk)
+    
 
     if request.method == 'POST':
-        club.delete()
+
+        result = Clubs.delete_one( { "_id" : club_id } )
+        if result.deleted_count == 1:
+            # Document successfully deleted
+            print(f"Document with _id '{club_id}' deleted.")
+            return redirect('clubs-list')
+        else:
+            # Document not found
+            print(f"No document found with _id '{club_id}'.")
+
         return redirect('clubs-list')
 
     context = {
-        'club': club,
+        'club': 1,
     }
     return render(request, 'cinema_manager/delete.html', context)
-    """
+    

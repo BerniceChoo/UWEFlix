@@ -54,6 +54,12 @@
                     <td>{{ i.Name }}</td>
                     <td>{{ i.Name }}</td>
                     <td>{{ i.Name }}</td>
+
+                    <td>
+                        {% load custom_filters %}
+                        <a href="{% url 'delete-club' i|get_id %}">Remove</a>
+                    </td>
+
                     
                 </tr>
             {% endfor %}

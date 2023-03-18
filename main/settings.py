@@ -70,6 +70,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            ##custom tag libaries
+            'libraries': {
+            'custom_filters': 'cinema_manager.custom_filters',}
         },
     },
 ]
