@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Create</title>
+{% endblock title %}
+
+{% block content %}
+    <h1 style="text-align: center; padding-top: 1em; padding-bottom: 1em;">Add New Screen Information</h1>
+
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="screenname">Screen Name:</label><br>
+        <input type="text" name="screenname" id="screenname" value="UWESCREEN"><br><br>
+
+        <label for="capacity">Seat Capacity:</label><br>
+        <input type="text" name="capacity" id="capacity" value="70"><br><br>
+
+
+        <input type="submit" class="btn btn-success">
+    </form>
+{% endblock content %}

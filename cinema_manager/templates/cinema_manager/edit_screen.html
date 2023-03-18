@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Edit</title>
+{% endblock title %}
+
+{% block content %}
+    <h1 style="text-align: center; padding-top: 1em; padding-bottom: 1em;">Edit Screen Information</h1>
+
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% for i in screen %}
+        {% csrf_token %}
+        <label for="screenname">Screen Name:</label><br>
+        <input type="text" name="screenname" id="screenname" value="{{ i.Name }}"><br><br>
+
+        <label for="capacity">Seat Capacity:</label><br>
+        <input type="text" name="capacity" id="capacity" value="{{ i.Capacity }}"><br><br>
+
+        <input type="submit" class="btn btn-success">
+        {% endfor %}
+    </form>
+{% endblock content %}

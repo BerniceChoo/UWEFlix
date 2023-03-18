@@ -9,6 +9,7 @@ client = pymongo.MongoClient("mongodb+srv://daniel2fernandes:skelJ6UzCVlG36Ei@uw
 db = client.test
 # collection 
 Clubs = db.Clubs
+Screens = db.Screens
 
 
 def clubs_list(request):
@@ -128,4 +129,102 @@ def delete_club(request, pk):
         'club': cursor,
     }
     return render(request, 'cinema_manager/delete.html', context)
+    
+
+
+def screens_list(request):
+
+    search_query = ""
+
+    if request.GET.get('search_query'):
+        search_query = request.GET.get('search_query')
+    
+    print("lol")
+
+    cursor = Screens.find({})
+    #for document in cursor:
+    #      print(document)
+
+    context = {
+        'cursor': cursor,
+        'search_query': search_query,
+    }
+    return render(request, 'cinema_manager/screen_list.html', context)
+
+
+
+
+
+def create_screen(request):
+
+    if request.method == 'POST':
+        screensname = request.POST['screenname']
+        capacity = request.POST['capacity']
+
+        document={"Name": screensname,
+                  "Capacity": capacity,
+                    }
+        Screens.insert_one(document)
+
+        return redirect('screens-list')
+
+    return render(request, 'cinema_manager/create_screen.html')
+
+
+def edit_screen(request, pk):
+
+    screen_id = ObjectId(pk)
+   
+    if request.method == 'POST':
+        screensname = request.POST['screenname']
+        capacity = request.POST['capacity']
+
+        document={"Name": screensname,
+                  "Capacity": capacity,
+                    }
+        
+        result = Screens.update_one({'_id': screen_id},{'$set': document} )
+
+        if result.modified_count == 1:
+            # Document successfully updated
+            print(f"Document with _id '{screen_id}' updated.")
+            return redirect('screens-list')
+        else:
+            # Document not found
+            print(f"No document found with _id '{screen_id}'.")
+
+        return redirect('screens-list')
+   
+    cursor = Screens.find({"_id" : screen_id})
+    context = {
+        'screen': cursor,
+    }
+    return render(request, 'cinema_manager/edit_screen.html', context)
+
+
+
+def delete_screen(request, pk):
+    
+    #convert string to objectId (format of mongoDB _id variable)
+    screen_id = ObjectId(pk)
+    
+
+    if request.method == 'POST':
+
+        result = Screens.delete_one( { "_id" : screen_id } )
+        if result.deleted_count == 1:
+            # Document successfully deleted
+            print(f"Document with _id '{screen_id}' deleted.")
+            return redirect('screens-list')
+        else:
+            # Document not found
+            print(f"No document found with _id '{screen_id}'.")
+
+        return redirect('screens-list')
+    
+    cursor = Screens.find({"_id" : screen_id})
+    context = {
+        'screen': cursor,
+    }
+    return render(request, 'cinema_manager/delete_screen.html', context)
     
