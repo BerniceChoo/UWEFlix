@@ -7,7 +7,7 @@ client = pymongo.MongoClient("mongodb+srv://daniel2fernandes:skelJ6UzCVlG36Ei@uw
 # database
 db = client.test
 # collection 
-todos = db.todos
+Clubs = db.Clubs
 
 
 def clubs_list(request):
@@ -19,7 +19,7 @@ def clubs_list(request):
     
     print("lol")
 
-    cursor = todos.find({})
+    cursor = Clubs.find({})
     #for document in cursor:
     #      print(document)
 
@@ -52,22 +52,38 @@ def clubs_list(request):
     return render(request, 'cinema_manager/list.html', context)
 """
 
-"""
+
 def create_club(request):
-    form = ClubForm()
 
     if request.method == 'POST':
-        form = ClubForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('clubs-list')
+        clubname = request.POST['clubname']
+        city = request.POST['city']
+        street = request.POST['street']
+        email = request.POST['email']
+        houseno = request.POST['houseno']
+        phoneno = request.POST['phoneno']
+        postcode = request.POST['postcode']
+        telephoneno = request.POST['telephoneno']
+
+        document={"Name": clubname,
+                  "City": city,
+                  "Street": street,
+                  "Email": email,
+                  "HouseNumber": houseno,
+                  "PhoneNumber": phoneno,
+                  "PostCode": postcode,
+                  "TelephoneNumber": telephoneno,
+                    }
+        Clubs.insert_one(document)
+
+        return redirect('clubs-list')
 
     context = {
-        'form': form,
+        'form': 1,
     }
     return render(request, 'cinema_manager/create.html', context)
 
-
+"""
 def edit_club(request, pk):
     club = Club.objects.get(id=pk)
     form = ClubForm(instance=club)

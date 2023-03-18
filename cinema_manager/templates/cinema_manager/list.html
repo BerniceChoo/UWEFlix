@@ -43,20 +43,25 @@
                     <th scope="row">
                         <img style="height: 100px; width: auto;" src="{{ todos.name }}" class="card-img-top" alt="...">
                     </th>
-                    <th scope="row">{{ todos.name }}</th>
-                    <td>{{ document.name }}</td>
-                    <td>{{ i.name }}</td>
-                    <td>{{ i.name }}</td>
-                    <td>{{ todos.name }}</td>
-                    <td>{{ document.text }}</td>
-                    <td>{{ club.name }}</td>
-                    <td>{{ i.name }}</td>
-                    <td>{{ todos.name }}</td>
-                    <td>{{ todos.name }}</td>
-                    <td>{{ todos.name }}</td>
+                    <th scope="row">{{ i.Name }}</th>
+                    <td>{{ i.HouseNumber }}</td>
+                    <td>{{ i.Street }}</td>
+                    <td>{{ i.City }}</td>
+                    <td>{{ i.PostCode }}</td>
+                    <td>{{ i.TelephoneNumber }}</td>
+                    <td>{{ i.PhoneNumber }}</td>
+                    <td>{{ i.Email }}</td>
+                    <td>{{ i.Name }}</td>
+                    <td>{{ i.Name }}</td>
+                    <td>{{ i.Name }}</td>
                     
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    <div class="text-center">
+        <a href="{% url 'create-club' %}"><button type="button" class="btn btn-primary">Add New Info</button></a>
+    </div>
+
 {% endblock content %}
