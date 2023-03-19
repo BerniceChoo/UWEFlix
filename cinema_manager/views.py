@@ -195,18 +195,19 @@ def register_club_rep(request, pk):
 
 def screens_list(request):
 
-    
-
     search_query = ""
+    
 
     if request.GET.get('search_query'):
         search_query = request.GET.get('search_query')
-    
-    print("lol")
+       
+        
+    #cursor = Clubs.find({})
+    # case insensitive search using regex
+    regex = re.compile(search_query, re.IGNORECASE)
+    query = {'Name': {'$regex': regex}}
+    cursor = Screens.find(query)
 
-    cursor = Screens.find({})
-    #for document in cursor:
-    #      print(document)
 
     context = {
         'cursor': cursor,
