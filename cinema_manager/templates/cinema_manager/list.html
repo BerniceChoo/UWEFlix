@@ -39,7 +39,8 @@
             </tr>
         </thead>
         <tbody>
-            {% for i in cursor %}
+            {% for i in data %}
+
                 <tr>
                     <th scope="row">
                         <img style="height: 100px; width: auto;" src="{{ todos.name }}" class="card-img-top" alt="...">
@@ -52,14 +53,23 @@
                     <td>{{ i.TelephoneNumber }}</td>
                     <td>{{ i.PhoneNumber }}</td>
                     <td>{{ i.Email }}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    
+
+                    <td>{{ i.pop.0.FirstName }}</td>
+                    <td>{{ i.pop.0.LastName }}</td>
+                    <td>{{ i.pop.0.DOB }}</td>
+                    
+                
+            
+                    
+            
+                    
 
                     <td>
                         {% load custom_filters %}
                         <a style="margin-right: 30px;" href="{% url 'edit-club' i|get_id %}">Edit</a>
                         <a href="{% url 'delete-club' i|get_id %}">Remove</a>
+                        <a href="{% url 'register-club-rep' i|get_id %}">register-club-rep</a>
                     </td>
 
                     

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Edit</title>
+{% endblock title %}
+
+{% block content %}
+    {% for i in club %}
+    <h1 style="text-align: center; padding-top: 1em; padding-bottom: 1em;">Enter Club Rep Information for {{ i.Name }}</h1>
+    {% endfor %}
+
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <label for="firstname">First Name:</label><br>
+        <input type="text" name="firstname" id="firstname" value=""><br><br>
+
+        <label for="lastname">Last Name:</label><br>
+        <input type="text" name="lastname" id="lastname" value=""><br><br>
+
+        <label for="dob">Date of Birth:</label><br>
+        <input type="text" name="dob" id="dob" value=""><br><br>
+
+
+        <input type="submit" class="btn btn-success">
+    </form>
+{% endblock content %}

@@ -11,6 +11,7 @@ db = client.test
 # collection 
 Clubs = db.Clubs
 Screens = db.Screens
+ClubReps = db.ClubRep
 
 
 def clubs_list(request):
@@ -29,9 +30,24 @@ def clubs_list(request):
     cursor = Clubs.find(query)
 
 
+    cursor2 = ClubReps
+
+    # Loop through the first collection and find related items in the second collection
+    data = []
+    for i in cursor:
+        data.append(i)
+
+    # Loop through the first collection and find related items in the second collection
+    for i in data:
+        i['pop'] = [j for j in cursor2.find({'Club_id': i['_id']})]
+        print (i)
+
+
     context = {
         'cursor': cursor,
         'search_query': search_query,
+        'cursor2': cursor2,
+        'data': data,
     }
     return render(request, 'cinema_manager/list.html', context)
 
@@ -136,7 +152,50 @@ def delete_club(request, pk):
     
 
 
+def register_club_rep(request, pk):
+    club_id = ObjectId(pk)
+    number = "65"
+    password = "ert"
+   
+    if request.method == 'POST':
+        firstname = request.POST['firstname']
+        lastname = request.POST['lastname']
+        dob = request.POST['dob']
+
+        document={"FirstName": firstname,
+                  "LastName": lastname,
+                  "DOB": dob,
+                  "Club_id": club_id,
+                  "Number": number,
+                  "Password": password,
+                    }
+        
+        ClubReps.insert_one(document)
+
+        return redirect('clubs-list')
+
+   
+    cursor = Clubs.find({"_id" : club_id})
+    context = {
+        'club': cursor,
+    }
+
+    return render(request, 'cinema_manager/create_club_rep.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
 def screens_list(request):
+
+    
 
     search_query = ""
 
@@ -154,9 +213,6 @@ def screens_list(request):
         'search_query': search_query,
     }
     return render(request, 'cinema_manager/screen_list.html', context)
-
-
-
 
 
 def create_screen(request):
@@ -213,7 +269,6 @@ def edit_screen(request, pk):
         'screen': cursor,
     }
     return render(request, 'cinema_manager/edit_screen.html', context)
-
 
 
 def delete_screen(request, pk):
