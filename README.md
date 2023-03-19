@@ -17,4 +17,7 @@ sudo pip install 'pymongo[snappy,gssapi,srv,tls]' -t /usr/local/lib/python3.10.4
 
 python -m pip install dnspython
 
+see changes in real time 
+python manage.py runserver
+
 https://www.youtube.com/watch?v=qWYx5neOh2s

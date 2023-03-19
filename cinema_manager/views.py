@@ -3,6 +3,7 @@ from pymongo import MongoClient
 import pymongo
 from bson.objectid import ObjectId
 import datetime
+import re
 
 client = pymongo.MongoClient("mongodb+srv://daniel2fernandes:skelJ6UzCVlG36Ei@uweflix.l8xahep.mongodb.net/?retryWrites=true&w=majority")
 # database
@@ -15,15 +16,18 @@ Screens = db.Screens
 def clubs_list(request):
 
     search_query = ""
+    
 
     if request.GET.get('search_query'):
         search_query = request.GET.get('search_query')
-    
-    print("lol")
+       
+        
+    #cursor = Clubs.find({})
+    # case insensitive search using regex
+    regex = re.compile(search_query, re.IGNORECASE)
+    query = {'$or': [{'Name': {'$regex': regex}}, {'Street': {'$regex': regex}}]}
+    cursor = Clubs.find(query)
 
-    cursor = Clubs.find({})
-    #for document in cursor:
-    #      print(document)
 
     context = {
         'cursor': cursor,
