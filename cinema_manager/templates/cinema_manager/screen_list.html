@@ -27,6 +27,7 @@
                 <th scope="col">Images</th>
                 <th scope="col">Screen Name</th>
                 <th scope="col">Seat Capacity</th>
+                <th scope="col">Social Distancing</th>
             </tr>
         </thead>
         <tbody>
@@ -37,6 +38,16 @@
                     </th>
                     <th scope="row">{{ i.Name }}</th>
                     <td>{{ i.Capacity }}</td>
+                    <td>
+                        <!-- true and false are case sensitive -->
+                        {% if i.SocialDistancing == True %}
+                        On
+
+                        {% elif i.SocialDistancing == False %}
+                        Off
+
+                        {% endif %}
+                    </td>
               
 
                     <td>

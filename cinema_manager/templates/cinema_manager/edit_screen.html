@@ -2,6 +2,7 @@
 
 {% block title %}
     <title>Edit</title>
+   
 {% endblock title %}
 
 {% block content %}
@@ -16,7 +17,24 @@
         <label for="capacity">Seat Capacity:</label><br>
         <input type="text" name="capacity" id="capacity" value="{{ i.Capacity }}"><br><br>
 
-        <input type="submit" class="btn btn-success">
+        <label for="socialdistancing">Social Distancing:</label><br>
+        {% if i.SocialDistancing == True %}
+            <label class="switch" <br>
+            <input type="checkbox" name="socialdistancing" id="socialdistancing" value= "true" checked>
+            <span class="slider round"></span>
+            </label>
+        {% elif i.SocialDistancing == False %}
+
+            <label class="switch" <br>
+            <input type="checkbox" name="socialdistancing" id="socialdistancing" value= "true">
+            <span class="slider round"></span>
+            </label>
+
+        {% endif %}
+        <br><br>
+
+
+        <input type="submit" class="btn btn-success" value="Update">
         {% endfor %}
     </form>
 {% endblock content %}

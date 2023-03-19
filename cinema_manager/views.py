@@ -163,6 +163,7 @@ def create_screen(request):
 
         document={"Name": screensname,
                   "Capacity": capacity,
+                  "SocialDistancing": False,
                     }
         Screens.insert_one(document)
 
@@ -179,8 +180,16 @@ def edit_screen(request, pk):
         screensname = request.POST['screenname']
         capacity = request.POST['capacity']
 
+        socialdistancing = request.POST.get('socialdistancing', False)
+        if (socialdistancing == "true"):
+            socialdistancing = True
+        elif (socialdistancing == "false"):
+            socialdistancing = False
+        
+
         document={"Name": screensname,
                   "Capacity": capacity,
+                  "SocialDistancing": socialdistancing,
                     }
         
         result = Screens.update_one({'_id': screen_id},{'$set': document} )
