@@ -26,27 +26,62 @@ def clubs_list(request):
     #cursor = Clubs.find({})
     # case insensitive search using regex
     regex = re.compile(search_query, re.IGNORECASE)
-    query = {'$or': [{'Name': {'$regex': regex}}, {'Street': {'$regex': regex}}]}
+    query = {'$or': [{'Name': {'$regex': regex}},
+                      {'FirstName': {'$regex': regex}},
+                        {'FirstName': {'$regex': regex}},
+                          {'LastName': {'$regex': regex}},
+    ]}
+    
+                          
     cursor = Clubs.find(query)
 
 
-    cursor2 = ClubReps
+    cursor2 = ClubReps.find(query)
 
-    # Loop through the first collection and find related items in the second collection
-    data = []
-    for i in cursor:
-        data.append(i)
+    #joins 2 collections together and matches the by local and foreign id
+    pipeline = [
+        {
+            '$lookup': {
+                'from': 'ClubRep',
+                'localField': '_id',
+                'foreignField': 'Club_id',
+                'as': 'club_reps'
+            }
+        },
+        {
+            '$match': {
+                '$or': [
+                    {'Name': {'$regex': search_query, '$options': 'i'}},
+                    {'club_reps.FirstName': {'$regex': search_query, '$options': 'i'}},
+                    {'club_reps.LastName': {'$regex': search_query, '$options': 'i'}}
+                ]
+            }
+        },
+        {
+            '$project': {
+                '_id': 1,
+                'Name': 1,
+                'HouseNumber': 1,
+                'Street': 1,
+                'City': 1,
+                'Postcode': 1,
+                'TelephoneNumber': 1,
+                'PhoneNumber': 1,
+                'Email': 1,
+                'club_reps.FirstName': 1,
+                'club_reps.LastName': 1,
+                'club_reps.DOB': 1,
+            }
+        }
+    ]
 
-    # Loop through the first collection and find related items in the second collection
-    for i in data:
-        i['pop'] = [j for j in cursor2.find({'Club_id': i['_id']})]
-        print (i)
+    result = client['test']['Clubs'].aggregate(pipeline)
+
+    data = [doc for doc in result]
 
 
     context = {
-        'cursor': cursor,
         'search_query': search_query,
-        'cursor2': cursor2,
         'data': data,
     }
     return render(request, 'cinema_manager/list.html', context)
