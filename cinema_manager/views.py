@@ -64,7 +64,7 @@ def clubs_list(request):
                 'HouseNumber': 1,
                 'Street': 1,
                 'City': 1,
-                'Postcode': 1,
+                'PostCode': 1,
                 'TelephoneNumber': 1,
                 'PhoneNumber': 1,
                 'Email': 1,

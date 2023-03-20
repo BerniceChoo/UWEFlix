@@ -5,23 +5,36 @@
 {% endblock title %}
 
 {% block content %}
-    <h1 style="text-align: center; padding-top: 1em; padding-bottom: 1em;">Cinema Manager</h1>
-    <a href="screen/" class="w3-hide-small w3-bar-item w3-button w3-mobile w3=-medium" style="margin-top:10px;">Screen </a>
+<div>
+    <header class="w3-container w3-black w3-center " style="padding:50px 16px">
+        <h1 class="w3-margin w3-jumbo">Cinema Manager</h1>
+      </header>
 
-    <!-- Search section  -->
-    <div class="center-form" style="display: flex; justify-content: center;">
-        <form action="{% url 'clubs-list' %}" method="GET" style="width: 500px;">
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Search by club or representative name" aria-label="" aria-describedby="basic-addon1" style="margin-right: 10px;"
-              name="search_query" value="{{ search_query }}"/>
-    
-              <input class="btn btn-success" type="submit" value="Search"/>
-            </div>
-        </form>
+    <div class="w3-section w3-bottombar w3-padding-16  ">
+        <a href="{% url 'clubs-list' %}" class="w3-button w3-red">Clubs</a>
+        <a href="screen/" class="w3-button w3-white" >Screen </a>
+        <a href="#" class="w3-button w3-white w3-hide-small" >Film </a>
+        
+        <!-- Search section  -->
+        <div class=" w3-right w3-col m2 w3-mobile ">
+            <form action="{% url 'clubs-list' %}" method="GET" >
+                <div class="">
+                    <input type="text" class="" placeholder="Search by club or representative name" 
+                    name="search_query" value="{{ search_query }}"/>
+        
+                    <input class="w3-button w3-green button4 " type="submit" value="Search"/>
+                </div>
+            </form>
+        </div>
     </div>
-    <br>
 
-    <table class="table table-striped">
+</div>
+
+<!-- Search section  -->
+<br>
+
+<div class="w3-container w3-card w3-round">
+    <table class="">
         <thead>
             <tr>
                 <th scope="col">Images</th>
@@ -36,6 +49,7 @@
                 <th scope="col">Rep First Name</th>
                 <th scope="col">Rep Last Name</th>
                 <th scope="col">Rep DOB</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
@@ -67,9 +81,11 @@
 
                     <td>
                         {% load custom_filters %}
-                        <a style="margin-right: 30px;" href="{% url 'edit-club' i|get_id %}">Edit</a>
-                        <a href="{% url 'delete-club' i|get_id %}">Remove</a>
-                        <a href="{% url 'register-club-rep' i|get_id %}">register-club-rep</a>
+                        <a class="w3-button w3-green button4" style="margin-right: 30px;" href="{% url 'edit-club' i|get_id %}">Edit</a>
+                        <br>
+                        <a class="w3-button w3-red button4 " style="margin-right: 30px; margin-top: 7px;" href="{% url 'delete-club' i|get_id %}">Remove</a>
+                        <br>
+                        <a class="w3-button w3-green button4" style="margin-right: 30px; margin-top: 7px;" href="{% url 'register-club-rep' i|get_id %}">register-club-rep</a>
                     </td>
 
                     
@@ -77,9 +93,11 @@
             {% endfor %}
         </tbody>
     </table>
+    <br>
 
-    <div class="text-center">
-        <a href="{% url 'create-club' %}"><button type="button" class="btn btn-primary">Add New Info</button></a>
+    <div class="w3-center">
+        <a href="{% url 'create-club' %}"><button type="button" class="w3-button w3-green button4">Add New Info</button></a>
     </div>
-
+    <br>
+</div>
 {% endblock content %}

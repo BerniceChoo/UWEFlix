@@ -5,9 +5,10 @@
 {% endblock title %}
 
 {% block content %}
-    <h1 style="text-align: center; padding-top: 1em; padding-bottom: 1em;">Edit Club Information</h1>
-
+    <div class="w3-container w3-margin w3-center"> 
     <form action="" method="POST" enctype="multipart/form-data">
+        <div class=" w3-blue w3-card w3-round w3-margin w3-padding">
+            <h1 style="text-align: center; padding-top: 1em; padding-bottom: 1em;">Edit Club Information</h1>
         {% for i in club %}
         {% csrf_token %}
         <label for="clubname">Club Name:</label><br>
@@ -34,7 +35,12 @@
         <label for="telephoneno">telephoneno:</label><br>
         <input type="text" name="telephoneno" id="telephoneno" value="{{ i.TelephoneNumber }}"><br><br>
 
-        <input type="submit" class="btn btn-success">
+   
+        <a href="{% url 'clubs-list' %}"><button type="button" class="w3-button w3-red button4">Go back</button></a>
+
+        <input type="submit" class="w3-button w3-green button4 w3-margin">
         {% endfor %}
+        </div>
     </form>
+</div>
 {% endblock content %}
