@@ -11,6 +11,7 @@
       </header>
 
     <div class="w3-section w3-bottombar w3-padding-16  ">
+        <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
         <a href="{% url 'clubs-list' %}" class="w3-button w3-red">Clubs</a>
         <a href="screen/" class="w3-button w3-white" >Screen </a>
         <a href="#" class="w3-button w3-white w3-hide-small" >Film </a>
@@ -83,9 +84,17 @@
                         {% load custom_filters %}
                         <a class="w3-button w3-green button4" style="margin-right: 30px;" href="{% url 'edit-club' i|get_id %}">Edit</a>
                         <br>
-                        <a class="w3-button w3-red button4 " style="margin-right: 30px; margin-top: 7px;" href="{% url 'delete-club' i|get_id %}">Remove</a>
+                        <a class="w3-button w3-red button4 " style="margin-right: 30px; margin-top: 7px;" href="{% url 'delete-club' i|get_id %}">Remove Club</a>
                         <br>
-                        <a class="w3-button w3-green button4" style="margin-right: 30px; margin-top: 7px;" href="{% url 'register-club-rep' i|get_id %}">register-club-rep</a>
+
+                        {% if i.club_reps.0.FirstName %}
+                        <a class="w3-button w3-red button4" style="margin-right: 30px; margin-top: 7px;" href="{% url 'delete-club-rep' i.club_reps.0|get_id %}">Remove Club Rep</a>
+                        {% elif not i.club_reps.0.FirstName %}
+                        <a class="w3-button w3-green button4" style="margin-right: 30px; margin-top: 7px;" href="{% url 'register-club-rep' i|get_id %}">Register Club Rep</a>
+         
+      
+
+                        {% endif %}
                     </td>
 
                     

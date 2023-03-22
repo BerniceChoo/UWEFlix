@@ -4,6 +4,8 @@ import pymongo
 from bson.objectid import ObjectId
 import datetime
 import re
+import string
+import random
 
 client = pymongo.MongoClient("mongodb+srv://daniel2fernandes:skelJ6UzCVlG36Ei@uweflix.l8xahep.mongodb.net/?retryWrites=true&w=majority")
 # database
@@ -68,6 +70,7 @@ def clubs_list(request):
                 'TelephoneNumber': 1,
                 'PhoneNumber': 1,
                 'Email': 1,
+                'club_reps._id': 1,
                 'club_reps.FirstName': 1,
                 'club_reps.LastName': 1,
                 'club_reps.DOB': 1,
@@ -189,8 +192,18 @@ def delete_club(request, pk):
 
 def register_club_rep(request, pk):
     club_id = ObjectId(pk)
-    number = "65"
-    password = "ert"
+    # finds the largest number in the number field from the Club reps collection. "-1" specifies that the sort order is descending
+    largest_number = ClubReps.find_one(sort=[("Number", -1)])["Number"]
+    number = largest_number + 1 
+
+    # define the length of the random string
+    length = 10
+    # define the pool of characters to choose from
+    characters = string.ascii_letters + string.digits
+    # generate the random string
+    random_string = ''.join(random.choice(characters) for i in range(length))
+
+    password = random_string
    
     if request.method == 'POST':
         firstname = request.POST['firstname']
@@ -219,7 +232,30 @@ def register_club_rep(request, pk):
 
 
 
+def delete_club_rep(request, pk):
+    
+    #convert string to objectId (format of mongoDB _id variable)
+    clubrep_id = ObjectId(pk)
+    
 
+    if request.method == 'POST':
+
+        result = ClubReps.delete_one( { "_id" : clubrep_id } )
+        if result.deleted_count == 1:
+            # Document successfully deleted
+            print(f"Document with _id '{clubrep_id}' deleted.")
+            return redirect('clubs-list')
+        else:
+            # Document not found
+            print(f"No document found with _id '{clubrep_id}'.")
+
+        return redirect('clubs-list')
+    
+    cursor = ClubReps.find({"_id" : clubrep_id})
+    context = {
+        'clubrep': cursor,
+    }
+    return render(request, 'cinema_manager/delete_club_rep.html', context)
 
 
 
