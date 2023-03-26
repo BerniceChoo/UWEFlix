@@ -1,27 +1,106 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8"/>
-        <title>{% block title %}{% endblock %}</title>
-        {% load static %}
-        <link rel="stylesheet" type="text/css" href="{% static 'cust/site.css' %}"/>
-    </head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"><link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+   
+{% block title %}
+{% endblock title %}
 
-    <body>
-        <h1 style="font-size:10vw"><center>UWEFlix</center></h1>
-        <div class="navbar">
-            <a href="{% url 'selectDate' %}" class="navbar-item" style="font-family:'Times New Roman', sans-serif;">Purchase Advance Tickets</a>
-        </div>
+<style>
+.switch {
+position: relative;
+display: inline-block;
+width: 60px;
+height: 34px;
+}
 
-        <div class="body-content">
-            {% block content %}
-            {% endblock %}
-            <br/>
-            <footer>
-            <div class="navbar">
-                <p style="font-family:'Times New Roman';"><center> @created by Foon Yee Choo 21000802 </center></p>
-            </div>
-            </footer>
-        </div>
-    </body>
+.switch input { 
+opacity: 0;
+width: 0;
+height: 0;
+}
+
+.slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #ccc;
+-webkit-transition: .4s;
+transition: .4s;
+}
+
+.slider:before {
+position: absolute;
+content: "";
+height: 26px;
+width: 26px;
+left: 4px;
+bottom: 4px;
+background-color: white;
+-webkit-transition: .4s;
+transition: .4s;
+}
+
+input:checked + .slider {
+background-color: #4CAF50;
+}
+
+input:focus + .slider {
+box-shadow: 0 0 1px #4CAF50;
+}
+
+input:checked + .slider:before {
+-webkit-transform: translateX(26px);
+-ms-transform: translateX(26px);
+transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+border-radius: 34px;
+}
+
+.slider.round:before {
+border-radius: 50%;
+}
+
+
+
+body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
+.w3-bar,h1,button {font-family: "Montserrat", sans-serif}
+.fa-anchor,.fa-coffee {font-size:200px}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #c9c7c7;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+
+.button4 {border-radius: 16px;}
+
+</style>
+    
+  
+</head>
+<body>
+    {% block content %}
+    {% endblock content %}
+</body>
 </html>
