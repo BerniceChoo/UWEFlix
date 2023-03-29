@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Delete</title>
+{% endblock title %}
+
+{% block content %}
+<div class="w3-container w3-margin w3-center"> 
+    <form action="" method="POST" enctype="multipart/form-data">
+        <div class=" w3-blue w3-card w3-round w3-margin w3-padding">
+        {% csrf_token %}
+
+        <br><br>
+        <div class="alert alert-danger" role="alert">
+            {% for i in club %}
+            <h1 style="text-align: center; padding-top: 1em; padding-bottom: 1em;">Are you sure you want to delete {{ i.Name }}?</h1>
+            {% endfor %}
+        </div>
+        
+        <div class="w3-center">
+            <a href="{% url 'clubs-list' %}"><button type="button" class="w3-button w3-green button4">Go back</button></a>
+            <input class="w3-button w3-red button4 w3-margin" type="submit" value="Confirm">
+        </div>
+
+    </div>
+    </form>
+</div>
+{% endblock content %}
