@@ -15,6 +15,7 @@ db = client.test
 Clubs = db.Clubs
 Screens = db.Screens
 ClubReps = db.ClubRep
+Showings = db.Showings
 
 
 def login(request):
@@ -26,31 +27,21 @@ def login(request):
         print(password)
         number= int(number)
    
-
-        #document={"Number": number,
-        #          "Password": password,
-        #            }
-        
-
         result = ClubReps.find_one({"Number": number, "Password": password})
 
-    
-    
 
         if result:
-            # Document successfully updated
-            print(f"Document with _id updated.")
+            print(f"Document found.")
 
             request.session['loggedin'] = True
             request.session['UserID'] = str(result['_id'])
             request.session['Name'] = str(result['FirstName']) + " " + str(result['LastName'])
 
-            return redirect('screens-list', name=request.session['Name'] )
+            return redirect('select-date-cr' )
         else:
             # Document not found
             print(f"No document found with _id.")
             return redirect('login', error='Invalid username or password')
-
 
 
     context = {
@@ -60,13 +51,15 @@ def login(request):
     return render(request, 'club_rep/login.html', context)
 
 
-def screens_list(request,name):
+
+
+def select_date(request):
 
     search_query = ""
     
 
-    if request.GET.get('search_query'):
-        search_query = request.GET.get('search_query')
+    if request.GET.get('date'):
+        search_query = request.GET.get('date')
        
         
     #cursor = Clubs.find({})
@@ -79,9 +72,50 @@ def screens_list(request,name):
     context = {
         'cursor': cursor,
         'search_query': search_query,
-        'name': name,
     }
-    return render(request, 'club_rep/screen_list.html', context)
+    return render(request, 'club_rep/select_date.html', context)
+
+
+
+
+
+
+
+def showings_list(request):
+    
+
+    selected_date = request.GET.get('date')
+    print(selected_date)
+
+    document={"date": selected_date,
+                    }
+
+    results = Showings.find(document)
+       
+    
+
+    context = {
+        'results': results,
+        'selected_date': selected_date
+    }
+    return render(request, 'club_rep/showings_list.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def create_club(request):
