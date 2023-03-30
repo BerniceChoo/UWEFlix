@@ -18,35 +18,43 @@
 </div>
 
 <div class="w3-container w3-card w3-round">
-    <table class="">
-        <thead>
-            <tr>
-                <th scope="col">Images</th>
-                <th scope="col">Film Name</th>
-                <th scope="col">Showing Time</th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for i in results %}
+
+    {% if data %}
+
+    
+        <table class="">
+            <thead>
                 <tr>
-                    <th scope="row">
-                        <img style="height: 100px; width: auto;" src="{{ todos.name }}" class="card-img-top" alt="...">
-                    </th>
-                    <th scope="row">{{ i.filmTitle }}</th>
-                    <td>{{ i.showingTime }}</td>
-
-                    <td>
-                        {% load custom_filters %}
-                        <a class="w3-button w3-green button4" style="margin-right: 10px;" href="{% url 'edit-screen' i|get_id %}">Select Showing</a>
-                        <br>
-                    </td>
-
-                    
+                    <th scope="col">Images</th>
+                    <th scope="col">Film Name</th>
+                    <th scope="col">Showing Time</th>
+                    <th scope="col"></th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for i in data %}
+                    <tr>
+                        <th scope="row">
+                            <img style="height: 100px; width: auto;" src="{{ todos.name }}" class="card-img-top" alt="...">
+                        </th>
+                        <th scope="row">{{ i.filmTitle }}</th>
+                        <td>{{ i.showingTime }}</td>
+
+                        <td>
+                            {% load custom_filters %}
+                            <a class="w3-button w3-green button4" style="margin-right: 10px;" href="{% url 'edit-screen' i|get_id %}">Select Showing</a>
+                            <br>
+                        </td>
+
+                        
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    {% elif not data %}
+    <h1 class="w3-margin">There are no showings on the {{selected_date}}</h1>
+    {% endif %}
     <br>
 
     <div class="w3-center">

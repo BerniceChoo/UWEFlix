@@ -94,12 +94,15 @@ def showings_list(request, selected_date):
                     }
 
     results = Showings.find(document)
+
+    data = [doc for doc in results]
        
     
 
     context = {
         'results': results,
-        'selected_date': selected_date
+        'selected_date': selected_date,
+        'data': data,
     }
     return render(request, 'club_rep/showings_list.html', context)
 
