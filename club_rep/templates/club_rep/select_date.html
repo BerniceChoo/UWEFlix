@@ -1,0 +1,37 @@
+{% extends "cust/base.html" %}
+
+{% block title %}
+    <title>Customer</title>
+{% endblock title %}
+
+{% block content %}
+<div>
+    <header class="w3-container w3-black w3-center " style="padding:50px 16px">
+        <h1 class="w3-margin w3-jumbo">Club Representative</h1>
+        <h1 class="w3-margin "> {{ name }} </h1>
+      </header>
+
+    <div class="w3-section w3-bottombar w3-padding-16  ">
+        <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
+        <a href="{% url 'select-date-cr'  %}" class="w3-button w3-blue">Select date</a>
+    </div>
+
+</div>
+
+<br>
+
+<div class="w3-container w3-card w3-round">
+    <table class="">
+        <form action="{% url 'showings_list-cr' %}" method="GET">
+            <label for="date">Select a date:</label>
+            <input type="date" name="date" id="date">
+            <br>
+            <button type="submit">View Data</button>
+        </form>
+    </table>
+    <br>
+
+
+    <br>
+</div>
+{% endblock content %}

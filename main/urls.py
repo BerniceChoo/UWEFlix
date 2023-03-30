@@ -10,6 +10,7 @@ path('admin/', admin.site.urls),
 path('', include('homepage.urls')),
 path('1/', include('cinema_manager.urls')),
 path('2/', include('cust.urls')),
+path('4/', include('club_rep.urls')),
 ]
 
 if settings.DEBUG:
