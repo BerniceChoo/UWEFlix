@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Cinema Manager</title>
+{% endblock title %}
+
+{% block content %}
+<div>
+    <header class="w3-container w3-black w3-center " style="padding:50px 16px">
+        <h1 class="w3-margin w3-jumbo">Cinema Manager</h1>
+    </header>
+    <div class="w3-section w3-bottombar w3-padding-16  ">
+        <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
+        <a href="{% url 'clubs-list' %}" class="w3-button w3-white">Clubs </a>
+        <a href="{% url 'screens-list' %}" class="w3-button w3-white" >Screen </a>
+        <a href="{% url 'films-list' %}" class="w3-button w3-blue w3-hide-small" >Film </a>
+
+        <!-- Search section  -->
+        <div class="w3-right w3-col m2 w3-mobile">
+            <form action="{% url 'screens-list' %}" method="GET">
+                <div class="">
+                <input type="text" class="form-control" placeholder="Search film name"
+                name="search_query" value="{{ search_query }}"/>
+        
+                <input class="w3-button w3-green button4 " type="submit" value="Search"/>
+                </div>
+            </form>
+        </div>
+</div>
+
+<div class="w3-container w3-card w3-round">
+    <table class="">
+        <thead>
+            <tr>
+                <th scope="col">Images</th>
+                <th scope="col">Film Name</th>
+                <th scope="col">Age Rating</th>
+                <th scope="col">Duration</th>
+                <th scope="col">Trailer Description</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in data %}
+                <tr>
+                    <td scope="row">
+                        <img style="height: 100px; width: auto;" src="{{ todos.name }}" class="card-img-top" alt="...">
+                    </td>
+                    <td scope="row">{{ i.Name }}</td>
+                    <td>{{ i.Rating }}</td>
+                    <td>{{ i.Duration }}</td>
+                    <td>{{ i.TrailerDescription }}</td>
+                    <td>{{ i.showings.0.filmTitle }}</td>
+              
+
+                    <td>
+                        {% load custom_filters %}
+                        <a class="w3-button w3-green button4" style="margin-right: 10px;" href="{% url 'edit-film' i|get_id %}">Edit</a>
+                        <br>
+                        {% if i.showings.0.filmTitle %}
+                        <a class="w3-button w3-red button4" style="margin-right: 10px; margin-top: 7px;" href="{% url 'delete-film' i|get_id %}">Remove Film</a>
+                        {% elif not i.showings.0.filmTitle %}
+         
+      
+
+                        {% endif %}
+                    </td>
+
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+
+    <div class="w3-center">
+        <a href="{% url 'create-film' %}"><button type="button" class="w3-button w3-green button4 ">Add New Info</button></a>
+    </div>
+    <br>
+</div>
+{% endblock content %}
