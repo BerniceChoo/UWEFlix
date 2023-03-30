@@ -13,7 +13,7 @@
 
     <div class="w3-section w3-bottombar w3-padding-16  ">
         <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
-        <a href="{% url 'select-date-cr'  %}" class="w3-button w3-blue">Select date</a>
+        <a href="{% url 'select-date-cr'   %}" class="w3-button w3-blue">Select date</a>
     </div>
 
 </div>
@@ -22,7 +22,7 @@
 
 <div class="w3-container w3-card w3-round">
     <table class="">
-        <form action="{% url 'showings_list-cr' %}" method="GET">
+        <form action="{% if date %}{% url 'showings_list-cr' date=date %}{% endif %}" method="GET">
             <label for="date">Select a date:</label>
             <input type="date" name="date" id="date">
             <br>

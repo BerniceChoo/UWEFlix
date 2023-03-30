@@ -55,25 +55,28 @@ def login(request):
 
 def select_date(request):
 
-    search_query = ""
+    #selected_date = ""
     
 
     if request.GET.get('date'):
-        search_query = request.GET.get('date')
+        selected_date = request.GET.get('date')
        
         
-    #cursor = Clubs.find({})
-    # case insensitive search using regex
-    regex = re.compile(search_query, re.IGNORECASE)
-    query = {'Name': {'$regex': regex}}
-    cursor = Screens.find(query)
+        #cursor = Clubs.find({})
+        # case insensitive search using regex
+        regex = re.compile(selected_date, re.IGNORECASE)
+        query = {'Name': {'$regex': regex}}
+        cursor = Screens.find(query)
 
 
-    context = {
-        'cursor': cursor,
-        'search_query': search_query,
-    }
-    return render(request, 'club_rep/select_date.html', context)
+        context = {
+            'cursor': cursor,
+            'selected_date': selected_date,
+        }
+        return redirect('showings_list-cr',selected_date )
+        
+    
+    return render(request, 'club_rep/select_date.html')
 
 
 
@@ -81,12 +84,12 @@ def select_date(request):
 
 
 
-def showings_list(request):
+def showings_list(request, selected_date):
     
 
-    selected_date = request.GET.get('date')
-    print(selected_date)
-
+    #selected_date = request.GET.get('date')
+    #print(selected_date)
+    #selected_date = date
     document={"date": selected_date,
                     }
 
