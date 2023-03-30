@@ -12,41 +12,36 @@
     <div class="w3-section w3-bottombar w3-padding-16  ">
         <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
         <a href="{% url 'select-date-cr' %}" class="w3-button w3-black">Select Date </a>
-        {% if selected_date %}
-        <a href="{% url 'showings_list-cr' selected_date %}" class="w3-button w3-blue" >Showings </a>
-        {% endif %}
+        <a href="#" class="w3-button w3-black" >Showings </a>
+        <a href="{% url 'view-film' film_name %}" class="w3-button w3-blue">Select Date </a>
 
 
 </div>
 
 <div class="w3-container w3-card w3-round">
-
-    {% if data %}
-
     
         <table class="">
             <thead>
                 <tr>
                     <th scope="col">Images</th>
                     <th scope="col">Film Name</th>
-                    <th scope="col">Showing Time</th>
-                    <th scope="col"></th>
+                    <th scope="col">Age Rating</th>
+                    <th scope="col">Duration</th>
+                    <th scope="col">Trailer Description</th>
                 </tr>
             </thead>
             <tbody>
-                {% for i in data %}
+                {% for i in cursor %}
                     <tr>
                         <th scope="row">
                             <img style="height: 100px; width: auto;" src="{{ todos.name }}" class="card-img-top" alt="...">
                         </th>
-                        <th scope="row">{{ i.filmTitle }}</th>
-                        <td>{{ i.showingTime }}</td>
+                        <th scope="row">{{ i.Name }}</th>
+                        <td>{{ i.Rating }}</td>
+                        <td>{{ i.Duration }}</td>
+                        <td>{{ i.TrailerDescription }}</td>
 
-                        <td>
-                            {% load custom_filters %}
-                            <a class="w3-button w3-green button4" style="margin-right: 10px;" href="{% url 'view-film' i|get_id %}">Select Showing</a>
-                            <br>
-                        </td>
+                       
 
                         
                     </tr>
@@ -54,12 +49,19 @@
             </tbody>
         </table>
 
-    {% elif not data %}
-    <h1 class="w3-margin">There are no showings on the {{selected_date}}</h1>
-    {% endif %}
     <br>
 
     <div class="w3-center">
+
+        <table class="">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <label for="date">Select Number of tickets:</label>
+                <input type="Number" name="tickets" id="tickets" min="10" max="50">
+                <br>
+                <button type="submit">Buy</button>
+            </form>
+        </table>
 
     </div>
     <br>

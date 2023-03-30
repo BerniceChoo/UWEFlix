@@ -16,6 +16,7 @@ Clubs = db.Clubs
 Screens = db.Screens
 ClubReps = db.ClubRep
 Showings = db.Showings
+Films = db.Films
 
 
 def login(request):
@@ -108,6 +109,67 @@ def showings_list(request, selected_date):
 
 
 
+def view_film(request, pk):
+    Showings_id = ObjectId(pk)
+
+    results = Showings.find_one({ "_id" : Showings_id })
+    film_name = results["filmTitle"]
+    
+    regex = re.compile(film_name, re.IGNORECASE)
+    query = {'Name': {'$regex': regex}}
+
+    cursor = Films.find(query)
+
+
+
+
+    if request.POST.get('tickets'):
+        numb_of_tickets = int(request.POST.get('tickets'))
+
+        tickets_available = results["ticketsLeft"]
+
+
+
+        if numb_of_tickets > tickets_available:
+            print("not ennough tickets")
+            return redirect('view-film',str(Showings_id) )
+        
+        elif numb_of_tickets <= tickets_available:
+            tickets_left= tickets_available - numb_of_tickets
+
+            document={"id": results["id"],
+                  "ageRating": results["ageRating"],
+                  "filmDuration": results["filmDuration"],
+                  "filmTitle": results["filmTitle"],
+                  "showingTime": results["showingTime"],
+                  "ticketsSold": numb_of_tickets,
+                  "trailerDescription": results["trailerDescription"],
+                  "date": results["date"],
+                  "ticketsLeft": tickets_left,
+                }
+        
+            result = Showings.update_one({'_id': Showings_id},{'$set': document} )
+
+            if result.modified_count == 1:
+                # Document successfully updated
+                print(f"Document with _id updated.")
+                return redirect('view-booking' )
+            else:
+                # Document not found
+                print(f"No document found with _id.")
+
+            return redirect('screens-list')
+
+
+        
+
+
+
+    context = {
+        'cursor': cursor,
+        'film_name': film_name,
+    }
+    return render(request, 'club_rep/view_film.html', context)
 
 
 
@@ -117,39 +179,15 @@ def showings_list(request, selected_date):
 
 
 
+def view_booking(request):
+
+    
+
+    return render(request, 'club_rep/booking.html')
 
 
 
 
-
-
-
-def create_club(request):
-
-    if request.method == 'POST':
-        clubname = request.POST['clubname']
-        city = request.POST['city']
-        street = request.POST['street']
-        email = request.POST['email']
-        houseno = request.POST['houseno']
-        phoneno = request.POST['phoneno']
-        postcode = request.POST['postcode']
-        telephoneno = request.POST['telephoneno']
-
-        document={"Name": clubname,
-                  "City": city,
-                  "Street": street,
-                  "Email": email,
-                  "HouseNumber": houseno,
-                  "PhoneNumber": phoneno,
-                  "PostCode": postcode,
-                  "TelephoneNumber": telephoneno,
-                    }
-        Clubs.insert_one(document)
-
-        return redirect('clubs-list')
-
-    return render(request, 'club_rep/create.html')
 
 
 def edit_club(request, pk):
