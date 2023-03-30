@@ -1,0 +1,33 @@
+{% extends "cust/base.html" %}
+
+{% block title %}
+    <title>Booking confirmation</title>
+{% endblock title %}
+
+{% block content %}
+
+
+<div>
+    <header class="w3-container w3-black w3-center " style="padding:50px 16px">
+        <h1 class="w3-margin w3-jumbo">Customer: Booking confirmation</h1>
+      </header>
+
+    <div class="w3-section w3-bottombar w3-padding-16  ">
+        <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
+        <a href="{% url 'select_date' %}" class="w3-button w3-blue">Select date</a>
+    </div>
+
+</div>
+
+<br>
+
+<body>
+    <h1><center>Unique Booking Number:</center></h1>
+    <p><center>{{ number }}</center></p>
+</body>
+    <br>
+
+
+    <br>
+</div>
+{% endblock content %}
