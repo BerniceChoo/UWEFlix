@@ -18,18 +18,17 @@
 
 </div>
 
-
-<br>
-
 <div class="w3-container w3-card w3-round">
-    <p>Results for {{ selected_date }} or newer:</p>
+    <p>Showings for {{ selected_date }} :</p>
     <table class="">
         <thead>
             <tr>
                 <th scope="col">Date</th>
+                <th scope="col">Time</th>
                 <th scope="col">Film Title</th>
                 <th scope="col">Trailer Description</th>
-                <th scope="col"></th>
+                <th scope="col">Age Rating</th>
+                <th scope="col">Duration</th>
             </tr>
         </thead>
         <tbody>
@@ -37,19 +36,40 @@
 
                 <tr>
                     <td>{{ i.date }}</td>
+                    <td>{{ i.showingTime }}</td>
                     <td>{{ i.filmTitle }}</td>
                     <td>{{ i.trailerDescription }}</td>
-                    <td>
-                        {% load custom_filters %}
-                        <a class="w3-button w3-blue button4" style="margin-right: 30px;" href="{% url 'edit-club' i|get_id %}">Select</a>
-                    </td>
-
+                    <td>{{ i.ageRating }}</td>
+                    <td>{{ i.filmDuration }}</td>
                     
+
                 </tr>
+                
             {% endfor %}
+            
         </tbody>
     </table>
     <br>
+    <p> Select a Movie</p>
+    <li><a href="{% url 'ticket' %}">{{ i.filmTitle }}</a></li>
+                        <table class="">
+                            {% comment %} <form action="{% url 'test' %}" method="get">
+                                <label>Select:</label>
+                                <input type="stringformat" name="data" id="data">
+                                <br>
+                                <button type="submit">View Data</button>
+                            </form> {% endcomment %}
+                            <form action="{% url 'ticket' %}" method="get">
+                                <select name="data" id="data">
+                                    {% for movie in movies %}
+                                    <option value="{{ movie.filmTitle }}">{{ movie.filmTitle }}</option>
+                                    {% endfor %}
+                                </select>
+                                <p> </p>
+                                <input class="w3-button w3-green button4" style="margin-right: 10px;" type="submit" value="Submit">
+                            </form>
+                        </table>
+     <br>
 
 
     <br>
