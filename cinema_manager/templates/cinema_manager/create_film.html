@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Create</title>
+{% endblock title %}
+
+{% block content %}
+    <div class="w3-container w3-margin w3-center"> 
+    <form action="" method="POST" enctype="multipart/form-data">
+        <div class=" w3-blue w3-card w3-round w3-margin w3-padding"> 
+        <h1 style="text-align: center; padding-top: 1em; padding-bottom: 1em;">Add New Screen Information</h1>
+        {% csrf_token %}
+        <label for="filmname">Film Name:</label><br>
+        <input type="text" name="filmname" id="filmname" value="Spider-man"><br><br>
+
+        <label for="agerating">Age Rating:</label><br>
+        <input type="text" name="agerating" id="agerating" value="PG"><br><br>
+
+        <label for="duration">Duration:</label><br>
+        <input type="text" name="duration" id="duration" value="160m"><br><br>
+
+        <label for="trailerdesc">Trailer Description:</label><br>
+        <input type="text" name="trailerdesc" id="trailerdesc" value="Spiderman dies"><br><br>
+
+        <a href="{% url 'films-list' %}"><button type="button" class="w3-button w3-red button4">Go back</button></a>
+
+        <input type="submit" class="w3-button w3-green button4 w3-margin" value="Add">
+        </div>
+    </form>
+</div>
+{% endblock content %}
