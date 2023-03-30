@@ -13,8 +13,8 @@
     <div class="w3-section w3-bottombar w3-padding-16  ">
         <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
         <a href="{% url 'clubs-list' %}" class="w3-button w3-blue">Clubs</a>
-        <a href="screen/" class="w3-button w3-white" >Screen </a>
-        <a href="#" class="w3-button w3-white w3-hide-small" >Film </a>
+        <a href="{% url 'screens-list' %}" class="w3-button w3-white" >Screen </a>
+        <a href="{% url 'films-list' %}" class="w3-button w3-white w3-hide-small" >Film </a>
         
         <!-- Search section  -->
         <div class=" w3-right w3-col m2 w3-mobile ">
@@ -31,7 +31,6 @@
 
 </div>
 
-<!-- Search section  -->
 <br>
 
 <div class="w3-container w3-card w3-round">

@@ -13,7 +13,7 @@
         <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
         <a href="{% url 'clubs-list' %}" class="w3-button w3-white">Clubs </a>
         <a href="{% url 'screens-list' %}" class="w3-button w3-blue" >Screen </a>
-        <a href="#" class="w3-button w3-white w3-hide-small" >Film </a>
+        <a href="{% url 'films-list' %}" class="w3-button w3-white w3-hide-small" >Film </a>
 
         <!-- Search section  -->
         <div class="w3-right w3-col m2 w3-mobile">
@@ -63,7 +63,7 @@
                         {% load custom_filters %}
                         <a class="w3-button w3-green button4" style="margin-right: 10px;" href="{% url 'edit-screen' i|get_id %}">Edit</a>
                         <br>
-                        <a class="w3-button w3-red button4" style="margin-right: 10px; margin-top: 7px;" href="{% url 'delete-screen' i|get_id %}">Remove Club</a>
+                        <a class="w3-button w3-red button4" style="margin-right: 10px; margin-top: 7px;" href="{% url 'delete-screen' i|get_id %}">Remove Screen</a>
                     </td>
 
                     

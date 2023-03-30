@@ -16,6 +16,12 @@ urlpatterns = [
     path('screen/edit/<str:pk>/', views.edit_screen, name='edit-screen'),
     path('screen/delete/<str:pk>/', views.delete_screen, name='delete-screen'),
 
+
+    path('film/', views.films_list, name='films-list'),
+    path('film/create/', views.create_film, name='create-film'),
+    path('film/edit/<str:pk>/', views.edit_film, name='edit-film'),
+    path('film/delete/<str:pk>/', views.delete_film, name='delete-film'),
+
     
 
 ]

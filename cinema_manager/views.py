@@ -14,6 +14,8 @@ db = client.test
 Clubs = db.Clubs
 Screens = db.Screens
 ClubReps = db.ClubRep
+Films = db.Films
+Showings = db.Showings
 
 
 def clubs_list(request):
@@ -190,6 +192,9 @@ def delete_club(request, pk):
     
 
 
+
+#==================================================================================
+
 def register_club_rep(request, pk):
     club_id = ObjectId(pk)
     # finds the largest number in the number field from the Club reps collection. "-1" specifies that the sort order is descending
@@ -259,10 +264,7 @@ def delete_club_rep(request, pk):
 
 
 
-
-
-
-
+#==================================================================================
 
 def screens_list(request):
 
@@ -367,4 +369,149 @@ def delete_screen(request, pk):
         'screen': cursor,
     }
     return render(request, 'cinema_manager/delete_screen.html', context)
+    
+
+
+#==================================================================================
+
+
+def films_list(request):
+
+    search_query = ""
+    
+
+    if request.GET.get('search_query'):
+        search_query = request.GET.get('search_query')
+       
+        
+    #cursor = Clubs.find({})
+    # case insensitive search using regex
+    regex = re.compile(search_query, re.IGNORECASE)
+    query = {'Name': {'$regex': regex}}
+    cursor = Films.find(query)
+
+    #joins showings and films collection, soo that we can see if a film is out for a showing, if it is the film cant be deleted
+    pipeline = [
+        {
+            '$lookup': {
+                'from': 'Showings',
+                'localField': 'Name',
+                'foreignField': 'filmTitle',
+                'as': 'showings'
+            }
+        },
+        {
+            '$match': {
+                '$or': [
+                    {'Name': {'$regex': search_query, '$options': 'i'}},
+                    {'showings.filmTitle': {'$regex': search_query, '$options': 'i'}},
+                ]
+            }
+        },
+        {
+            '$project': {
+                '_id': 1,
+                'Name': 1,
+                'Rating': 1,
+                'Duration': 1,
+                'TrailerDescription': 1,
+                'showings.filmTitle': 1,
+
+            }
+        }
+    ]
+
+
+    result = client['test']['Films'].aggregate(pipeline)
+
+    data = [doc for doc in result]
+  
+    context = {
+        'cursor': cursor,
+        'search_query': search_query,
+        'data': data,
+    }
+    return render(request, 'cinema_manager/film_list.html', context)
+
+
+def create_film(request):
+
+    if request.method == 'POST':
+        filmname = request.POST['filmname']
+        agerating = request.POST['agerating']
+        duration = request.POST['duration']
+        trailerdesc = request.POST['trailerdesc']
+
+        document={"Name": filmname,
+                  "Rating": agerating,
+                  "Duration": duration,
+                  "TrailerDescription": trailerdesc,
+                    }
+        Films.insert_one(document)
+
+        return redirect('films-list')
+
+    return render(request, 'cinema_manager/create_film.html')
+
+
+def edit_film(request, pk):
+
+    film_id = ObjectId(pk)
+   
+    if request.method == 'POST':
+        filmname = request.POST['filmname']
+        agerating = request.POST['agerating']
+        duration = request.POST['duration']
+        trailerdesc = request.POST['trailerdesc']
+
+        
+
+        document={"Name": filmname,
+                  "Rating": agerating,
+                  "Duration": duration,
+                  "TrailerDescription": trailerdesc,
+                    }
+        
+        result = Films.update_one({'_id': film_id},{'$set': document} )
+
+        if result.modified_count == 1:
+            # Document successfully updated
+            print(f"Document with _id '{film_id}' updated.")
+            return redirect('films-list')
+        else:
+            # Document not found
+            print(f"No document found with _id '{film_id}'.")
+
+        return redirect('films-list')
+   
+    cursor = Films.find({"_id" : film_id})
+    context = {
+        'film': cursor,
+    }
+    return render(request, 'cinema_manager/edit_film.html', context)
+
+
+def delete_film(request, pk):
+    
+    #convert string to objectId (format of mongoDB _id variable)
+    film_id = ObjectId(pk)
+    
+
+    if request.method == 'POST':
+
+        result = Films.delete_one( { "_id" : film_id } )
+        if result.deleted_count == 1:
+            # Document successfully deleted
+            print(f"Document with _id '{film_id}' deleted.")
+            return redirect('films-list')
+        else:
+            # Document not found
+            print(f"No document found with _id '{film_id}'.")
+        return redirect('films-list')
+    
+    cursor = Films.find({"_id" : film_id})
+    context = {
+        'film': cursor,
+    }
+    return render(request, 'cinema_manager/delete_film.html', context)
     
