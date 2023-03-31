@@ -69,7 +69,9 @@
                         </table>
      <br>
     {% elif not data %}
-    <h1 class="w3-margin">There are no showings on the {{selected_date}}</h1>
+    <h1 class="w3-margin"><center>There are no showings on the {{selected_date}}</center></h1>
+    <p> </p>
+    <a href="{% url 'select_date' %}"><center><button type="button" class="w3-button w3-red button4">Select another date</button></center></a>
     {% endif %}
 
     <br>
