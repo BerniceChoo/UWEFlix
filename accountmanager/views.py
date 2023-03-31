@@ -18,10 +18,6 @@ client = pymongo.MongoClient('mongodb+srv://nathan2miller:hj86z7mW3ZnWG1HH@uwefl
 db = client['test']
 cl = db["Accounts"]
 
-
-def home(request):
-    return HttpResponse("Hello, Django!")
-
 def accountMngrTable(request, *args, **kwargs):
     data = linkDatabase("Accounts")
     #print(data)
