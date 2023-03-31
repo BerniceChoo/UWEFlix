@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>cor
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="{% static 'CSS.css' %}">
+        <title>Input Data</title>
+    </head>
+    <body>
+        {% block content %}
+        <header>Input Data</header>
+        <form action="/accountManagerAddRecieved" method="POST">{% csrf_token %}
+            <input type="text" name="firstName" placeholder="First Name/ Club Name" required/>
+            <input type="text" name="surname" placeholder="Surname" required/>
+            <input type="password" name="password" placeholder="Password" required/>
+            <input type="text" name="cardNumber" placeholder="Card Number" required maxlength="16" minlength="16"/>
+            <input type="month" name="expiryDate" placeholder="Expiry Date" required/>
+            <input type="number" name="discount" placeholder="Discount Rate" required/>
+            <input type="submit" value="Save" />
+        </form>
+        {% endblock content %}
+    </body>
+</html>

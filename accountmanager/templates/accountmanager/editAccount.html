@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>cor
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="{% static 'CSS.css' %}">
+        <title>Edit Account</title>
+    </head>
+    <body>
+        {% block content %}
+        <header>Input Data</header>
+        <form action="/accountManagerEditRecieved" method="POST">{% csrf_token %}
+            <input type="number" name="id" placeholder="Account ID" required/>
+            <select id="change" name="change" required>
+                <option style="display:none"></option>
+                <option disabled>--Select--</option>
+                <option value="FirstName">Name</option>
+                <option value="LastName">Surname</option>
+                <option value="CardNumber">Card Number</option>
+                <option value="ExpiryDate">Expiry Date</option>
+                <option value="DiscountRate">Discount Rate</option>
+            </select>
+            <input type="text" name="newData" placeholder="New Data" required/>
+            <input type="submit" value="Save" />
+        </form>
+        {% endblock content %}
+    </body>
+</html>

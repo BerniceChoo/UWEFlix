@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>cor
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="{% static 'CSS.css' %}">
+        <title>Delete Account</title>
+    </head>
+    <body>
+        {% block content %}
+        <header>Select Account to be Removed</header>
+        <form action="/accountManagerRemoveRecieved" method="POST">{% csrf_token %}
+            <input type="number" name="id" placeholder="Account ID" required/>
+            <input type="submit" value="Save" />
+        </form>
+        {% endblock content %}
+    </body>
+</html>

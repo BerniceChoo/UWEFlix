@@ -1,0 +1,17 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>cor
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="{% static 'CSS.css' %}">
+        <title>Data Recieved</title>
+    </head>
+    <body>
+        {% block content %}
+        <header>Data Recieved</header>
+        <p>Data Added.</p>
+        <a href="/accountManagerTable">back to table</a>
+        </form>
+        {% endblock content %}
+    </body>
+</html>
