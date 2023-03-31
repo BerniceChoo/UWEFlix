@@ -19,7 +19,8 @@
 </div>
 
 <div class="w3-container w3-card w3-round">
-    <p>Showings for {{ selected_date }} :</p>
+<p>Showings for {{ selected_date }} :</p>
+{% if data %}
     <table class="">
         <thead>
             <tr>
@@ -32,7 +33,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for i in results %}
+            {% for i in data %}
 
                 <tr>
                     <td>{{ i.date }}</td>
@@ -44,12 +45,9 @@
                     
 
                 </tr>
-                
             {% endfor %}
-            
         </tbody>
     </table>
-    <br>
     <p> Select a Movie</p>
     <li><a href="{% url 'ticket' %}">{{ i.filmTitle }}</a></li>
                         <table class="">
@@ -70,6 +68,14 @@
                             </form>
                         </table>
      <br>
+    {% elif not data %}
+    <h1 class="w3-margin"><center>There are no showings on the {{selected_date}}</center></h1>
+    <p> </p>
+    <a href="{% url 'select_date' %}"><center><button type="button" class="w3-button w3-red button4">Select another date</button></center></a>
+    {% endif %}
+
+    <br>
+    
 
 
     <br>
