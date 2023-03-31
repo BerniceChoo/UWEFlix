@@ -21,7 +21,8 @@ def view_data(request):
     selected_date = request.GET.get('date')
     results = Showings.find({'date': selected_date})
     movies = Showings.find({'date': selected_date}, {'filmTitle': 1})
-    context = {'results': results, 'selected_date': selected_date, 'movies': movies}
+    data = [doc for doc in results]
+    context = {'results': results, 'selected_date': selected_date, 'movies': movies, 'data': data}
     return render(request, 'cust/data_view.html', context)
 
 
