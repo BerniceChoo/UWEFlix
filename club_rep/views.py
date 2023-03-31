@@ -129,40 +129,15 @@ def view_film(request, pk):
         tickets_available = results["ticketsLeft"]
 
 
-
         if numb_of_tickets > tickets_available:
             print("not ennough tickets")
-            return redirect('view-film',str(Showings_id) )
+            return redirect('view-film',pk=pk )
         
         elif numb_of_tickets <= tickets_available:
-            tickets_left= tickets_available - numb_of_tickets
 
-            document={"id": results["id"],
-                  "ageRating": results["ageRating"],
-                  "filmDuration": results["filmDuration"],
-                  "filmTitle": results["filmTitle"],
-                  "showingTime": results["showingTime"],
-                  "ticketsSold": numb_of_tickets,
-                  "trailerDescription": results["trailerDescription"],
-                  "date": results["date"],
-                  "ticketsLeft": tickets_left,
-                }
-        
-            result = Showings.update_one({'_id': Showings_id},{'$set': document} )
+            return redirect('view-booking', pk=pk )
 
-            if result.modified_count == 1:
-                # Document successfully updated
-                print(f"Document with _id updated.")
-                return redirect('view-booking' )
-            else:
-                # Document not found
-                print(f"No document found with _id.")
-
-            return redirect('screens-list')
-
-
-        
-
+     
 
 
     context = {
@@ -179,11 +154,66 @@ def view_film(request, pk):
 
 
 
-def view_booking(request):
+def view_booking(request, pk):
+    Showings_id = ObjectId(pk)
+
+    results = Showings.find_one({ "_id" : Showings_id })
+    film_name = results["filmTitle"]
+    
+    regex = re.compile(film_name, re.IGNORECASE)
+    query = {'Name': {'$regex': regex}}
+
+    cursor = Films.find(query)
+
+    if request.POST.get('tickets'):
+        numb_of_tickets = int(request.POST.get('tickets'))
+        tickets_available = results["ticketsLeft"]
+        tickets_left= tickets_available - numb_of_tickets
+
+        document={"id": results["id"],
+                  "ageRating": results["ageRating"],
+                  "filmDuration": results["filmDuration"],
+                  "filmTitle": results["filmTitle"],
+                  "showingTime": results["showingTime"],
+                  "ticketsSold": numb_of_tickets,
+                  "trailerDescription": results["trailerDescription"],
+                  "date": results["date"],
+                  "ticketsLeft": tickets_left,
+                }
+        
+        result = Showings.update_one({'_id': Showings_id},{'$set': document} )
+
+        if result.modified_count == 1:
+            # Document successfully updated
+            print(f"Document with _id updated.")
+            return redirect('select-date-cr' )
+        else:
+            # Document not found
+            print(f"No document found with _id.")
+            #return redirect('view-film', pk=pk , error ="" )
+
+
+    context = {
+        'cursor': cursor,
+        'film_name': film_name,
+    }
 
     
 
-    return render(request, 'club_rep/booking.html')
+    return render(request, 'club_rep/booking.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

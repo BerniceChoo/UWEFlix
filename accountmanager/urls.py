@@ -2,7 +2,7 @@ from django.urls import path
 from accountmanager import views
 
 urlpatterns = [
-    path("", views.home, name="home"),
+    path("", views.accountMngrTable, name="home"),
     path("accountManagerTable", views.accountMngrTable, name="viewTable"),
     path("accountManagerAdd", views.accountMngrAdd, name="inputData"),
     path("accountManagerAddRecieved", views.accountMngrAddRecieved, name="recievedData"),

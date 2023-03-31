@@ -8,13 +8,14 @@
 <div>
     <header class="w3-container w3-black w3-center " style="padding:50px 16px">
         <h1 class="w3-margin w3-jumbo">Club Representative</h1>
+        <h1 class="w3-margin w3-jumbo">Booking</h1>
     </header>
     <div class="w3-section w3-bottombar w3-padding-16  ">
         <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
         <a href="{% url 'select-date-cr' %}" class="w3-button w3-black">Select Date </a>
         <a href="#" class="w3-button w3-black" >Showings </a>
         {% if film_name %}
-        <a href="{% url 'view-film' film_name %}" class="w3-button w3-blue">Select Date </a>
+        <a href="{% url 'view-film' film_name %}" class="w3-button w3-blue">Booking </a>
         {% endif %}
 
 

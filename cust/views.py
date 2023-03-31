@@ -38,6 +38,6 @@ def ticket(request):
 def book_tickets(request):
     selected_ticketsnum = request.GET.get('tickets')
     ticket_price = TicketsPrice.find_one()['customerPrice']
-    total_price = selected_ticketsnum * ticket_price
+    total_price = int(selected_ticketsnum) * ticket_price
     context = { 'selected_ticketsnum': selected_ticketsnum, 'ticket_price': ticket_price, 'total_price': total_price}
     return render(request, 'cust/book_tickets.html', context)
