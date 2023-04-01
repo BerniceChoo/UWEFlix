@@ -199,7 +199,8 @@ def view_booking(request, pk, numb_of_tickets):
         result = Showings.update_one({'_id': Showings_id},{'$set': document} )
 
         now = datetime.now()
-        dt_string = now.strftime("%d/%m/%Y")
+        #dt_string = now.strftime("%d/%m/%Y")
+        #https://www.programiz.com/python-programming/datetime/current-datetime
 
         
 
@@ -208,7 +209,7 @@ def view_booking(request, pk, numb_of_tickets):
                   "NumberOfTickets": numb_of_tickets,
                   "TotalCost": price_after,
                   "PaymentMethod": payment,
-                  "DateOfTransaction": dt_string,
+                  "DateOfTransaction": now,
                 }
         
         
@@ -247,13 +248,64 @@ def view_booking(request, pk, numb_of_tickets):
 
 
 
-def view_transactions(request):
+def view_transactions(request , selected_month=None):
 
     clubrep_id = ObjectId(request.session['UserID'])
+
+    if request.GET.get('date'):
+        selected_month = request.GET.get('date')
+        return redirect( 'view-month-transactions', selected_month=selected_month)
+
+    if selected_month:
+        print("po")
+        print(selected_month)
+        selected_month = datetime.strptime(selected_month, "%Y-%m")
+
+        query = {
+            "DateOfTransaction": {
+            "$gte": selected_month,
+            "$lt": selected_month.replace(month=selected_month.month+1)
+            },
+            "AccountID": {
+            "$eq": clubrep_id
+            }
+        }
+
+        cursor = Bookings.find(query)
+        
+
+    else:
+        cursor = Bookings.find({"AccountID" : clubrep_id})
+
+
+
+
+    context = {
+        'cursor': cursor,
+    }
+    return render(request, 'club_rep/transactions.html', context)
+
+
+'''
+
+def view_transactions(request):
+
+  
+
+
+    selected_month = datetime.strptime("2023-04", "%Y-%m")
+    print(selected_month)
+
+    query = {
+        "DateOfTransaction": {
+        "$gte": selected_month,
+        "$lt": selected_month.replace(month=selected_month.month+1)
+        }
+    }
+
+    cursor = Bookings.find(query)
+
    
-    
-   
-    cursor = Bookings.find({"AccountID" : clubrep_id})
     context = {
         'cursor': cursor,
     }
@@ -262,10 +314,7 @@ def view_transactions(request):
 
 
 
-
-
-
-
+'''
 
 
 

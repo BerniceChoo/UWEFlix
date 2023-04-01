@@ -32,7 +32,7 @@
                 {% for i in cursor %}
                     <tr>
                         <th scope="row">{{ i.NumberOfTickets }}</th>
-                        <th scope="row">{{ i.TotalCost }}</th>
+                        <th scope="row">£{{ i.TotalCost }}</th>
                         <td>{{ i.PaymentMethod }}</td>
                         <td>{{ i.DateOfTransaction }}</td>
 
@@ -50,10 +50,23 @@
 
         <table class="">
             
-            <form action="" method="POST">
+            <form action="" method="get">
                 {% csrf_token %}
                 <label for="date">Select Month:</label>
-                <input type="Number" name="tickets" id="tickets" min="10" max="50">
+                <select id='date' name ='date'>
+                    <option selected value='2023-01'>Janaury</option>
+                    <option value='2023-02'>February</option>
+                    <option value='2023-03'>March</option>
+                    <option value='2023-04'>April</option>
+                    <option value='2023-05'>May</option>
+                    <option value='2023-06'>June</option>
+                    <option value='2023-07'>July</option>
+                    <option value='2023-08'>August</option>
+                    <option value='2023-09'>September</option>
+                    <option value='2023-10'>October</option>
+                    <option value='2023-11'>November</option>
+                    <option value='2023-12'>December</option>
+                    </select>
                 <br>
                 
                 <a href="#"><button type="button" class="w3-button w3-red button4">Go back</button></a>
