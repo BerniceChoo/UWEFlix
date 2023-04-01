@@ -19,7 +19,7 @@ Showings = db.Showings
 Films = db.Films
 
 
-def login(request):
+def login(request, message=None):
     
     if request.method == 'POST':
         number = request.POST.get('number')
@@ -42,12 +42,14 @@ def login(request):
         else:
             # Document not found
             print(f"No document found with _id.")
-            return redirect('login', error='Invalid username or password')
+            message = "Your login credentials were not found. Please try again."
+            return redirect('login', message=message)
 
 
     context = {
         'search_query': 1,
         'data': 1,
+        'message': message
     }
     return render(request, 'club_rep/login.html', context)
 
