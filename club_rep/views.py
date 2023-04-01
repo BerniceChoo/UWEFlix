@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from pymongo import MongoClient
 import pymongo
 from bson.objectid import ObjectId
-import datetime
+from datetime import datetime
 import re
 import string
 import random
@@ -17,6 +17,7 @@ Screens = db.Screens
 ClubReps = db.ClubRep
 Showings = db.Showings
 Films = db.Films
+Bookings = db.Bookings
 
 
 def login(request, message=None):
@@ -165,6 +166,9 @@ def view_booking(request, pk, numb_of_tickets):
     film_name = results["filmTitle"]
     showing_date = results["date"]
     showing_id = results["_id"]
+
+    price_before = int(numb_of_tickets) * 10
+    price_after = price_before * 0.75
     
     regex = re.compile(film_name, re.IGNORECASE)
     query = {'Name': {'$regex': regex}}
@@ -179,6 +183,8 @@ def view_booking(request, pk, numb_of_tickets):
         tickets_sold = tickets_sold + numb_of_tickets
         tickets_left= tickets_available - numb_of_tickets
 
+        clubrep_id = ObjectId(request.session['UserID'])
+
         document={"id": results["id"],
                   "ageRating": results["ageRating"],
                   "filmDuration": results["filmDuration"],
@@ -192,6 +198,25 @@ def view_booking(request, pk, numb_of_tickets):
         
         result = Showings.update_one({'_id': Showings_id},{'$set': document} )
 
+        now = datetime.now()
+        dt_string = now.strftime("%d/%m/%Y")
+
+        
+
+        document2={"AccountID": clubrep_id,
+                  "ShowingID": Showings_id,
+                  "NumberOfTickets": numb_of_tickets,
+                  "TotalCost": price_after,
+                  "PaymentMethod": payment,
+                  "DateOfTransaction": dt_string,
+                }
+        
+        
+
+
+        Bookings.insert_one(document2)
+
+
         if result.modified_count == 1:
             # Document successfully updated
             print(f"Document with _id updated.")
@@ -203,8 +228,6 @@ def view_booking(request, pk, numb_of_tickets):
             #return redirect('view-film', pk=pk , error ="" )
 
 
-    price_before = int(numb_of_tickets) * 10
-    price_after = price_before * 0.75
 
     context = {
         'cursor': cursor,
@@ -224,7 +247,17 @@ def view_booking(request, pk, numb_of_tickets):
 
 
 
+def view_transactions(request):
 
+    clubrep_id = ObjectId(request.session['UserID'])
+   
+    
+   
+    cursor = Bookings.find({"AccountID" : clubrep_id})
+    context = {
+        'cursor': cursor,
+    }
+    return render(request, 'club_rep/transactions.html', context)
 
 
 

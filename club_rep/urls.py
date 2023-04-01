@@ -14,6 +14,7 @@ urlpatterns = [
     path('selectdate/', views.select_date, name='select-date-cr'),
     path('<str:message>/', views.login, name='login') ,
 
+    path('transactions', views.view_transactions, name='view-transactions'),
     path('showing/<str:selected_date>/', views.showings_list, name='showings_list-cr'),
     path('view/<str:pk>/', views.view_film, name='view-film'),
     path('booking/<str:pk>/<str:numb_of_tickets>', views.view_booking, name='view-booking'),

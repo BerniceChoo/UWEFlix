@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Cinema Manager</title>
+{% endblock title %}
+
+{% block content %}
+<div>
+    <header class="w3-container w3-black w3-center " style="padding:50px 16px">
+        <h1 class="w3-margin w3-jumbo">Club Representative</h1>
+    </header>
+    <div class="w3-section w3-bottombar w3-padding-16  ">
+        <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
+        <a href="{% url 'select-date-cr'  %}" class="w3-button w3-black">Select Date </a>
+
+
+
+</div>
+
+<div class="w3-container w3-card w3-round">
+    
+        <table class="">
+            <thead>
+                <tr>
+                    <th scope="col">Number Of Tickets</th>
+                    <th scope="col">Total Cost</th>
+                    <th scope="col">Payment Method</th>
+                    <th scope="col">Date of transaction</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in cursor %}
+                    <tr>
+                        <th scope="row">{{ i.NumberOfTickets }}</th>
+                        <th scope="row">{{ i.TotalCost }}</th>
+                        <td>{{ i.PaymentMethod }}</td>
+                        <td>{{ i.DateOfTransaction }}</td>
+
+                       
+
+                        
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    <br>
+
+    <div class="w3-center">
+
+        <table class="">
+            
+            <form action="" method="POST">
+                {% csrf_token %}
+                <label for="date">Select Month:</label>
+                <input type="Number" name="tickets" id="tickets" min="10" max="50">
+                <br>
+                
+                <a href="#"><button type="button" class="w3-button w3-red button4">Go back</button></a>
+                <input class="w3-button w3-green button4 w3-margin" type="submit" value="View">
+            </form>
+        </table>
+        
+
+    </div>
+    <br>
+</div>
+{% endblock content %}
