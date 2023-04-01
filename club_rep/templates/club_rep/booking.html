@@ -8,20 +8,21 @@
 <div>
     <header class="w3-container w3-black w3-center " style="padding:50px 16px">
         <h1 class="w3-margin w3-jumbo">Club Representative</h1>
-        <h1 class="w3-margin w3-jumbo">Booking</h1>
     </header>
     <div class="w3-section w3-bottombar w3-padding-16  ">
         <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
         <a href="{% url 'select-date-cr' %}" class="w3-button w3-black">Select Date </a>
-        <a href="#" class="w3-button w3-black" >Showings </a>
-        {% if film_name %}
-        <a href="{% url 'view-film' film_name %}" class="w3-button w3-blue">Booking </a>
+        <a href="{% url 'showings_list-cr' date  %}" class="w3-button w3-black" >Showings </a>
+        {% if showing_id %}
+        <a href="{% url 'view-film' showing_id %}" class="w3-button w3-black">Ticket </a>
+        <a href="{% url 'view-booking' showing_id numb_of_tickets %}" class="w3-button w3-blue" >Booking Confirmation </a>
         {% endif %}
 
 
 </div>
 
 <div class="w3-container w3-card w3-round">
+    <h1 class="w3-margin ">Booking confirmation</h1>
     
         <table class="">
             <thead>
@@ -59,10 +60,29 @@
         <table class="">
             <form action="" method="POST">
                 {% csrf_token %}
-                <label for="date">Select Number of tickets:</label>
-                <input type="Number" name="tickets" id="tickets" min="10" max="50">
+                <label for="date">Number of tickets:</label>
+                <input type="Number" name="tickets" id="tickets" value="{{numb_of_tickets}}" readonly>
+                <br><br>
+                <label for="payment">Payment system:</label>
+                <select id="payment" name="payment">
+                    <option value="Debitcard">Debit card</option>
+                    <option value="Paypal">Paypal</option>
+                    <option value="Stripe">Stripe</option>
+                </select>
+
                 <br>
-                <button type="submit">Buy</button>
+
+                <h1 class="w3-margin"> Checkout </h1>
+                <h3 class="w3-margin"> {{numb_of_tickets}} tickets x £10 = £{{price_before}} </h3>
+                <h5 class="w3-margin w3-green"> Club rep discount 25% </h5>
+                <h2 class="w3-margin"> £{{price_after}} </h2>
+
+
+
+
+
+                <a href="{% url 'view-film' showing_id %}"><button type="button" class="w3-button w3-red button4">Go back</button></a>
+                <input class="w3-button w3-green button4 w3-margin" type="submit" value="Confirm">
             </form>
         </table>
 

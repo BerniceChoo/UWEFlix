@@ -116,6 +116,7 @@ def view_film(request, pk):
 
     results = Showings.find_one({ "_id" : Showings_id })
     film_name = results["filmTitle"]
+    showing_date = results["date"]
     
     regex = re.compile(film_name, re.IGNORECASE)
     query = {'Name': {'$regex': regex}}
@@ -137,14 +138,15 @@ def view_film(request, pk):
         
         elif numb_of_tickets <= tickets_available:
 
-            return redirect('view-booking', pk=pk )
+            return redirect('view-booking', pk=pk ,numb_of_tickets=numb_of_tickets)
 
      
 
 
     context = {
         'cursor': cursor,
-        'film_name': film_name,
+        'film_id': pk,
+        'date': showing_date,
     }
     return render(request, 'club_rep/view_film.html', context)
 
@@ -156,11 +158,13 @@ def view_film(request, pk):
 
 
 
-def view_booking(request, pk):
+def view_booking(request, pk, numb_of_tickets):
     Showings_id = ObjectId(pk)
 
     results = Showings.find_one({ "_id" : Showings_id })
     film_name = results["filmTitle"]
+    showing_date = results["date"]
+    showing_id = results["_id"]
     
     regex = re.compile(film_name, re.IGNORECASE)
     query = {'Name': {'$regex': regex}}
@@ -169,7 +173,10 @@ def view_booking(request, pk):
 
     if request.POST.get('tickets'):
         numb_of_tickets = int(request.POST.get('tickets'))
+        payment = request.POST.get('payment')
         tickets_available = results["ticketsLeft"]
+        tickets_sold = results["ticketsSold"]
+        tickets_sold = tickets_sold + numb_of_tickets
         tickets_left= tickets_available - numb_of_tickets
 
         document={"id": results["id"],
@@ -177,7 +184,7 @@ def view_booking(request, pk):
                   "filmDuration": results["filmDuration"],
                   "filmTitle": results["filmTitle"],
                   "showingTime": results["showingTime"],
-                  "ticketsSold": numb_of_tickets,
+                  "ticketsSold": tickets_sold,
                   "trailerDescription": results["trailerDescription"],
                   "date": results["date"],
                   "ticketsLeft": tickets_left,
@@ -188,21 +195,55 @@ def view_booking(request, pk):
         if result.modified_count == 1:
             # Document successfully updated
             print(f"Document with _id updated.")
-            return redirect('select-date-cr' )
+            message = "Your login credentials were not found. Please try again."
+            return redirect('select-date-cr'  )
         else:
             # Document not found
             print(f"No document found with _id.")
             #return redirect('view-film', pk=pk , error ="" )
 
 
+    price_before = int(numb_of_tickets) * 10
+    price_after = price_before * 0.75
+
     context = {
         'cursor': cursor,
-        'film_name': film_name,
+        'date': showing_date,
+        'showing_id': showing_id,
+        'numb_of_tickets': numb_of_tickets,
+        'price_before': price_before,
+        'price_after': price_after,
     }
 
     
 
     return render(request, 'club_rep/booking.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
