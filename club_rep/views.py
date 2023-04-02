@@ -140,7 +140,19 @@ def view_film(request, pk):
         
         elif numb_of_tickets <= tickets_available:
 
-            return redirect('view-booking', pk=pk ,numb_of_tickets=numb_of_tickets)
+
+            club_id = ObjectId(request.session['ClubID'])
+            price_before = int(numb_of_tickets) * 10
+            price_after = price_before * 0.75
+            results = Clubs.find_one({'_id': club_id})
+            balance = results['Balance']
+            print(balance)
+            print(price_after)
+
+            if int(balance) < int(price_after):
+                return redirect('club_balance' )
+            else:
+                return redirect('view-booking', pk=pk ,numb_of_tickets=numb_of_tickets)
 
      
 
