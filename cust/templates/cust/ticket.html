@@ -26,6 +26,7 @@
     <table class="">
         <thead>
             <tr>
+                <th scope="col">Images</th>
                 <th scope="col">Date</th>
                 <th scope="col">Time</th>
                 <th scope="col">Film Title</th>
@@ -38,12 +39,15 @@
             {% for i in results %}
 
                 <tr>
-                    <td>{{ i.date }}</td>
-                    <td>{{ i.showingTime }}</td>
-                    <td>{{ i.filmTitle }}</td>
-                    <td>{{ i.trailerDescription }}</td>
-                    <td>{{ i.ageRating }}</td>
-                    <td>{{ i.filmDuration }}</td>
+                    <td scope="row">
+                        <img style="height: 100px; width: auto;" src="{{ todos.name }}" class="card-img-top" alt="...">
+                    </td>
+                    <td>{{ i.Date }}</td>
+                    <td>{{ i.Time }}</td>
+                    <td>{{ i.Name }}</td>
+                    <td>{{ i.TrailerDescription }}</td>
+                    <td>{{ i.Rating }}</td>
+                    <td>{{ i.Duration }}</td>
 
                     
                 </tr>
@@ -53,12 +57,13 @@
     </table>
     <br>
     <table class="">
-        <form action="{% url 'book_tickets' %}" method="get">
+        <form action="{% url 'book_tickets' %}" method="get"><center>
             <label for="tickets">Number of tickets:  </label>
             <input type="number" name="tickets" id="tickets" min="1" max="10" value="1">
             <br>
+            <p> </p>
             <button type="submit" class="w3-button w3-green button4" style="margin-right: 10px;"> Proceed to Booking</button>
-        </form>
+        </center></form>
     {% comment %} </table>
         <table class="">
             <form method="post" action="{% url 'book_tickets' %}" method="get">
