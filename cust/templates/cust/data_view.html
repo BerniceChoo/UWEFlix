@@ -24,6 +24,7 @@
     <table class="">
         <thead>
             <tr>
+                <th scope="col">Images</th>
                 <th scope="col">Date</th>
                 <th scope="col">Time</th>
                 <th scope="col">Film Title</th>
@@ -36,20 +37,22 @@
             {% for i in data %}
 
                 <tr>
-                    <td>{{ i.date }}</td>
-                    <td>{{ i.showingTime }}</td>
-                    <td>{{ i.filmTitle }}</td>
-                    <td>{{ i.trailerDescription }}</td>
-                    <td>{{ i.ageRating }}</td>
-                    <td>{{ i.filmDuration }}</td>
+                    <td scope="row">
+                        <img style="height: 100px; width: auto;" src="{{ todos.name }}" class="card-img-top" alt="...">
+                    </td>
+                    <td>{{ i.Date }}</td>
+                    <td>{{ i.Time }}</td>
+                    <td>{{ i.Name }}</td>
+                    <td>{{ i.TrailerDescription }}</td>
+                    <td>{{ i.Rating }}</td>
+                    <td>{{ i.Duration }}</td>
                     
 
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-    <p> Select a Movie</p>
-    <li><a href="{% url 'ticket' %}">{{ i.filmTitle }}</a></li>
+    <p><center> Select a Movie</center></p>
                         <table class="">
                             {% comment %} <form action="{% url 'test' %}" method="get">
                                 <label>Select:</label>
@@ -57,15 +60,15 @@
                                 <br>
                                 <button type="submit">View Data</button>
                             </form> {% endcomment %}
-                            <form action="{% url 'ticket' %}" method="get">
+                            <form action="{% url 'ticket' %}" method="get"><center>
                                 <select name="data" id="data">
                                     {% for movie in movies %}
-                                    <option value="{{ movie.filmTitle }}">{{ movie.filmTitle }}</option>
+                                    <option value="{{ movie.Name }}">{{ movie.Name }}</option>
                                     {% endfor %}
                                 </select>
                                 <p> </p>
                                 <input class="w3-button w3-green button4" style="margin-right: 10px;" type="submit" value="Submit">
-                            </form>
+                            </center></form>
                         </table>
      <br>
     {% elif not data %}
