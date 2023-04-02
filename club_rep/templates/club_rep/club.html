@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Cinema Manager</title>
+{% endblock title %}
+
+{% block content %}
+<div>
+    <header class="w3-container w3-black w3-center " style="padding:50px 16px">
+        <h1 class="w3-margin w3-jumbo">Club Representative</h1>
+    </header>
+    <div class="w3-section w3-bottombar w3-padding-16  ">
+        <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
+        <a href="{% url 'select-date-cr'  %}" class="w3-button w3-white">Select Date </a>
+        <a href="{% url 'view-all-transactions'   %}" class="w3-button w3-white">View transactions</a>
+        <a href="{% url 'club_balance'   %}" class="w3-button w3-blue">Club Balance</a>
+
+
+
+</div>
+
+<div class="w3-container w3-card w3-round">
+    
+        <table class="">
+            <thead>
+                <tr>
+                    <th scope="col">Club Name</th>
+                    <th scope="col">Address No.</th>
+                    <th scope="col">Address Street</th>
+                    <th scope="col">Address City</th>
+                    <th scope="col">Address Postcode</th>
+                    <th scope="col">Telephone No.</th>
+                    <th scope="col">Phone No.</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in data %}
+                    <tr>
+                        <th scope="row">{{ i.clubs.0.Name }}</th>
+                        <th scope="row">{{ i.clubs.0.HouseNumber }}</th>
+                        <td>{{ i.clubs.0.Street }}</td>
+                        <td>{{ i.clubs.0.City }}</td>
+                        <td>{{ i.clubs.0.PostCode }}</td>
+                        <td>{{ i.clubs.0.TelephoneNumber }}</td>
+                        <td>{{ i.clubs.0.PhoneNumber }}</td>
+                        <td>{{ i.clubs.0.Email }}</td>
+                        <td>£{{ i.clubs.0.Balance }}</td>
+
+                       
+
+                        
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    <br>
+
+    <div class="w3-center">
+
+        <table class="">
+            
+            <form action="" method="POST">
+                {% csrf_token %}
+                <label for="funds">Add Funds:</label>
+                <input type="Number" name="funds" id="funds" min="1" max="100000">
+                <br>
+                
+                <a href="{% url 'select-date-cr' %}"><button type="button" class="w3-button w3-red button4">Go back</button></a>
+                <input class="w3-button w3-green button4 w3-margin" type="submit" value="Add">
+            </form>
+        </table>
+        
+
+    </div>
+    <br>
+</div>
+{% endblock content %}

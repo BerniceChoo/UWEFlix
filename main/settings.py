@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'cinema_manager.apps.CinemaManagerConfig',
     'cust',
     'club_rep',
+    'accountmanager'
 ]
 
 MIDDLEWARE = [

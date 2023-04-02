@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from pymongo import MongoClient
 import pymongo
 from bson.objectid import ObjectId
-import datetime
+from datetime import datetime
 import re
 import string
 import random
@@ -17,9 +17,10 @@ Screens = db.Screens
 ClubReps = db.ClubRep
 Showings = db.Showings
 Films = db.Films
+Bookings = db.Bookings
 
 
-def login(request):
+def login(request, message=None):
     
     if request.method == 'POST':
         number = request.POST.get('number')
@@ -37,17 +38,20 @@ def login(request):
             request.session['loggedin'] = True
             request.session['UserID'] = str(result['_id'])
             request.session['Name'] = str(result['FirstName']) + " " + str(result['LastName'])
+            request.session['ClubID'] = str(result['Club_id'])
 
             return redirect('select-date-cr' )
         else:
             # Document not found
             print(f"No document found with _id.")
-            return redirect('login', error='Invalid username or password')
+            message = "Your login credentials were not found. Please try again."
+            return redirect('login-error', message=message)
 
 
     context = {
         'search_query': 1,
         'data': 1,
+        'message': message,
     }
     return render(request, 'club_rep/login.html', context)
 
@@ -109,11 +113,12 @@ def showings_list(request, selected_date):
 
 
 
-def view_film(request, pk):
+def view_film(request, pk, message=None):
     Showings_id = ObjectId(pk)
 
     results = Showings.find_one({ "_id" : Showings_id })
     film_name = results["filmTitle"]
+    showing_date = results["date"]
     
     regex = re.compile(film_name, re.IGNORECASE)
     query = {'Name': {'$regex': regex}}
@@ -129,45 +134,36 @@ def view_film(request, pk):
         tickets_available = results["ticketsLeft"]
 
 
-
         if numb_of_tickets > tickets_available:
             print("not ennough tickets")
-            return redirect('view-film',str(Showings_id) )
+            message = (f"There are not enough tickets available. \n Tickets Available: {tickets_available} ")
+            return redirect('view-film-error',pk=pk , message=message)
         
         elif numb_of_tickets <= tickets_available:
-            tickets_left= tickets_available - numb_of_tickets
 
-            document={"id": results["id"],
-                  "ageRating": results["ageRating"],
-                  "filmDuration": results["filmDuration"],
-                  "filmTitle": results["filmTitle"],
-                  "showingTime": results["showingTime"],
-                  "ticketsSold": numb_of_tickets,
-                  "trailerDescription": results["trailerDescription"],
-                  "date": results["date"],
-                  "ticketsLeft": tickets_left,
-                }
-        
-            result = Showings.update_one({'_id': Showings_id},{'$set': document} )
 
-            if result.modified_count == 1:
-                # Document successfully updated
-                print(f"Document with _id updated.")
-                return redirect('view-booking' )
+            club_id = ObjectId(request.session['ClubID'])
+            price_before = int(numb_of_tickets) * 10
+            price_after = price_before * 0.75
+            results = Clubs.find_one({'_id': club_id})
+            balance = results['Balance']
+            print(balance)
+            print(price_after)
+
+            if int(balance) < int(price_after):
+                message = (f"Insufficient balance in club account. \n Club Balance: £{balance} ")
+                return redirect('view-film-error' ,pk=pk , message=message )
             else:
-                # Document not found
-                print(f"No document found with _id.")
+                return redirect('view-booking', pk=pk ,numb_of_tickets=numb_of_tickets)
 
-            return redirect('screens-list')
-
-
-        
-
+     
 
 
     context = {
         'cursor': cursor,
-        'film_name': film_name,
+        'film_id': pk,
+        'date': showing_date,
+        'message': message,
     }
     return render(request, 'club_rep/view_film.html', context)
 
@@ -179,11 +175,254 @@ def view_film(request, pk):
 
 
 
-def view_booking(request):
+def view_booking(request, pk, numb_of_tickets):
+    Showings_id = ObjectId(pk)
+
+    results = Showings.find_one({ "_id" : Showings_id })
+    film_name = results["filmTitle"]
+    showing_date = results["date"]
+    showing_id = results["_id"]
+
+    price_before = int(numb_of_tickets) * 10
+    price_after = price_before * 0.75
+    
+    regex = re.compile(film_name, re.IGNORECASE)
+    query = {'Name': {'$regex': regex}}
+
+    cursor = Films.find(query)
+
+    if request.POST.get('tickets'):
+        numb_of_tickets = int(request.POST.get('tickets'))
+        payment = request.POST.get('payment')
+        tickets_available = results["ticketsLeft"]
+        tickets_sold = results["ticketsSold"]
+        tickets_sold = tickets_sold + numb_of_tickets
+        tickets_left= tickets_available - numb_of_tickets
+
+        clubrep_id = ObjectId(request.session['UserID'])
+
+        document={"id": results["id"],
+                  "ageRating": results["ageRating"],
+                  "filmDuration": results["filmDuration"],
+                  "filmTitle": results["filmTitle"],
+                  "showingTime": results["showingTime"],
+                  "ticketsSold": tickets_sold,
+                  "trailerDescription": results["trailerDescription"],
+                  "date": results["date"],
+                  "ticketsLeft": tickets_left,
+                }
+        
+        result = Showings.update_one({'_id': Showings_id},{'$set': document} )
+
+        now = datetime.now()
+        #dt_string = now.strftime("%d/%m/%Y")
+        #https://www.programiz.com/python-programming/datetime/current-datetime
+
+        
+
+        document2={"AccountID": clubrep_id,
+                  "ShowingID": Showings_id,
+                  "NumberOfTickets": numb_of_tickets,
+                  "TotalCost": price_after,
+                  "PaymentMethod": payment,
+                  "DateOfTransaction": now,
+                }
+        
+        
+
+
+        Bookings.insert_one(document2)
+
+        club_id = ObjectId(request.session['ClubID'])
+
+        results = Clubs.find_one({'_id': club_id})
+        balance = results['Balance']
+        new_balance = int(balance) - int(price_after)
+
+                       
+        document={"Balance": new_balance,
+                    }
+        
+        result = Clubs.update_one({'_id': club_id},{'$set': document} )
+
+
+        if result.modified_count == 1:
+            # Document successfully updated
+            print(f"Document with _id updated.")
+            message = "Your login credentials were not found. Please try again."
+            return redirect('view-all-transactions'  )
+        else:
+            # Document not found
+            print(f"No document found with _id.")
+            #return redirect('view-film', pk=pk , error ="" )
+
+
+
+    context = {
+        'cursor': cursor,
+        'date': showing_date,
+        'showing_id': showing_id,
+        'numb_of_tickets': numb_of_tickets,
+        'price_before': price_before,
+        'price_after': price_after,
+    }
 
     
 
-    return render(request, 'club_rep/booking.html')
+    return render(request, 'club_rep/booking.html', context)
+
+
+
+
+
+
+def view_transactions(request , selected_month=None):
+
+    clubrep_id = ObjectId(request.session['UserID'])
+
+    if request.GET.get('date'):
+        selected_month = request.GET.get('date')
+        return redirect( 'view-month-transactions', selected_month=selected_month)
+
+    if selected_month:
+        print("po")
+        print(selected_month)
+        selected_month = datetime.strptime(selected_month, "%Y-%m")
+
+        query = {
+            "DateOfTransaction": {
+            "$gte": selected_month,
+            "$lt": selected_month.replace(month=selected_month.month+1)
+            },
+            "AccountID": {
+            "$eq": clubrep_id
+            }
+        }
+
+        cursor = Bookings.find(query)
+        
+
+    else:
+        cursor = Bookings.find({"AccountID" : clubrep_id})
+
+
+
+
+    context = {
+        'cursor': cursor,
+    }
+    return render(request, 'club_rep/transactions.html', context)
+
+
+
+
+
+
+
+
+
+def club_balance(request ):
+
+
+    club_id = ObjectId(request.session['ClubID'])
+    print(club_id)
+    
+    
+                          
+    #cursor = Clubs.find({"Number": number})
+
+
+
+    #joins 2 collections together and matches the by local and foreign id
+    pipeline = [
+        {
+        '$match': {
+            'Club_id': club_id  # Replace <club_id> with the ID of the club you want to filter by
+        }
+        },
+
+        {
+            '$lookup': {
+                'from': 'Clubs',
+                'localField': 'Club_id',
+                'foreignField': '_id',
+                'as': 'clubs'
+            }
+        },
+      
+        {
+            '$project': {
+                '_id': 1,
+                'FirstName': 1,
+                'LastName': 1,
+                'DOB': 1,
+                'clubs._id': 1,
+                'clubs.Name': 1,
+                'clubs.HouseNumber': 1,
+                'clubs.Street': 1,
+                'clubs.City': 1,
+                'clubs.PostCode': 1,
+                'clubs.TelephoneNumber': 1,
+                'clubs.PhoneNumber': 1,
+                'clubs.Email': 1,
+                'clubs.Balance': 1,
+            }
+        }
+    ]
+
+    result = client['test']['ClubRep'].aggregate(pipeline)
+
+    data = [doc for doc in result]
+    print(data)
+
+    if request.POST.get('funds'):
+        funds = request.POST.get('funds')
+
+
+        results = Clubs.find_one({'_id': club_id})
+        balance = results['Balance']
+        new_balance = int(balance) + int(funds)
+
+                       
+        document={"Balance": new_balance,
+                    }
+        
+        result = Clubs.update_one({'_id': club_id},{'$set': document} )
+
+
+        return redirect( 'club_balance')
+
+    context = {
+        'data': data,
+    }
+    return render(request, 'club_rep/club.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
