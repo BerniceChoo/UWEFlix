@@ -38,13 +38,14 @@ def login(request, message=None):
             request.session['loggedin'] = True
             request.session['UserID'] = str(result['_id'])
             request.session['Name'] = str(result['FirstName']) + " " + str(result['LastName'])
+            request.session['ClubID'] = str(result['Club_id'])
 
             return redirect('select-date-cr' )
         else:
             # Document not found
             print(f"No document found with _id.")
             message = "Your login credentials were not found. Please try again."
-            return redirect('login', message=message)
+            return redirect('login-error', message=message)
 
 
     context = {
@@ -222,7 +223,7 @@ def view_booking(request, pk, numb_of_tickets):
             # Document successfully updated
             print(f"Document with _id updated.")
             message = "Your login credentials were not found. Please try again."
-            return redirect('select-date-cr'  )
+            return redirect('view-all-transactions'  )
         else:
             # Document not found
             print(f"No document found with _id.")
@@ -286,35 +287,76 @@ def view_transactions(request , selected_month=None):
     return render(request, 'club_rep/transactions.html', context)
 
 
-'''
-
-def view_transactions(request):
-
-  
 
 
-    selected_month = datetime.strptime("2023-04", "%Y-%m")
-    print(selected_month)
 
-    query = {
-        "DateOfTransaction": {
-        "$gte": selected_month,
-        "$lt": selected_month.replace(month=selected_month.month+1)
+
+
+
+
+def club_balance(request):
+
+
+    clubrep_id = ObjectId(request.session['ClubID'])
+    print(clubrep_id)
+    
+    
+                          
+    #cursor = Clubs.find({"Number": number})
+
+
+
+    #joins 2 collections together and matches the by local and foreign id
+    pipeline = [
+        {
+        '$match': {
+            'Club_id': clubrep_id  # Replace <club_id> with the ID of the club you want to filter by
         }
-    }
+        },
 
-    cursor = Bookings.find(query)
+        {
+            '$lookup': {
+                'from': 'Clubs',
+                'localField': 'Club_id',
+                'foreignField': '_id',
+                'as': 'clubs'
+            }
+        },
+      
+        {
+            '$project': {
+                '_id': 1,
+                'FirstName': 1,
+                'LastName': 1,
+                'DOB': 1,
+                'clubs._id': 1,
+                'clubs.Name': 1,
+                'clubs.HouseNumber': 1,
+                'clubs.Street': 1,
+                'clubs.City': 1,
+                'clubs.PostCode': 1,
+                'clubs.TelephoneNumber': 1,
+                'clubs.PhoneNumber': 1,
+                'clubs.Email': 1,
+                'clubs.Balance': 1,
+            }
+        }
+    ]
+
+    result = client['test']['ClubRep'].aggregate(pipeline)
+
+    data = [doc for doc in result]
+    print(data)
 
    
+
     context = {
-        'cursor': cursor,
+        'data': data,
     }
-    return render(request, 'club_rep/transactions.html', context)
+    return render(request, 'club_rep/club.html', context)
 
 
 
-
-'''
 
 
 

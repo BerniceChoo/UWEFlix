@@ -113,6 +113,7 @@ def create_club(request):
                   "PhoneNumber": phoneno,
                   "PostCode": postcode,
                   "TelephoneNumber": telephoneno,
+                  "Balance": 0,
                     }
         Clubs.insert_one(document)
 
