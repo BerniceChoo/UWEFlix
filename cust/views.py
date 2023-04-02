@@ -11,7 +11,7 @@ client = pymongo.MongoClient("mongodb+srv://choo2foonyee:FpaMQ6825hCyJw6x@uwefli
 # database
 db = client.test
 # collection 
-Showings = db.Showings
+Showings = db.Films
 TicketsPrice = db.TicketsPrice
 
 def select_date(request):
@@ -19,8 +19,8 @@ def select_date(request):
 
 def view_data(request):
     selected_date = request.GET.get('date')
-    results = Showings.find({'date': selected_date})
-    movies = Showings.find({'date': selected_date}, {'filmTitle': 1})
+    results = Showings.find({'Date': selected_date})
+    movies = Showings.find({'Date': selected_date}, {'Name': 1})
     data = [doc for doc in results]
     context = {'results': results, 'selected_date': selected_date, 'movies': movies, 'data': data}
     return render(request, 'cust/data_view.html', context)
@@ -32,13 +32,13 @@ def confirmation(request):
 
 def ticket(request):
     selected_data = request.GET.get('data')
-    results = Showings.find({'filmTitle': selected_data})
+    results = Showings.find({'Name': selected_data})
     context = {'results': results, 'selected_data': selected_data}
     return render(request, 'cust/ticket.html', context)
 
 def book_tickets(request):
     selected_ticketsnum = request.GET.get('tickets')
-    ticket_price = TicketsPrice.find_one()['customerPrice']
+    ticket_price = TicketsPrice.find_one()['CustomerPrice']
     total_price = int(selected_ticketsnum) * ticket_price
     context = { 'selected_ticketsnum': selected_ticketsnum, 'ticket_price': ticket_price, 'total_price': total_price}
     return render(request, 'cust/book_tickets.html', context)

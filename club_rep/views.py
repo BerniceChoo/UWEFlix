@@ -308,8 +308,43 @@ def view_transactions(request , selected_month=None):
 
 
 
+    pipeline = [
+
+        {
+            '$lookup': {
+                'from': 'Showings',
+                'localField': 'ShowingID',
+                'foreignField': '_id',
+                'as': 'showings'
+            }
+        },
+      
+        {
+            '$project': {
+                '_id': 1,
+                'NumberOfTickets': 1,
+                'TotalCost': 1,
+                'PaymentMethod': 1,
+                'DateOfTransaction': 1,
+                'showings.showingTime': 1,
+                'showings.date': 1,
+                'showings.Screen': 1,
+         
+            }
+        }
+    ]
+
+    result = client['test']['Bookings'].aggregate(pipeline)
+
+    data = [doc for doc in result]
+    print(data)
+
+
+
+
     context = {
         'cursor': cursor,
+        'data': data,
     }
     return render(request, 'club_rep/transactions.html', context)
 

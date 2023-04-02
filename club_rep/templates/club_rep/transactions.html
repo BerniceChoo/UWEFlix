@@ -25,15 +25,18 @@
         <table class="">
             <thead>
                 <tr>
-                    <th scope="col">Booking ID</th>
-                    <th scope="col">Number Of Tickets</th>
-                    <th scope="col">Total Cost</th>
-                    <th scope="col">Payment Method</th>
-                    <th scope="col">Date of transaction</th>
+                    <th scope="col" class="w3-khaki">Booking ID</th>
+                    <th scope="col" class="w3-indigo">Number Of Tickets</th>
+                    <th scope="col" class="w3-blue-grey">Total Cost</th>
+                    <th scope="col" class="w3-lime">Payment Method</th>
+                    <th scope="col" class="w3-lime">Date of transaction</th>
+                    <th scope="col" class="w3-sand">Showing Screen</th>
+                    <th scope="col" class="w3-sand">Showing Date</th>
+                    <th scope="col" class="w3-sand">Showing Time</th>
                 </tr>
             </thead>
             <tbody>
-                {% for i in cursor %}
+                {% for i in data %}
                     <tr>
                         {% load custom_filters %}
                         <th scope="row">{{ i|get_id }}</th>
@@ -41,6 +44,9 @@
                         <th scope="row">£{{ i.TotalCost }}</th>
                         <td>{{ i.PaymentMethod }}</td>
                         <td>{{ i.DateOfTransaction }}</td>
+                        <td>{{ i.showings.0.Screen }}</td>
+                        <td>{{ i.showings.0.date }}</td>
+                        <td>{{ i.showings.0.showingTime }}</td>
 
                        
 

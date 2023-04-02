@@ -2,8 +2,8 @@
 
 ## How to run?
 0) go inside folder
-1) [docker build -t main .]
-2) [docker run -p 8000:8000 main]  
+1) `docker build -t main .`
+2) `docker run -p 8000:8000 main`
 
 
 
