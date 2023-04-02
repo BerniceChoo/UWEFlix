@@ -61,9 +61,8 @@
         <table class="">
             <form action="" method="POST">
                 {% csrf_token %}
-                <label for="date">Number of tickets:</label>
-                <input type="Number" name="tickets" id="tickets" value="{{numb_of_tickets}}" readonly>
-                <br><br>
+                <input type="Number" name="tickets" id="tickets" value="{{numb_of_tickets}}" readonly hidden>
+
                 <label for="payment">Payment system:</label>
                 <select id="payment" name="payment">
                     <option value="Club Account">Club Account</option>

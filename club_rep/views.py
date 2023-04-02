@@ -136,7 +136,7 @@ def view_film(request, pk, message=None):
 
         if numb_of_tickets > tickets_available:
             print("not ennough tickets")
-            message = (f"There are not enough tickets available.   Tickets Available: {tickets_available} ")
+            message = (f"There are not enough tickets available. \n Tickets Available: {tickets_available} ")
             return redirect('view-film-error',pk=pk , message=message)
         
         elif numb_of_tickets <= tickets_available:
@@ -151,7 +151,8 @@ def view_film(request, pk, message=None):
             print(price_after)
 
             if int(balance) < int(price_after):
-                return redirect('club_balance' )
+                message = (f"Insufficient balance in club account. \n Club Balance: £{balance} ")
+                return redirect('view-film-error' ,pk=pk , message=message )
             else:
                 return redirect('view-booking', pk=pk ,numb_of_tickets=numb_of_tickets)
 
@@ -320,7 +321,7 @@ def view_transactions(request , selected_month=None):
 
 
 
-def club_balance(request):
+def club_balance(request ):
 
 
     club_id = ObjectId(request.session['ClubID'])
