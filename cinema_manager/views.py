@@ -282,10 +282,46 @@ def screens_list(request):
     query = {'Name': {'$regex': regex}}
     cursor = Screens.find(query)
 
+    #joins showings and films collection, soo that we can see if a film is out for a showing, if it is the film cant be deleted
+    pipeline = [
+        {
+            '$lookup': {
+                'from': 'Showings',
+                'localField': 'Name',
+                'foreignField': 'Screen',
+                'as': 'showings'
+            }
+        },
+        {
+            '$match': {
+                '$or': [
+                    {'Name': {'$regex': search_query, '$options': 'i'}},
+                    {'showings.Screen': {'$regex': search_query, '$options': 'i'}},
+                ]
+            }
+        },
+        {
+            '$project': {
+                '_id': 1,
+                'Name': 1,
+                'Capacity': 1,
+                'SocialDistancing': 1,
+                'showings.Screen': 1,
+
+            }
+        }
+    ]
+
+
+    result = client['test']['Screens'].aggregate(pipeline)
+
+    data = [doc for doc in result]
+
 
     context = {
         'cursor': cursor,
         'search_query': search_query,
+        'data': data,
     }
     return render(request, 'cinema_manager/screen_list.html', context)
 

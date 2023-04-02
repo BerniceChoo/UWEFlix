@@ -32,12 +32,13 @@
     <table class="">
         <thead>
             <tr>
-                <th scope="col">Images</th>
-                <th scope="col">Film Name</th>
-                <th scope="col">Age Rating</th>
-                <th scope="col">Duration</th>
-                <th scope="col">Trailer Description</th>
-                <th scope="col"></th>
+                <th scope="col" class="w3-indigo">Images</th>
+                <th scope="col" class="w3-indigo">Film Name</th>
+                <th scope="col" class="w3-indigo">Age Rating</th>
+                <th scope="col" class="w3-indigo">Duration</th>
+                <th scope="col" class="w3-indigo">Trailer Description</th>
+                <th scope="col" class="w3-indigo">Showing Attached?</th>
+                <th scope="col" class="w3-indigo"></th>
             </tr>
         </thead>
         <tbody>
@@ -50,7 +51,13 @@
                     <td>{{ i.Rating }}</td>
                     <td>{{ i.Duration }}</td>
                     <td>{{ i.TrailerDescription }}</td>
-                    <td>{{ i.showings.0.filmTitle }}</td>
+                    <td>
+                        {% if i.showings.0.filmTitle %}
+                        yes
+                        {% elif not i.showings.0.filmTitle %}
+                        No
+                        {% endif %}
+                    </td>
               
 
                     <td>
@@ -58,8 +65,8 @@
                         <a class="w3-button w3-green button4" style="margin-right: 10px;" href="{% url 'edit-film' i|get_id %}">Edit</a>
                         <br>
                         {% if i.showings.0.filmTitle %}
-                        <a class="w3-button w3-red button4" style="margin-right: 10px; margin-top: 7px;" href="{% url 'delete-film' i|get_id %}">Remove Film</a>
                         {% elif not i.showings.0.filmTitle %}
+                        <a class="w3-button w3-red button4" style="margin-right: 10px; margin-top: 7px;" href="{% url 'delete-film' i|get_id %}">Remove Film</a>
          
       
 

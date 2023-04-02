@@ -32,15 +32,16 @@
     <table class="">
         <thead>
             <tr>
-                <th scope="col">Images</th>
-                <th scope="col">Screen Name</th>
-                <th scope="col">Seat Capacity</th>
-                <th scope="col">Social Distancing</th>
-                <th scope="col"></th>
+                <th scope="col" class="w3-indigo">Images</th>
+                <th scope="col" class="w3-indigo">Screen Name</th>
+                <th scope="col" class="w3-indigo">Seat Capacity</th>
+                <th scope="col" class="w3-indigo">Social Distancing</th>
+                <th scope="col" class="w3-indigo">Showing Attached?</th>
+                <th scope="col" class="w3-indigo"></th>
             </tr>
         </thead>
         <tbody>
-            {% for i in cursor %}
+            {% for i in data %}
                 <tr>
                     <th scope="row">
                         <img style="height: 100px; width: auto;" src="{{ todos.name }}" class="card-img-top" alt="...">
@@ -57,13 +58,25 @@
 
                         {% endif %}
                     </td>
+                    <td>
+                        {% if i.showings.0.Screen %}
+                        yes
+                        {% elif not i.showings.0.Screen %}
+                        No
+                        {% endif %}
+                    </td>
               
 
                     <td>
                         {% load custom_filters %}
+                    
                         <a class="w3-button w3-green button4" style="margin-right: 10px;" href="{% url 'edit-screen' i|get_id %}">Edit</a>
                         <br>
+                        {% if i.showings.0.Screen %}
+                        {% elif not i.showings.0.Screen %}
                         <a class="w3-button w3-red button4" style="margin-right: 10px; margin-top: 7px;" href="{% url 'delete-screen' i|get_id %}">Remove Screen</a>
+         
+                        {% endif %}
                     </td>
 
                     
