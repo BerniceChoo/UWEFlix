@@ -51,7 +51,7 @@ def login(request, message=None):
     context = {
         'search_query': 1,
         'data': 1,
-        'message': message
+        'message': message,
     }
     return render(request, 'club_rep/login.html', context)
 
@@ -113,7 +113,7 @@ def showings_list(request, selected_date):
 
 
 
-def view_film(request, pk):
+def view_film(request, pk, message=None):
     Showings_id = ObjectId(pk)
 
     results = Showings.find_one({ "_id" : Showings_id })
@@ -136,7 +136,8 @@ def view_film(request, pk):
 
         if numb_of_tickets > tickets_available:
             print("not ennough tickets")
-            return redirect('view-film',pk=pk )
+            message = (f"There are not enough tickets available.   Tickets Available: {tickets_available} ")
+            return redirect('view-film-error',pk=pk , message=message)
         
         elif numb_of_tickets <= tickets_available:
 
@@ -161,6 +162,7 @@ def view_film(request, pk):
         'cursor': cursor,
         'film_id': pk,
         'date': showing_date,
+        'message': message,
     }
     return render(request, 'club_rep/view_film.html', context)
 

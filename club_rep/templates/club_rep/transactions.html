@@ -25,6 +25,7 @@
         <table class="">
             <thead>
                 <tr>
+                    <th scope="col">Booking ID</th>
                     <th scope="col">Number Of Tickets</th>
                     <th scope="col">Total Cost</th>
                     <th scope="col">Payment Method</th>
@@ -34,6 +35,8 @@
             <tbody>
                 {% for i in cursor %}
                     <tr>
+                        {% load custom_filters %}
+                        <th scope="row">{{ i|get_id }}</th>
                         <th scope="row">{{ i.NumberOfTickets }}</th>
                         <th scope="row">£{{ i.TotalCost }}</th>
                         <td>{{ i.PaymentMethod }}</td>
