@@ -297,8 +297,8 @@ def view_transactions(request , selected_month=None):
 def club_balance(request):
 
 
-    clubrep_id = ObjectId(request.session['ClubID'])
-    print(clubrep_id)
+    club_id = ObjectId(request.session['ClubID'])
+    print(club_id)
     
     
                           
@@ -310,7 +310,7 @@ def club_balance(request):
     pipeline = [
         {
         '$match': {
-            'Club_id': clubrep_id  # Replace <club_id> with the ID of the club you want to filter by
+            'Club_id': club_id  # Replace <club_id> with the ID of the club you want to filter by
         }
         },
 
@@ -348,7 +348,22 @@ def club_balance(request):
     data = [doc for doc in result]
     print(data)
 
-   
+    if request.POST.get('funds'):
+        funds = request.POST.get('funds')
+
+
+        results = Clubs.find_one({'_id': club_id})
+        balance = results['Balance']
+        new_balance = int(balance) + int(funds)
+
+                       
+        document={"Balance": new_balance,
+                    }
+        
+        result = Clubs.update_one({'_id': club_id},{'$set': document} )
+
+
+        return redirect( 'club_balance')
 
     context = {
         'data': data,
