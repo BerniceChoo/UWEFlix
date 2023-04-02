@@ -218,6 +218,18 @@ def view_booking(request, pk, numb_of_tickets):
 
         Bookings.insert_one(document2)
 
+        club_id = ObjectId(request.session['ClubID'])
+
+        results = Clubs.find_one({'_id': club_id})
+        balance = results['Balance']
+        new_balance = int(balance) - int(price_after)
+
+                       
+        document={"Balance": new_balance,
+                    }
+        
+        result = Clubs.update_one({'_id': club_id},{'$set': document} )
+
 
         if result.modified_count == 1:
             # Document successfully updated
