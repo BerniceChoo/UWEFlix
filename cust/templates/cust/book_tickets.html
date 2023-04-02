@@ -21,7 +21,7 @@
 <br>
 
 <div class="w3-container w3-card w3-round">
-    <p>the calculations for total price is {{ selected_ticketsnum }} * £ {{ ticket_price }} = £ {{ total_price}}:</p>
+    <p>Selected number of tickets ( {{ selected_ticketsnum }} ) x ticket price £ {{ ticket_price }} = total price £ {{ total_price}}:</p>
     <table class="">
         <thead>
             <tr>
@@ -38,10 +38,10 @@
                 </tr>
         </tbody>
     </table>
-    <br>
+    <br><center>
     <a class="w3-button w3-green button4" style="margin-right: 10px;" href="{% url 'confirmation'%}">Confirm Booking</a>
     <a href="{% url 'select_date' %}"><button type="button" class="w3-button w3-red button4">Cancel</button></a>
-    <br>
+    </center><br>
 
     <br>
 </div>
