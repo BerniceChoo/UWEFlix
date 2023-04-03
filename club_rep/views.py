@@ -6,7 +6,7 @@ from datetime import datetime
 import re
 import string
 import random
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 client = pymongo.MongoClient("mongodb+srv://daniel2fernandes:skelJ6UzCVlG36Ei@uweflix.l8xahep.mongodb.net/?retryWrites=true&w=majority")
 # database
@@ -309,6 +309,13 @@ def view_transactions(request , selected_month=None):
 
 
     pipeline = [
+        {
+        '$match': {
+            'AccountID': clubrep_id
+
+            }
+
+        },
 
         {
             '$lookup': {
@@ -334,7 +341,49 @@ def view_transactions(request , selected_month=None):
         }
     ]
 
-    result = client['test']['Bookings'].aggregate(pipeline)
+  
+
+    if selected_month:
+
+        pipeline2 = [
+        {
+        '$match': {
+            'AccountID': clubrep_id,
+            'DateOfTransaction': {
+                "$gte": selected_month,
+                "$lt": selected_month.replace(month=selected_month.month+1)
+            }
+        }
+
+        },
+
+        {
+            '$lookup': {
+                'from': 'Showings',
+                'localField': 'ShowingID',
+                'foreignField': '_id',
+                'as': 'showings'
+            }
+        },
+      
+        {
+            '$project': {
+                '_id': 1,
+                'NumberOfTickets': 1,
+                'TotalCost': 1,
+                'PaymentMethod': 1,
+                'DateOfTransaction': 1,
+                'showings.showingTime': 1,
+                'showings.date': 1,
+                'showings.Screen': 1,
+         
+            }
+        }
+    ]
+        
+        result = client['test']['Bookings'].aggregate(pipeline2)
+    else:
+        result = client['test']['Bookings'].aggregate(pipeline)
 
     data = [doc for doc in result]
     print(data)
@@ -435,7 +484,13 @@ def club_balance(request ):
 
 
 
-
+def logout(request):
+    del request.session['loggedin']
+    del request.session['UserID']
+    del request.session['Name']
+    del request.session['ClubID']
+    
+    return redirect(request,'login')
 
 
 
