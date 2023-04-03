@@ -40,12 +40,12 @@
                     <td scope="row">
                         <img style="height: 100px; width: auto;" src="{{ todos.name }}" class="card-img-top" alt="...">
                     </td>
-                    <td>{{ i.Date }}</td>
-                    <td>{{ i.Time }}</td>
-                    <td>{{ i.Name }}</td>
-                    <td>{{ i.TrailerDescription }}</td>
-                    <td>{{ i.Rating }}</td>
-                    <td>{{ i.Duration }}</td>
+                    <td>{{ i.date }}</td>
+                    <td>{{ i.showingTime }}</td>
+                    <td>{{ i.filmTitle }}</td>
+                    <td>{{ i.trailerDescription }}</td>
+                    <td>{{ i.ageRating }}</td>
+                    <td>{{ i.filmDuration }}</td>
                     
 
                 </tr>
@@ -63,7 +63,7 @@
                             <form action="{% url 'ticket' %}" method="get"><center>
                                 <select name="data" id="data">
                                     {% for movie in movies %}
-                                    <option value="{{ movie.Name }}">{{ movie.Name }}</option>
+                                    <option value="{{ movie.filmTitle }}">{{ movie.filmTitle }}</option>
                                     {% endfor %}
                                 </select>
                                 <p> </p>
