@@ -353,12 +353,18 @@ def edit_screen(request, pk):
 
         socialdistancing = request.POST.get('socialdistancing', False)
         if (socialdistancing == "true"):
-            socialdistancing = True
             capacity = Screens.find_one({'_id': screen_id}, {"Capacity": capacity} )
             capacity = float(capacity['Capacity'])/2
+            print("\n Capacity Decreaed :", capacity)
+            socialdistancing = True
             
         elif (socialdistancing == "false"):
+            capacity = Screens.find_one({'_id': screen_id}, {"Capacity": capacity} )
+            capacity = (float(capacity['Capacity'])*2)
             socialdistancing = False
+        else:
+            capacity = Screens.find_one({'_id': screen_id}, {"Capacity": capacity} )
+            capacity = (float(capacity['Capacity'])*2)
         
 
         document={"Name": screensname,
