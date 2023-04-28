@@ -1,18 +1,24 @@
-{% load static %}
-<!DOCTYPE html>
-<html>
-    <head>cor
-        <meta charset="utf-8" />
-        <link rel="stylesheet" href="{% static 'CSS.css' %}">
-        <title>Delete Account</title>
-    </head>
-    <body>
-        {% block content %}
-        <header>Select Account to be Removed</header>
-        <form action="/accountManagerRemoveRecieved" method="POST">{% csrf_token %}
-            <input type="number" name="id" placeholder="Account ID" required/>
-            <input type="submit" value="Save" />
-        </form>
-        {% endblock content %}
-    </body>
-</html>
+{% extends 'accountmanager/base.html' %}
+
+{% block title %}
+<title>Delete Account</title>
+{% endblock title %}
+
+{% block content %}
+    <div class="w3-container w3-margin w3-center"> 
+        {% if message is not None %}
+        <p>{{ message }}</p>
+        {% endif %}
+    <form action="/accountManagerRemoveRecieved" method="POST" enctype="multipart/form-data">
+        <div class=" w3-blue-grey w3-card w3-round w3-margin w3-padding"> 
+            <h1 style="text-align: center; padding-top: 1em; padding-bottom: 1em;">Select Account to be Removed</h1>
+            {% csrf_token %}
+            <label for="id">Account ID:</label><br>
+            <input type="number" name="id" placeholder="Account ID" required/> <br>
+            <a href="{% url 'home' %}"><button type="button" class="w3-button w3-red button4">Go back</button></a>
+            <input type="submit" class="w3-button w3-green button4 w3-margin" value="Save" />
+        <br><br>
+        </div> 
+    </form>
+</div>
+{% endblock content %}

@@ -1,28 +1,43 @@
-{% load static %}
-<!DOCTYPE html>
-<html>
-    <head>cor
-        <meta charset="utf-8" />
-        <link rel="stylesheet" href="{% static 'CSS.css' %}">
-        <title>Edit Account</title>
-    </head>
-    <body>
-        {% block content %}
-        <header>Input Data</header>
-        <form action="/accountManagerEditRecieved" method="POST">{% csrf_token %}
-            <input type="number" name="id" placeholder="Account ID" required/>
+
+
+
+{% extends 'accountmanager/base.html' %}
+
+{% block title %}
+<title>Edit Account</title>
+{% endblock title %}
+
+{% block content %}
+    <div class="w3-container w3-margin w3-center"> 
+        {% if message is not None %}
+        <p>{{ message }}</p>
+        {% endif %}
+    <form action="/accountManagerEditRecieved" method="POST" enctype="multipart/form-data">
+        <div class=" w3-blue-grey w3-card w3-round w3-margin w3-padding"> 
+            <h1 style="text-align: center; padding-top: 1em; padding-bottom: 1em;">Input Data</h1>
+            {% csrf_token %}
+            <label for="number">Account ID:</label><br>
+            <input type="number" name="id" placeholder="Account ID" required/> <br>
+
+            <label for="change">Select Option:</label><br>
             <select id="change" name="change" required>
                 <option style="display:none"></option>
-                <option disabled>--Select--</option>
+                <option disabled selected>--Select--</option>
                 <option value="FirstName">Name</option>
                 <option value="LastName">Surname</option>
                 <option value="CardNumber">Card Number</option>
                 <option value="ExpiryDate">Expiry Date</option>
                 <option value="DiscountRate">Discount Rate</option>
             </select>
-            <input type="text" name="newData" placeholder="New Data" required/>
-            <input type="submit" value="Save" />
-        </form>
-        {% endblock content %}
-    </body>
-</html>
+            <br>
+
+            <label for="newData">New Data:</label><br>
+            <input type="text" name="newData" placeholder="New Data" required/> <br>
+
+            <a href="{% url 'home' %}"><button type="button" class="w3-button w3-red button4">Go back</button></a>
+            <input type="submit" class="w3-button w3-green button4 w3-margin" value="Save" />
+        <br><br>
+        </div> 
+    </form>
+</div>
+{% endblock content %}

@@ -1,33 +1,50 @@
-{% load static %}
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <link rel="stylesheet" href="{% static 'CSS.css' %}">
-        <title>All Users</title>
-    </head>
-    <body>
-        {% block content %}
-        <table style="width:100%">
-            <tr>
-                <th>Id</th>
-                <th>Name</th> 
-                <th>Surname</th>
-                <th>Discount Rate</th>
-                <th>Card Number</th>
-                <th>Expiration Date</th>
-            </tr>
-            {% for array in my_list %}
-            <tr>
-                {% for x in array %}
-                <td>{{ x }}</td>
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Account Manager</title>
+{% endblock title %}
+
+{% block content %}
+<div>
+    <header class="w3-container w3-black w3-center " style="padding:50px 16px">
+        <h1 class="w3-margin w3-jumbo">Account Manager</h1>
+    </header>
+    <div class="w3-section w3-bottombar w3-padding-16  ">
+        <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
+        <a href="accountManagerAdd" class="w3-button w3-blue">Add Account</a>
+        <a href="accountManagerRemove" class="w3-button w3-blue">Remove Account</a>
+        <a href="accountManagerEdit" class="w3-button w3-blue">Edit Account</a>
+
+
+
+</div>
+
+<div class="w3-container w3-card w3-round">
+    
+        <table class="">
+            <thead>
+                <tr>
+                    <th scope="col" class="w3-indigo">Id</th>
+                    <th scope="col" class="w3-indigo">Name</th>
+                    <th scope="col" class="w3-indigo">Surname</th>
+                    <th scope="col" class="w3-indigo">Discount Rate</th>
+                    <th scope="col" class="w3-indigo">Card Number</th>
+                    <th scope="col" class="w3-indigo">Expiration Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for array in my_list %}
+                    <tr>
+                        {% for x in array %}
+                        <td>{{ x }}</td>
+                        {% endfor %}
+                    </tr>
                 {% endfor %}
-            </tr>
-            {% endfor %}
-        {% endblock content %}
+            </tbody>
         </table>
-        <a href='accountManagerAdd'>Add Account</a>
-        <a href='accountManagerRemove'>Remove Account</a>
-        <a href='accountManagerEdit'>Edit Account</a>
-    </body>
-</html>
+
+    <br>
+
+    <br>
+</div>
+{% endblock content %}
