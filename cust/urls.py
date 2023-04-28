@@ -1,8 +1,10 @@
 from django.urls import path
 from cust import views
 
+app_name='cust'
 urlpatterns = [
-    path('', views.select_date, name='select_date'),
+    path('', views.login, name='login') ,
+    path('select_date/', views.select_date, name='selectdate'),
     path('view_data/', views.view_data, name='view_data'),
 
     path('view_data/ticket/', views.ticket, name='ticket'),
