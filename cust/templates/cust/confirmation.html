@@ -1,7 +1,7 @@
 {% extends "cust/base.html" %}
 
 {% block title %}
-    <title>Booking confirmation</title>
+    <title>Ticket Booking confirmation</title>
 {% endblock title %}
 
 {% block content %}
@@ -9,13 +9,15 @@
 
 <div>
     <header class="w3-container w3-black w3-center " style="padding:50px 16px">
-        <h1 class="w3-margin w3-jumbo">Customer: Booking confirmation</h1>
+        <h1 class="w3-margin w3-jumbo">Customer: Ticket Booking confirmation</h1>
       </header>
 
     <div class="w3-section w3-bottombar w3-padding-16  ">
         <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
         <a href="{% url 'cust:selectdate' %}" class="w3-button w3-blue">Select date</a>
+        <h2><p><center>Your ticket(s) have been booked</center></p></h2>
     </div>
+    
 
 </div>
 
@@ -23,7 +25,9 @@
 
 <body>
     <h1><center>Unique Booking Number:</center></h1>
+    
     <p><center>{{ number }}</center></p>
+    <p><center><a class="w3-button w3-blue" href="{% url 'cust:selectdate' %}">Go Back Customer Home</a></center></p>
 </body>
     <br>
 

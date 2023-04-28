@@ -60,7 +60,7 @@
                                 <br>
                                 <button type="submit">View Data</button>
                             </form> {% endcomment %}
-                            <form action="{% url 'ticket' %}" method="get"><center>
+                            <form action="{% url 'cust:ticket' %}" method="get"><center>
                                 <select name="data" id="data">
                                     {% for movie in movies %}
                                     <option value="{{ movie.filmTitle }}">{{ movie.filmTitle }}</option>
