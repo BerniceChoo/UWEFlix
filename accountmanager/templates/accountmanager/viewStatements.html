@@ -11,7 +11,7 @@
     </header>
     <div class="w3-section w3-bottombar w3-padding-16  ">
         <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
-        <a href="" class="w3-button w3-blue">View Accounts</a>
+        <a href="accountManagerTable" class="w3-button w3-blue">View Accounts</a>
         <a href="accountManagerAdd" class="w3-button w3-blue">Add Account</a>
         <a href="accountManagerRemove" class="w3-button w3-blue">Remove Account</a>
         <a href="accountManagerEdit" class="w3-button w3-blue">Edit Account</a>
@@ -26,29 +26,30 @@
         <table class="">
             <thead>
                 <tr>
-                    <th scope="col" class="w3-indigo">Id</th>
-                    <th scope="col" class="w3-indigo">Name</th>
-                    <th scope="col" class="w3-indigo">Surname</th>                    
-                    <th scope="col" class="w3-indigo">Date Of Birth</th>
-                    <th scope="col" class="w3-indigo">Account Type</th>
-                    <th scope="col" class="w3-indigo">Discount Rate</th>
-                    <th scope="col" class="w3-indigo">Card Number</th>
-                    <th scope="col" class="w3-indigo">Expiration Date</th>
+                    <th scope="col" class="w3-indigo">No. of Tickets</th>
+                    <th scope="col" class="w3-indigo">Total Cost</th>
+                    <th scope="col" class="w3-indigo">Payment Method</th>                    
+                    <th scope="col" class="w3-indigo">Date Of Transaction</th>
+
+                    <th scope="col" class="w3-indigo">Film Title</th>
+                    <th scope="col" class="w3-indigo">Showing Time</th>
+                    <th scope="col" class="w3-indigo">Showing Date</th>
+
+                    <th scope="col" class="w3-indigo">Payer Name</th>
+                    <th scope="col" class="w3-indigo">Club Name</th>
                 </tr>
             </thead>
             <tbody>
                 {% for x in my_list %}
                     <tr>
-                        <td>{{ x.id }}</td>
-                        <td>{{ x.FirstName }}</td>
-                        <td>{{ x.LastName }}</td>
-                        <td>{{ x.DOB }}</td>
-                        <td>{{ x.Type }}</td>
-                        <td>{{ x.DiscountRate }}</td>
-                        <td>{{ x.CardNumber }}</td>
-                        <td>{{ x.ExpiryDate }}</td>
+                        <td>{{ x.NumberOfTickets }}</td>
+                        <td>{{ x.TotalCost }}</td>
+                        <td>{{ x.PaymentMethod }}</td>
+                        <td>{{ x.DateOfTransaction }}</td>
+                        <td>{{ x.filmTitle }}</td>
                     </tr>
                 {% endfor %}
+                    
             </tbody>
         </table>
 
