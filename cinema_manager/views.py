@@ -46,7 +46,7 @@ def clubs_list(request):
     pipeline = [
         {
             '$lookup': {
-                'from': 'ClubRep',
+                'from': 'Accounts',
                 'localField': '_id',
                 'foreignField': 'Club_id',
                 'as': 'club_reps'
