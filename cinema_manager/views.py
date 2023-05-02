@@ -13,7 +13,7 @@ db = client.test
 # collection 
 Clubs = db.Clubs
 Screens = db.Screens
-ClubReps = db.ClubRep
+ClubReps = db.Accounts
 Films = db.Films
 Showings = db.Showings
 
@@ -199,7 +199,7 @@ def delete_club(request, pk):
 def register_club_rep(request, pk):
     club_id = ObjectId(pk)
     # finds the largest number in the number field from the Club reps collection. "-1" specifies that the sort order is descending
-    largest_number = ClubReps.find_one(sort=[("Number", -1)])["Number"]
+    largest_number = ClubReps.find_one(sort=[("id", -1)])["id"]
     number = largest_number + 1 
 
     # define the length of the random string
@@ -220,7 +220,7 @@ def register_club_rep(request, pk):
                   "LastName": lastname,
                   "DOB": dob,
                   "Club_id": club_id,
-                  "Number": number,
+                  "id": number,
                   "Password": password,
                     }
         
@@ -353,18 +353,10 @@ def edit_screen(request, pk):
 
         socialdistancing = request.POST.get('socialdistancing', False)
         if (socialdistancing == "true"):
-            capacity = Screens.find_one({'_id': screen_id}, {"Capacity": capacity} )
-            capacity = float(capacity['Capacity'])/2
-            print("\n Capacity Decreaed :", capacity)
             socialdistancing = True
-            
         elif (socialdistancing == "false"):
-            capacity = Screens.find_one({'_id': screen_id}, {"Capacity": capacity} )
-            capacity = (float(capacity['Capacity'])*2)
             socialdistancing = False
-        else:
-            capacity = Screens.find_one({'_id': screen_id}, {"Capacity": capacity} )
-            capacity = (float(capacity['Capacity'])*2)
+
         
 
         document={"Name": screensname,
