@@ -11,9 +11,11 @@
     </header>
     <div class="w3-section w3-bottombar w3-padding-16  ">
         <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
+        <a href="" class="w3-button w3-blue">View Accounts</a>
         <a href="accountManagerAdd" class="w3-button w3-blue">Add Account</a>
         <a href="accountManagerRemove" class="w3-button w3-blue">Remove Account</a>
         <a href="accountManagerEdit" class="w3-button w3-blue">Edit Account</a>
+        <a href="accountManagerStatements" class="w3-button w3-blue">View Transactions</a>
 
 
 
@@ -26,18 +28,25 @@
                 <tr>
                     <th scope="col" class="w3-indigo">Id</th>
                     <th scope="col" class="w3-indigo">Name</th>
-                    <th scope="col" class="w3-indigo">Surname</th>
+                    <th scope="col" class="w3-indigo">Surname</th>                    
+                    <th scope="col" class="w3-indigo">Date Of Birth</th>
+                    <th scope="col" class="w3-indigo">Account Type</th>
                     <th scope="col" class="w3-indigo">Discount Rate</th>
                     <th scope="col" class="w3-indigo">Card Number</th>
                     <th scope="col" class="w3-indigo">Expiration Date</th>
                 </tr>
             </thead>
             <tbody>
-                {% for array in my_list %}
+                {% for x in my_list %}
                     <tr>
-                        {% for x in array %}
-                        <td>{{ x }}</td>
-                        {% endfor %}
+                        <td>{{ x.id }}</td>
+                        <td>{{ x.FirstName }}</td>
+                        <td>{{ x.LastName }}</td>
+                        <td>{{ x.DOB }}</td>
+                        <td>{{ x.Type }}</td>
+                        <td>{{ x.DiscountRate }}</td>
+                        <td>{{ x.CardNumber }}</td>
+                        <td>{{ x.ExpiryDate }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

@@ -1,0 +1,68 @@
+{% extends "cust/base.html" %}
+
+{% block title %}
+    <title>Film Listings</title>
+    <link rel="icon" href="logo.png">
+{% endblock title %}
+
+{% block content %}
+<div>
+    <header class="w3-container w3-center" style="padding:50px 16px">
+        <h1 class="w3-margin w3-jumbo" style="color: #fff">All Films</h1>
+    </header>
+    <div class="w3-section w3-bottombar w3-padding-16  ">
+        <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
+        <a href="/2/films_list" class="w3-button w3-white">View Movies</a>
+        <a href="/2/select_date/" class="w3-button w3-white" >Book Tickets</a>
+        <a href="{% url 'logout'  %}" class="w3-button w3-blue w3-hide-small" >Login</a>
+
+        <!-- Search section  -->
+        <div class="w3-right w3-col m2 w3-mobile">
+            <form action="{% url 'screens-list' %}" method="GET">
+                <div class="">
+                <input type="text" class="form-control" placeholder="Search film name"
+                name="search_query" value="{{ search_query }}"/>
+        
+                <input class="w3-button w3-green button4 " type="submit" value="Search"/>
+                </div>
+            </form>
+        </div>
+</div>
+
+<div class="w3-container w3-card w3-round">
+    <table class="">
+        <thead>
+            <tr>
+                <th scope="col" class="w3-indigo">Images</th>
+                <th scope="col" class="w3-indigo">Film Name</th>
+                <th scope="col" class="w3-indigo">Age Rating</th>
+                <th scope="col" class="w3-indigo">Duration</th>
+                <th scope="col" class="w3-indigo">Trailer Description</th>
+                <th scope="col" class="w3-indigo">Upcoming Showings?</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in data %}
+                <tr>
+                    <td scope="row">
+                        <img style="height: 100px; width: auto;" src="{{ todos.name }}" class="card-img-top" alt="...">
+                    </td>
+                    <td scope="row">{{ i.Name }}</td>
+                    <td>{{ i.Rating }}</td>
+                    <td>{{ i.Duration }}</td>
+                    <td>{{ i.TrailerDescription }}</td>
+                    <td>
+                        {% if i.showings.0.filmTitle %}
+                        yes
+                        {% elif not i.showings.0.filmTitle %}
+                        No
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <br>
+</div>
+{% endblock content %}

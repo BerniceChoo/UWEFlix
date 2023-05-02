@@ -11,4 +11,6 @@ urlpatterns = [
     path('view_data/ticket/book_tickets/', views.book_tickets, name='book_tickets'),
 
     path('view_data/ticket/book_tickets/booking_confirmation/', views.confirmation, name='confirmation'),
+
+    path('films_list', views.films_list, name='films_list') ,
 ]

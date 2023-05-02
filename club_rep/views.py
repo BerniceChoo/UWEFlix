@@ -15,6 +15,7 @@ db = client.test
 Clubs = db.Clubs
 Screens = db.Screens
 ClubReps = db.ClubRep
+Accounts = db.Accounts
 Showings = db.Showings
 Films = db.Films
 Bookings = db.Bookings
@@ -23,27 +24,32 @@ Bookings = db.Bookings
 def login(request, message=None):
     
     if request.method == 'POST':
-        number = request.POST.get('number')
+        number = int(request.POST.get('id'))
         print(number)
-        password = request.POST.get('password')
+        password = request.POST.get('Password')
         print(password)
-        number= int(number)
+        #   number= int(number)
    
-        result = ClubReps.find_one({"Number": number, "Password": password})
+        result = Accounts.find_one({"id": number, "Password": password})
+        print(result)
 
 
         if result:
-            print(f"Document found.")
+            if 'CR' in str(result):
+                print(f"Document found.")
 
-            request.session['loggedin'] = True
-            request.session['UserID'] = str(result['_id'])
-            request.session['Name'] = str(result['FirstName']) + " " + str(result['LastName'])
-            request.session['ClubID'] = str(result['Club_id'])
+                request.session['loggedin'] = True
+                request.session['UserID'] = str(result['_id'])
+                request.session['Name'] = str(result['FirstName']) + " " + str(result['LastName'])
+                request.session['ClubID'] = str(result['Club_id'])
 
-            return redirect('select-date-cr' )
-        else:
+                return redirect('select-date-cr' )
+            else:
+                message = "Your account is not a Customer Representative. Please login elsewhere."
+                return redirect('login-error', message=message)
+        else: 
             # Document not found
-            print(f"No document found with _id.")
+            print("No document found with _id.")
             message = "Your login credentials were not found. Please try again."
             return redirect('login-error', message=message)
 
@@ -454,10 +460,10 @@ def club_balance(request ):
         }
     ]
 
-    result = client['test']['ClubRep'].aggregate(pipeline)
+    result = client['test']['Accounts'].aggregate(pipeline)
 
     data = [doc for doc in result]
-    print(data)
+    #print(data)
 
     if request.POST.get('funds'):
         funds = request.POST.get('funds')
@@ -490,7 +496,7 @@ def logout(request):
     del request.session['Name']
     del request.session['ClubID']
     
-    return redirect(request,'login')
+    return redirect(request,'/login/')
 
 
 

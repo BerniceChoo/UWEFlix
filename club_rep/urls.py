@@ -2,8 +2,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.login, name='login') ,
-    path('', views.login, name='logout') ,
+    #path('', views.login, name='login') ,
+    #path('', views.login, name='logout') ,
 
     #path('create/', views.create_club, name='create-club'),
     #path('edit/<str:pk>/', views.edit_club, name='edit-club'),
@@ -23,7 +23,7 @@ urlpatterns = [
 
     path('view/<str:pk>/<str:message>/?', views.view_film, name='view-film-error'),
      
-    path('<str:message>/?', views.login, name='login-error') ,
+    #path('<str:message>/?', views.login, name='login-error') ,
 
     
 

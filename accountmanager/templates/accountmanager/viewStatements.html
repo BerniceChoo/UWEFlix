@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Account Manager</title>
+{% endblock title %}
+
+{% block content %}
+<div>
+    <header class="w3-container w3-black w3-center " style="padding:50px 16px">
+        <h1 class="w3-margin w3-jumbo">Account Manager</h1>
+    </header>
+    <div class="w3-section w3-bottombar w3-padding-16  ">
+        <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
+        <a href="accountManagerTable" class="w3-button w3-blue">View Accounts</a>
+        <a href="accountManagerAdd" class="w3-button w3-blue">Add Account</a>
+        <a href="accountManagerRemove" class="w3-button w3-blue">Remove Account</a>
+        <a href="accountManagerEdit" class="w3-button w3-blue">Edit Account</a>
+        <a href="accountManagerStatements" class="w3-button w3-blue">View Transactions</a>
+
+
+
+</div>
+
+<div class="w3-container w3-card w3-round">
+    
+        <table class="">
+            <thead>
+                <tr>
+                    <th scope="col" class="w3-indigo">No. of Tickets</th>
+                    <th scope="col" class="w3-indigo">Total Cost</th>
+                    <th scope="col" class="w3-indigo">Payment Method</th>                    
+                    <th scope="col" class="w3-indigo">Date Of Transaction</th>
+
+                    <th scope="col" class="w3-indigo">Film Title</th>
+                    <th scope="col" class="w3-indigo">Showing Time</th>
+                    <th scope="col" class="w3-indigo">Showing Date</th>
+
+                    <th scope="col" class="w3-indigo">Payer Name</th>
+                    <th scope="col" class="w3-indigo">Club Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for x in my_list %}
+                    <tr>
+                        <td>{{ x.NumberOfTickets }}</td>
+                        <td>{{ x.TotalCost }}</td>
+                        <td>{{ x.PaymentMethod }}</td>
+                        <td>{{ x.DateOfTransaction }}</td>
+                        <td>{{ x.filmTitle }}</td>
+                    </tr>
+                {% endfor %}
+                    
+            </tbody>
+        </table>
+
+    <br>
+
+    <br>
+</div>
+{% endblock content %}

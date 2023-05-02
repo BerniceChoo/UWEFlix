@@ -25,8 +25,9 @@ db = client.test
 # collection 
 Showings = db.Showings
 TicketsPrice = db.TicketsPrice
-Student = db.Student
-print("\n Student :", Student)
+Accounts = db.Accounts
+Films = db.Films
+print("\n Student :", Accounts)
 
 def select_date(request):
     return render(request, 'cust/select_date.html')
@@ -42,7 +43,7 @@ def login(request, message=None):
         number= int(number)
         # print("\n Find One :", Student.find_one({"number": number, "password": password}))
 
-        result = Student.find_one({"Number": number, "Password": password})
+        result = Accounts.find_one({"id": number, "Password": password})
         print("\n Result if user exists :", result)
 
 
@@ -93,3 +94,61 @@ def book_tickets(request):
     total_price = int(selected_ticketsnum) * ticket_price
     context = { 'selected_ticketsnum': selected_ticketsnum, 'ticket_price': ticket_price, 'total_price': total_price}
     return render(request, 'cust/book_tickets.html', context)
+
+def films_list(request):
+    
+    search_query = ""
+    
+
+    if request.GET.get('search_query'):
+        search_query = request.GET.get('search_query')
+       
+        
+    #cursor = Clubs.find({})
+    # case insensitive search using regex
+    regex = re.compile(search_query, re.IGNORECASE)
+    query = {'Name': {'$regex': regex}}
+    cursor = Films.find(query)
+
+    #joins showings and films collection, soo that we can see if a film is out for a showing, if it is the film cant be deleted
+    pipeline = [
+        {
+            '$lookup': {
+                'from': 'Showings',
+                'localField': 'Name',
+                'foreignField': 'filmTitle',
+                'as': 'showings'
+            }
+        },
+        {
+            '$match': {
+                '$or': [
+                    {'Name': {'$regex': search_query, '$options': 'i'}},
+                    {'showings.filmTitle': {'$regex': search_query, '$options': 'i'}},
+                ]
+            }
+        },
+        {
+            '$project': {
+                '_id': 1,
+                'Name': 1,
+                'Rating': 1,
+                'Duration': 1,
+                'TrailerDescription': 1,
+                'showings.filmTitle': 1,
+
+            }
+        }
+    ]
+
+
+    result = client['test']['Films'].aggregate(pipeline)
+
+    data = [doc for doc in result]
+  
+    context = {
+        'cursor': cursor,
+        'search_query': search_query,
+        'data': data,
+    }
+    return render(request, 'cust/films_list.html', context)

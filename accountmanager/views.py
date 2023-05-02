@@ -12,6 +12,7 @@ from .models import linkDatabase
 from .models import delete
 from .models import add
 from .models import edit
+from .models import dataStatements
 
 
 client = pymongo.MongoClient('mongodb+srv://nathan2miller:hj86z7mW3ZnWG1HH@uweflix.l8xahep.mongodb.net/?retryWrites=true&w=majority')
@@ -136,3 +137,12 @@ def accountMngrRemoveRecieved(request):
 
     my_context = {}
     return render(request, "accountmanager/dataRecievedRemoved.html", my_context)
+
+def accountMngrStatements(request, *args, **kwargs):
+    data = dataStatements()
+    print(data)
+    my_context = {
+        "my_list": data,
+    }
+    print(data)
+    return render(request, "accountmanager/viewStatements.html", my_context)
