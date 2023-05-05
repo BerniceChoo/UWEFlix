@@ -16,6 +16,7 @@
         {% if showing_id %}
         <a href="{% url 'view-film' showing_id %}" class="w3-button w3-black">Ticket </a>
         <a href="{% url 'view-booking' showing_id numb_of_tickets %}" class="w3-button w3-blue" >Checkout </a>
+        <a href="{% url 'logout'  %}" class="w3-button w3-white">Log Out</a>
         {% endif %}
 
 
