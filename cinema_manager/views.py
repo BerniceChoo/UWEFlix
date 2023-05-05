@@ -222,6 +222,7 @@ def register_club_rep(request, pk):
                   "Club_id": club_id,
                   "id": number,
                   "Password": password,
+                  "Type": "CR"
                     }
         
         ClubReps.insert_one(document)
