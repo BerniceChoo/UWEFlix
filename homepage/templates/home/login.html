@@ -1,14 +1,14 @@
-{% extends "club_rep/base.html" %}
+{% extends "home/base.html" %}
 
 {% block title %}
     <title>Create</title>
 {% endblock title %}
 
 {% block content %}
-    <div class="w3-container w3-margin w3-center"> 
+<div class="w3-container w3-margin w3-center"> 
     <form action="" method="POST" enctype="multipart/form-data">
-        <div class=" w3-blue-grey w3-card w3-round w3-margin w3-padding"> 
-            <h1 style="text-align: center; padding-top: 1em; padding-bottom: 1em;">Log In</h1>
+        <div class=" w3-blue-grey w3-card w3-round w3-margin w3-padding button4"> 
+            <h1 style="text-align: center; padding-top: 5em; padding-bottom: 1em;">Log In</h1>
         {% csrf_token %}
 
         {% if message is not None %}
@@ -25,7 +25,8 @@
 
         <a href="{% url 'home-page' %}"><button type="button" class="w3-button w3-red button4">Go back</button></a>
 
-        <input type="submit" class="w3-button w3-green button4 w3-margin" value="Log in">
+        <input type="submit" class="w3-button w3-green button4 w3-margin"  value="Log in">
+        <h1 style="text-align: center; padding-top: 5em; padding-bottom: 1em;"></h1>
         </div> 
     </form>
 </div>
