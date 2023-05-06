@@ -22,7 +22,7 @@ urlpatterns = [
     path('booking/<str:pk>/<str:numb_of_tickets>', views.view_booking, name='view-booking'),
 
     path('view/<str:pk>/<str:message>/?', views.view_film, name='view-film-error'),
-     
+    
     #path('<str:message>/?', views.login, name='login-error') ,
 
     

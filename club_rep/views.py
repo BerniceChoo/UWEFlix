@@ -21,71 +21,34 @@ Films = db.Films
 Bookings = db.Bookings
 
 
-def login(request, message=None):
-    
-    if request.method == 'POST':
-        number = int(request.POST.get('id'))
-        print(number)
-        password = request.POST.get('Password')
-        print(password)
-        #   number= int(number)
-   
-        result = Accounts.find_one({"id": number, "Password": password})
-        print(result)
-
-
-        if result:
-            if 'CR' in str(result):
-                print(f"Document found.")
-
-                request.session['loggedin'] = True
-                request.session['UserID'] = str(result['_id'])
-                request.session['Name'] = str(result['FirstName']) + " " + str(result['LastName'])
-                request.session['ClubID'] = str(result['Club_id'])
-
-                return redirect('select-date-cr' )
-            else:
-                message = "Your account is not a Customer Representative. Please login elsewhere."
-                return redirect('login-error', message=message)
-        else: 
-            # Document not found
-            print("No document found with _id.")
-            message = "Your login credentials were not found. Please try again."
-            return redirect('login-error', message=message)
-
-
-    context = {
-        'search_query': 1,
-        'data': 1,
-        'message': message,
-    }
-    return render(request, 'club_rep/login.html', context)
-
 
 
 
 def select_date(request):
+    if request.session.get('loggedin', False):
     
 
-    if request.GET.get('date'):
-        selected_date = request.GET.get('date')
-       
+        if request.GET.get('date'):
+            selected_date = request.GET.get('date')
         
-        #cursor = Clubs.find({})
-        # case insensitive search using regex
-        regex = re.compile(selected_date, re.IGNORECASE)
-        query = {'Name': {'$regex': regex}}
-        cursor = Screens.find(query)
+            
+            #cursor = Clubs.find({})
+            # case insensitive search using regex
+            regex = re.compile(selected_date, re.IGNORECASE)
+            query = {'Name': {'$regex': regex}}
+            cursor = Screens.find(query)
 
 
-        context = {
-            'cursor': cursor,
-            'selected_date': selected_date,
-        }
-        return redirect('showings_list-cr',selected_date )
+            context = {
+                'cursor': cursor,
+                'selected_date': selected_date,
+            }
+            return redirect('showings_list-cr',selected_date )
+            
         
-    
-    return render(request, 'club_rep/select_date.html')
+        return render(request, 'club_rep/select_date.html')
+    else:
+        return redirect('login')
 
 
 
@@ -488,12 +451,6 @@ def club_balance(request ):
 
 
 
-def logout(request):
-    del request.session['loggedin']
-    del request.session['UserID']
-    del request.session['Name']
-    del request.session['ClubID']
-    
-    return redirect(request,'/login/')
+
 
 

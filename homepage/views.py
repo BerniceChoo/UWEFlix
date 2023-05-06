@@ -46,6 +46,8 @@ def login(request, message=None):
                 request.session['UserID'] = str(result['_id'])
                 request.session['Name'] = str(result['FirstName']) + " " + str(result['LastName'])
                 request.session['ClubID'] = str(result['Club_id'])
+                namey = request.session['Name']
+                print(namey)
 
                 return redirect('/4/selectdate/')
             elif 'AM' in str(result):
@@ -87,3 +89,13 @@ def login(request, message=None):
     }
     return render(request, 'home/login.html', context)
 
+
+def user_logout(request):
+    del request.session['loggedin']
+    namey2 = request.session['Name']
+    print(namey2)
+    del request.session['UserID']
+    del request.session['Name']
+    del request.session['ClubID']
+    return redirect('/login/')
+    #return redirect('home-page')
