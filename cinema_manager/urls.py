@@ -22,6 +22,8 @@ urlpatterns = [
     path('film/edit/<str:pk>/', views.edit_film, name='edit-film'),
     path('film/delete/<str:pk>/', views.delete_film, name='delete-film'),
 
+    path('logout-cm/', views.user_logout, name='user-logout-cm')
+
     
 
 ]

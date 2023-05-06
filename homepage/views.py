@@ -90,7 +90,7 @@ def login(request, message=None):
     return render(request, 'home/login.html', context)
 
 
-def user_logout(request):
+#def user_logout(request):
     del request.session['loggedin']
     namey2 = request.session['Name']
     print(namey2)

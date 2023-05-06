@@ -555,3 +555,12 @@ def delete_film(request, pk):
     }
     return render(request, 'cinema_manager/delete_film.html', context)
     
+
+def user_logout(request):
+    del request.session['loggedin']
+    namey2 = request.session['Name']
+    print(namey2)
+    del request.session['UserID']
+    del request.session['Name']
+    return redirect('/login/')
+    #return redirect('home-page')
