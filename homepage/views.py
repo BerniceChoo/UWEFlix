@@ -22,14 +22,8 @@ Bookings = db.Bookings
 
 
 def home(request):
-    return render(request, 'home/list.html')
+    return render(request, 'home/home.html')
 
-
-def cinema_manager(request):
-    return render(request, 'home/list.html')
-
-def customer(request):
-    return render(request, 'home/list.html')
 
 def login(request, message=None):
     
@@ -91,12 +85,5 @@ def login(request, message=None):
         'data': 1,
         'message': message,
     }
-    return render(request, 'club_rep/login.html', context)
+    return render(request, 'home/login.html', context)
 
-def logout(request):
-    del request.session['loggedin']
-    del request.session['UserID']
-    del request.session['Name']
-    del request.session['ClubID']
-    
-    return redirect(request,'/login/')

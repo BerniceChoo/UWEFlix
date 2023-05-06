@@ -8,7 +8,7 @@
     <div class="w3-container w3-margin w3-center"> 
     <form action="" method="POST" enctype="multipart/form-data">
         <div class=" w3-blue-grey w3-card w3-round w3-margin w3-padding"> 
-            <h1 style="text-align: center; padding-top: 1em; padding-bottom: 1em;">Club Representative</h1>
+            <h1 style="text-align: center; padding-top: 1em; padding-bottom: 1em;">Log In</h1>
         {% csrf_token %}
 
         {% if message is not None %}
@@ -20,7 +20,7 @@
         <input type="number" name="id" id="id" value=1><br><br>
 
         <label for="password">Password:</label><br>
-        <input type="text" name="Password" id="Password" value="password123"><br><br>
+        <input type="text" name="Password" id="Password" value="1"><br><br>
 
 
         <a href="{% url 'home-page' %}"><button type="button" class="w3-button w3-red button4">Go back</button></a>
