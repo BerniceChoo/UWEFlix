@@ -65,8 +65,6 @@ def login(request, message=None):
 
 
 def select_date(request):
-
-    #selected_date = ""
     
 
     if request.GET.get('date'):

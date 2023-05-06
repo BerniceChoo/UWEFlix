@@ -16,6 +16,7 @@ Screens = db.Screens
 ClubReps = db.Accounts
 Films = db.Films
 Showings = db.Showings
+Accounts = db.Accounts
 
 
 def clubs_list(request):
