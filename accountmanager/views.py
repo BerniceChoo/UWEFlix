@@ -20,12 +20,15 @@ db = client['test']
 cl = db["Accounts"]
 
 def accountMngrTable(request, *args, **kwargs):
+  if request.session.get('loggedin', False):
     data = linkDatabase("Accounts")
     #print(data)
     my_context = {
         "my_list": data
     }
     return render(request, "accountmanager/viewTable.html", my_context)
+  else:
+     return redirect('/login/')
     ##return render(
       ##  request,
         ##'accountmanager/page.html',
@@ -49,6 +52,7 @@ def accountMngrTable(request, *args, **kwargs):
             ##return render(request, ""
 
 def accountMngrAdd(request):
+  if request.session.get('loggedin', False):
     #data = linkDatabase("Accounts")
     #firstName = request.POST.get('firstName')
     #surname = request.POST.get('surname')
@@ -61,8 +65,11 @@ def accountMngrAdd(request):
 
     my_context = {}
     return render(request, "accountmanager/addAccount.html", my_context)
+  else:
+     return redirect('/login/')
 
 def accountMngrAddRecieved(request):
+  if request.session.get('loggedin', False):
     #data = linkDatabase("Accounts")
 #    firstName = request.POST.get('firstName')
  #   surname = request.POST.get('surname')
@@ -81,6 +88,8 @@ def accountMngrAddRecieved(request):
     add(request)
     my_context = {}
     return render(request, "accountmanager/dataRecievedAdd.html", my_context)
+  else:
+     return redirect('/login/')
 
 #newguy = {"id":"3", "Password" : "MYPASSWORD", "Card Number" : "7491039265748283", "Expiry Date" : "1/27", "Discount Rate" : "0", "First Name" : "Zach", "Last Name" : my_title}
 
@@ -90,22 +99,29 @@ def accountMngrAddRecieved(request):
 #cl = db["Accounts"]
 
 def accountMngrRemove(request, *args, **kwargs):
+  if request.session.get('loggedin', False):
     data = linkDatabase("Accounts")
     #print(data)
     my_context = {
         "my_list": data
     }
     return render(request, "accountmanager/removeAccount.html", my_context)
+  else:
+     return redirect('/login/')
 
 def accountMngrEdit(request, *args, **kwargs):
+  if request.session.get('loggedin', False):
     data = linkDatabase("Accounts")
     #print(data)
     my_context = {
         "my_list": data
     }
     return render(request, "accountmanager/editAccount.html", my_context)
+  else:
+     return redirect('/login/')
 
 def accountMngrEditRecieved(request):
+  if request.session.get('loggedin', False):
     #data = linkDatabase("Accounts")
     change = request.POST.get('change')
     number = int(request.POST.get('id'))
@@ -129,16 +145,22 @@ def accountMngrEditRecieved(request):
 
     my_context = {}
     return render(request, "accountmanager/dataRecievedEdit.html", my_context)
+  else:
+     return redirect('/login/')
 
 def accountMngrRemoveRecieved(request):
+  if request.session.get('loggedin', False):
     number = int(request.POST.get('id'))
     delete(number)
     print("RemoveRecieved")
 
     my_context = {}
     return render(request, "accountmanager/dataRecievedRemoved.html", my_context)
+  else:
+     return redirect('/login/')
 
 def accountMngrStatements(request, *args, **kwargs):
+  if request.session.get('loggedin', False):
     data = dataStatements()
     print(data)
     my_context = {
@@ -146,6 +168,8 @@ def accountMngrStatements(request, *args, **kwargs):
     }
     print(data)
     return render(request, "accountmanager/viewStatements.html", my_context)
+  else:
+     return redirect('/login/')
 
 
 def user_logout(request):

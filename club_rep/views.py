@@ -48,7 +48,7 @@ def select_date(request):
         
         return render(request, 'club_rep/select_date.html')
     else:
-        return redirect('login')
+        return redirect('/login/')
 
 
 
@@ -80,7 +80,7 @@ def showings_list(request, selected_date):
         }
         return render(request, 'club_rep/showings_list.html', context)
     else:
-        return redirect('login')
+        return redirect('/login/')
 
 
 
@@ -142,7 +142,7 @@ def view_film(request, pk, message=None):
         }
         return render(request, 'club_rep/view_film.html', context)
     else:
-        return redirect('login')
+        return redirect('/login/')
 
 
 
@@ -249,7 +249,7 @@ def view_booking(request, pk, numb_of_tickets):
 
         return render(request, 'club_rep/booking.html', context)
     else:
-        return redirect('login')
+        return redirect('/login/')
 
 
 
@@ -378,7 +378,7 @@ def view_transactions(request , selected_month=None):
         }
         return render(request, 'club_rep/transactions.html', context)
     else:
-        return redirect('login')
+        return redirect('/login/')
 
 
 
@@ -465,7 +465,7 @@ def club_balance(request ):
         }
         return render(request, 'club_rep/club.html', context)
     else:
-        return redirect('login')
+        return redirect('/login/')
 
 
 
