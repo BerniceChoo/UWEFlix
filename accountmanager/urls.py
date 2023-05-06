@@ -11,4 +11,6 @@ urlpatterns = [
     path("accountManagerEdit", views.accountMngrEdit, name="editAccount"),
     path("accountManagerEditRecieved", views.accountMngrEditRecieved, name="editAccount"),
     path("accountManagerRemoveRecieved", views.accountMngrRemoveRecieved, name="editAccount"),
+
+    path('logout-am/', views.user_logout, name='user-logout-am')
 ]

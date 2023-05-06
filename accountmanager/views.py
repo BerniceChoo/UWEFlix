@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render , redirect
 
 from datetime import datetime
 
@@ -146,3 +146,12 @@ def accountMngrStatements(request, *args, **kwargs):
     }
     print(data)
     return render(request, "accountmanager/viewStatements.html", my_context)
+
+
+def user_logout(request):
+  del request.session['loggedin']
+  namey2 = request.session['Name']
+  print(namey2)
+  del request.session['UserID']
+  del request.session['Name']
+  return redirect('/login/')
