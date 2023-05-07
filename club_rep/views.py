@@ -479,5 +479,74 @@ def user_logout(request):
     return redirect('/login/')
     #return redirect('home-page')
 
+# REST APIs
+from rest_framework import generics, status
+from rest_framework.response import Response
+from .serializers import ScreenSerializer, DeleteScreenSerializer, EditScreenSerializer
 
+
+class CreateScreenView(generics.CreateAPIView):
+    serializer_class = ScreenSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            screensname = serializer.validated_data.get('name')
+            capacity = serializer.validated_data.get('capacity')
+            social_distancing = serializer.validated_data.get('social_distancing')
+            document = {
+                "Name": screensname,
+                "Capacity": capacity,
+                "SocialDistancing": social_distancing
+            }
+            Screens.insert_one(document)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+
+
+class EditScreenView(generics.UpdateAPIView):
+    serializer_class = EditScreenSerializer
+
+    def put(self, request, *args, **kwargs):
+        screen_id = ObjectId(kwargs['pk'])
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            screensname = serializer.validated_data.get('name')
+            capacity = serializer.validated_data.get('capacity')
+            social_distancing = serializer.validated_data.get('social_distancing')
+            document = {
+                "Name": screensname,
+                "Capacity": capacity,
+                "SocialDistancing": social_distancing
+            }
+            result = Screens.update_one({'_id': screen_id}, {'$set': document})
+
+            if result.modified_count == 1:
+                # Document successfully updated
+                print(f"Document with _id '{screen_id}' updated.")
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                # Document not found
+                print(f"No document found with _id '{screen_id}'.")
+                return Response({'detail': f"No document found with _id '{screen_id}'."}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DeleteScreenView(generics.DestroyAPIView):
+    serializer_class = DeleteScreenSerializer
+
+    def delete(self, request, *args, **kwargs):
+        screen_id = ObjectId(kwargs['pk'])
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            confirm = serializer.validated_data.get('confirm')
+
+            if confirm:
+                result = Screens.delete_one({"_id": screen_id})
+                return Response({'message': f"Screen with id {screen_id} is deleted successfully!"}, status=status.HTTP_204_NO_CONTENT)
+            else:
+                return Response({'error': f"No screen found with id {screen_id}."}, status=status.HTTP_404_NOT_FOUND)
 

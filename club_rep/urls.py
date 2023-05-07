@@ -27,6 +27,9 @@ urlpatterns = [
     
     #path('<str:message>/?', views.login, name='login-error') ,
 
-    
+    # APIs
+    path('api/screens/create/', views.CreateScreenView.as_view(), name='create_screen'),
+    path('api/screens/<str:pk>/edit/', views.EditScreenView.as_view(), name='edit_screen'),
+    path('api/screens/<str:pk>/delete/', views.DeleteScreenView.as_view(), name='delete_screen'),
 
 ]
