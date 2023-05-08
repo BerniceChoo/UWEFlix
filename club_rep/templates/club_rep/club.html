@@ -64,7 +64,7 @@
         <table class="">
             
             {% comment %} <form action="" method="POST" > {% endcomment %}
-            <form action="{% url 'payment' %}" method="">
+            <form action="{% url 'payment' %}" method="get">
                 {% csrf_token %}
                 <label for="funds" >Add Funds:</label>
                 <input type="Number" name="funds" id="funds" min="1" max="100000">
@@ -72,7 +72,6 @@
                 
                 <a href="{% url 'select-date-cr' %}"><button type="button" class="w3-button w3-red button4" >Go back</button></a>
                 <input class="w3-button w3-green button4 w3-margin" type="submit" value="Add" href="{% url 'payment' %}">
-                {% comment %} <button type="submit" class="w3-button w3-green button4 w3-margin" href="{% url 'payment' %}" value="add"> Proceed to Booking</button>
             </form> {% endcomment %}
         </table>
         
