@@ -6,6 +6,7 @@ import datetime
 import re
 import string
 import random
+from django.http import HttpResponse
 
 client = pymongo.MongoClient("mongodb+srv://daniel2fernandes:skelJ6UzCVlG36Ei@uweflix.l8xahep.mongodb.net/?retryWrites=true&w=majority")
 # database
@@ -17,6 +18,7 @@ ClubReps = db.Accounts
 Films = db.Films
 Showings = db.Showings
 Accounts = db.Accounts
+
 
 
 def clubs_list(request):
@@ -616,3 +618,162 @@ def user_logout(request):
     del request.session['Name']
     return redirect('/login/')
     #return redirect('home-page')
+
+def showing_list(request):
+    if request.session.get('loggedin', False):
+
+        search_query = ""
+        
+
+        if request.GET.get('search_query'):
+            search_query = request.GET.get('search_query')
+        
+            
+        #cursor = Clubs.find({})
+        # case insensitive search using regex
+        regex = re.compile(search_query, re.IGNORECASE)
+        query = {'Name': {'$regex': regex}}
+        cursor = Showings.find(query)
+
+        #joins showings and films collection, soo that we can see if a film is out for a showing, if it is the film cant be deleted
+        pipeline = [
+            {
+                '$lookup': {
+                    'from': 'Showings',
+                    'localField': 'Name',
+                    'foreignField': 'filmTitle',
+                    'as': 'showings'
+                }
+            },
+            {
+                '$match': {
+                    '$or': [
+                        {'Name': {'$regex': search_query, '$options': 'i'}},
+                        {'showings.filmTitle': {'$regex': search_query, '$options': 'i'}},
+                    ]
+                }
+            },
+            {
+                '$project': {
+                    '_id': 1,
+                    'filmTitle': 1,
+                    'ageRating': 1,
+                    'flimDuration': 1,
+                    'TrailerDescription': 1,
+                    'showings.filmTitle': 1,
+
+                }
+            }
+        ]
+
+
+        result = client['test']['Showings'].aggregate(pipeline)
+        results = Showings.find()
+        datas = [doc for doc in results]
+        data = [doc for doc in result]
+    
+        context = {
+            'cursor': cursor,
+            'search_query': search_query,
+            'data': data,
+            'datas': datas,
+        }
+        return render(request, 'cinema_manager/showing.html', context)
+    else:
+        return redirect('/login/')
+
+def select_showing(request):    
+    if request.session.get('loggedin', False):
+
+        search_query = ""
+        
+
+        if request.GET.get('search_query'):
+            search_query = request.GET.get('search_query')
+        
+            
+        #cursor = Clubs.find({})
+        # case insensitive search using regex
+        regex = re.compile(search_query, re.IGNORECASE)
+        query = {'Name': {'$regex': regex}}
+        cursor = Films.find(query)
+
+        #joins showings and films collection, soo that we can see if a film is out for a showing, if it is the film cant be deleted
+        pipeline = [
+            {
+                '$lookup': {
+                    'from': 'Showings',
+                    'localField': 'Name',
+                    'foreignField': 'filmTitle',
+                    'as': 'showings'
+                }
+            },
+            {
+                '$match': {
+                    '$or': [
+                        {'Name': {'$regex': search_query, '$options': 'i'}},
+                        {'showings.filmTitle': {'$regex': search_query, '$options': 'i'}},
+                    ]
+                }
+            },
+            {
+                '$project': {
+                    '_id': 1,
+                    'Name': 1,
+                    'Rating': 1,
+                    'Duration': 1,
+                    'TrailerDescription': 1,
+                    'showings.filmTitle': 1,
+
+                }
+            }
+        ]
+
+
+        result = client['test']['Films'].aggregate(pipeline)
+
+        data = [doc for doc in result]
+    
+        context = {
+            'cursor': cursor,
+            'search_query': search_query,
+            'data': data,
+        }
+        return render(request, 'cinema_manager/select_showing.html', context)
+    else:
+        return redirect('/login/')
+
+def add_showing(request, pk):
+    if request.session.get('loggedin', False):
+
+        film_id = ObjectId(pk)
+    
+        if request.method == 'POST':
+            filmname = request.POST['filmname']
+            showing_time = datetime.strptime(request.POST.get('showing_time'), '%Y-%m-%d %H:%M:%S')
+
+            
+
+            document={"filmTitle": filmname,
+                      'showingTime': showing_time,
+                        }
+            
+            result = Showings.update_one({'_id': film_id},{'$set': document} )
+
+            if result.modified_count == 1:
+                # Document successfully updated
+                print(f"Document with _id '{film_id}' updated.")
+                return redirect('showing')
+            else:
+                # Document not found
+                print(f"No document found with _id '{film_id}'.")
+
+            return redirect('select-showing')
+    
+        cursor = Films.find({"_id" : film_id})
+        context = {
+            'film': cursor,
+        }
+        return render(request, 'cinema_manager/add_showing.html', context)
+    else:
+        return redirect('/login/')
