@@ -16,6 +16,6 @@ services:
     environment:
       MONGO_HOST: uweflix.l8xahep.mongodb.net
       MONGO_PORT: 27017
-      MONGO_DB: UWEFLIX
+      MONGO_DB: test
       MONGO_USER: daniel2fernandes
       MONGO_PASSWORD: skelJ6UzCVlG36Ei

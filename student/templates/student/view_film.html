@@ -1,0 +1,77 @@
+{% extends "club_rep/base.html" %}
+
+{% block title %}
+    <title>Cinema Manager</title>
+{% endblock title %}
+
+{% block content %}
+<div>
+    <header class="w3-container w3-black w3-center " style="padding:50px 16px">
+        <h1 class="w3-margin w3-jumbo">Student</h1>
+    </header>
+    <div class="w3-section w3-bottombar w3-padding-16  ">
+        <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
+        <a href="{% url 'select-date-cr'  %}" class="w3-button w3-black">Select Date </a>
+        <a href="{% url 'showings_list-cr' date  %}" class="w3-button w3-black" >Showings </a>
+        <a href="{% url 'view-film' film_id %}" class="w3-button w3-blue">Ticket </a>
+        <a href="{% url 'user-logout'  %}" class="w3-button w3-white">Log Out</a>
+
+
+</div>
+
+<div class="w3-container w3-card w3-round">
+    
+        <table class="">
+            <thead>
+                <tr>
+                    <th scope="col" class="w3-teal">Images</th>
+                    <th scope="col" class="w3-teal">Film Name</th>
+                    <th scope="col" class="w3-teal">Age Rating</th>
+                    <th scope="col" class="w3-teal">Duration</th>
+                    <th scope="col" class="w3-teal">Trailer Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in cursor %}
+                    <tr>
+                        <th scope="row">
+                            <img style="height: 100px; width: auto;" src="{{ todos.name }}" class="card-img-top" alt="...">
+                        </th>
+                        <th scope="row">{{ i.Name }}</th>
+                        <td>{{ i.Rating }}</td>
+                        <td>{{ i.Duration }}</td>
+                        <td>{{ i.TrailerDescription }}</td>
+
+                       
+
+                        
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    <br>
+
+    <div class="w3-center">
+
+        <table class="">
+            
+            <form action="" method="POST">
+                {% csrf_token %}
+                {% if message is not None %}
+                <p class="w3-red">{{ message }}</p>
+                {% endif %}
+                <label for="date">Select Number of tickets:</label>
+                <input type="Number" name="tickets" id="tickets" min="10" max="50">
+                <br>
+                
+                <a href="{% url 'showings_list-cr' date %}"><button type="button" class="w3-button w3-red button4">Go back</button></a>
+                <input class="w3-button w3-green button4 w3-margin" type="submit" value="Buy">
+            </form>
+        </table>
+        
+
+    </div>
+    <br>
+</div>
+{% endblock content %}
