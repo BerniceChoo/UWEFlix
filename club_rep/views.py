@@ -7,6 +7,13 @@ import re
 import string
 import random
 from django.contrib.auth import authenticate, login, logout
+from django.urls import reverse
+from django.shortcuts import render
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+from stripe import api_key
+import stripe
 
 client = pymongo.MongoClient("mongodb+srv://daniel2fernandes:skelJ6UzCVlG36Ei@uweflix.l8xahep.mongodb.net/?retryWrites=true&w=majority")
 # database
@@ -479,5 +486,28 @@ def user_logout(request):
     return redirect('/login/')
     #return redirect('home-page')
 
-
+def payment(request):
+    amount = request.GET.get('funds')
+    #stripe.api_key = 'sk_test_51MreTZEAy08SY67AuRf9elHrmFnL4yBktiRpiZ29iuuUvC5icNfYLv9XuVmggtVml6bUKSuvylsi5B9VPSuRe8PX00PvyX47Oh'
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    #print(settings.STRIPE_SECRET_KEY)
+    #payment = Ticket.objects.get(pk = booking_id)
+    checkout_session = stripe.checkout.Session.create(
+        line_items=[
+            {
+                # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+                'price': 'price_1N5arHIPj7kzkHPxwklw6O9B',
+                'quantity': amount,
+            },
+        ],
+        mode='payment',
+        success_url= 'http://127.0.0.1:8000/4/club-balance/',
+        cancel_url='http://127.0.0.1:8000/2/select_date/',
+        )
+    # print("heeeey", checkout_session.status)
+    # while checkout_session.status != 'succeed':
+    #     print("not done")
+    # else:
+    #     print("now its done", checkout_session.status )
+    return redirect(checkout_session.url, code=303)
 
