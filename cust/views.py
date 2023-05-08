@@ -10,6 +10,12 @@ import ssl
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from django.urls import reverse
+from django.shortcuts import render
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+from stripe import api_key
+import stripe
 
 client = "mongodb+srv://choo2foonyee:FpaMQ6825hCyJw6x@uweflix.l8xahep.mongodb.net/?retryWrites=true&w=majority"
 # client = pymongo.MongoClient("mongodb+srv://choo2foonyee:FpaMQ6825hCyJw6x@uweflix.l8xahep.mongodb.net/?retryWrites=true&w=majority", ssl_cert_reqs=ssl.CERT_NONE)
@@ -152,3 +158,28 @@ def films_list(request):
         'data': data,
     }
     return render(request, 'cust/films_list.html', context)
+
+def payment(request):
+    selected_ticketsnum = request.GET.get('tickets')
+    #stripe.api_key = 'sk_test_51MreTZEAy08SY67AuRf9elHrmFnL4yBktiRpiZ29iuuUvC5icNfYLv9XuVmggtVml6bUKSuvylsi5B9VPSuRe8PX00PvyX47Oh'
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    #print(settings.STRIPE_SECRET_KEY)
+    #payment = Ticket.objects.get(pk = booking_id)
+    checkout_session = stripe.checkout.Session.create(
+        line_items=[
+            {
+                # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+                'price': 'price_1N5Xl5IPj7kzkHPxkY2059nU',
+                'quantity': selected_ticketsnum,
+            },
+        ],
+        mode='payment',
+        success_url= 'http://127.0.0.1:8000/2/view_data/ticket/book_tickets/booking_confirmation/',
+        cancel_url='http://127.0.0.1:8000/2/select_date/',
+        )
+    # print("heeeey", checkout_session.status)
+    # while checkout_session.status != 'succeed':
+    #     print("not done")
+    # else:
+    #     print("now its done", checkout_session.status )
+    return redirect(checkout_session.url, code=303)
