@@ -66,14 +66,14 @@ def login(request, message=None):
                 request.session['Name'] = str(result['FirstName']) + " " + str(result['LastName'])
 
                 return redirect('/1/')
-            elif 'CUS' in str(result):
-                print(f"Cinema Manager Found.")
+            elif 'STU' in str(result):
+                print(f"Customer Found.")
 
                 request.session['loggedin'] = True
                 request.session['UserID'] = str(result['_id'])
                 request.session['Name'] = str(result['FirstName']) + " " + str(result['LastName'])
 
-                return redirect('/')
+                return redirect('/5/selectdate/')
             
         else: 
             # Document not found

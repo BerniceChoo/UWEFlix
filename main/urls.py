@@ -12,6 +12,7 @@ path('1/', include('cinema_manager.urls')),
 path('2/', include('cust.urls')),
 path('3/', include('accountmanager.urls')),
 path('4/', include('club_rep.urls')),
+path('5/', include('student.urls')),
 ]
 
 if settings.DEBUG:
