@@ -184,23 +184,60 @@ def view_booking(request, pk, numb_of_tickets):
             tickets_sold = tickets_sold + numb_of_tickets
             tickets_left= tickets_available - numb_of_tickets
 
-            #------------------------------stripe------------------------
-            stripe.api_key = settings.STRIPE_SECRET_KEY
+            clubrep_id = ObjectId(request.session['UserID'])
 
-            checkout_session = stripe.checkout.Session.create(
-                line_items=[
-                    {
-                        # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                        'price': 'price_1N5Xl5IPj7kzkHPxkY2059nU',
-                        'quantity': numb_of_tickets,
-                    },
-                ],
-                mode='payment',
-                success_url= f'http://127.0.0.1:8000/5/payment/?payment_status=success&numb_of_tickets={numb_of_tickets}&pk={pk}',
-                cancel_url='http://127.0.0.1:8000/5/showing/2023-04-23/',
-                )
-            return redirect(checkout_session.url, code=303)
+            document={"id": results["id"],
+                    "ageRating": results["ageRating"],
+                    "filmDuration": results["filmDuration"],
+                    "filmTitle": results["filmTitle"],
+                    "showingTime": results["showingTime"],
+                    "ticketsSold": tickets_sold,
+                    "trailerDescription": results["trailerDescription"],
+                    "date": results["date"],
+                    "ticketsLeft": tickets_left,
+                    }
             
+            result = Showings.update_one({'_id': Showings_id},{'$set': document} )
+
+            now = datetime.now()
+            #dt_string = now.strftime("%d/%m/%Y")
+            #https://www.programiz.com/python-programming/datetime/current-datetime
+
+            
+
+            document2={"AccountID": clubrep_id,
+                    "ShowingID": Showings_id,
+                    "NumberOfTickets": numb_of_tickets,
+                    "TotalCost": price_after,
+                    "PaymentMethod": payment,
+                    "DateOfTransaction": now,
+                    }
+            
+            
+
+
+            Bookings.insert_one(document2)
+
+            '''
+            club_id = ObjectId(request.session['ClubID'])
+            results = Clubs.find_one({'_id': club_id})
+            balance = results['Balance']
+            new_balance = int(balance) - int(price_after)           
+            document={"Balance": new_balance,}
+            result = Clubs.update_one({'_id': club_id},{'$set': document} )
+            '''
+
+
+            if result.modified_count == 1:
+                # Document successfully updated
+                print(f"Document with _id updated.")
+                message = "Your login credentials were not found. Please try again."
+                return redirect('view-all-transactions-st'  )
+            else:
+                # Document not found
+                print(f"No document found with _id.")
+                #return redirect('view-film', pk=pk , error ="" )
+
 
 
         context = {
@@ -362,65 +399,26 @@ def user_logout(request):
 
 
 def payment(request):
-    payment_status = request.GET.get('payment_status')
-    numb_of_tickets = request.GET.get('numb_of_tickets')
-    pk = request.GET.get('pk')
-    if payment_status == 'success':
-        # execute database operations here
-        Showings_id = ObjectId(pk)
-
-        results = Showings.find_one({ "_id" : Showings_id })
-
-
-        price_before = int(numb_of_tickets) * 10
-        price_after = price_before * 0.75
-        
-
-
-
-        numb_of_tickets = int(numb_of_tickets)
-        payment = request.POST.get('payment')
-        tickets_available = results["ticketsLeft"]
-        tickets_sold = results["ticketsSold"]
-        tickets_sold = tickets_sold + numb_of_tickets
-        tickets_left= tickets_available - numb_of_tickets
-        
-        clubrep_id = ObjectId(request.session['UserID'])
-
-
-
-        document={"id": results["id"],
-                "ageRating": results["ageRating"],
-                "filmDuration": results["filmDuration"],
-                "filmTitle": results["filmTitle"],
-                "showingTime": results["showingTime"],
-                "ticketsSold": tickets_sold,
-                "trailerDescription": results["trailerDescription"],
-                "date": results["date"],
-                "ticketsLeft": tickets_left,
-                }
-        
-        result = Showings.update_one({'_id': Showings_id},{'$set': document} )
-
-        now = datetime.now()
-        #dt_string = now.strftime("%d/%m/%Y")
-        #https://www.programiz.com/python-programming/datetime/current-datetime
-
-        
-
-        document2={"AccountID": clubrep_id,
-                "ShowingID": Showings_id,
-                "NumberOfTickets": numb_of_tickets,
-                "TotalCost": price_after,
-                "PaymentMethod": payment,
-                "DateOfTransaction": now,
-                }
-        
-        
-
-
-        Bookings.insert_one(document2)
-        return redirect('view-all-transactions-st')
-    return render(request, 'student/select_date.html')
-       
-    
+    selected_ticketsnum = request.GET.get('tickets')
+    #stripe.api_key = 'sk_test_51MreTZEAy08SY67AuRf9elHrmFnL4yBktiRpiZ29iuuUvC5icNfYLv9XuVmggtVml6bUKSuvylsi5B9VPSuRe8PX00PvyX47Oh'
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    #print(settings.STRIPE_SECRET_KEY)
+    #payment = Ticket.objects.get(pk = booking_id)
+    checkout_session = stripe.checkout.Session.create(
+        line_items=[
+            {
+                # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+                'price': 'price_1N5Xl5IPj7kzkHPxkY2059nU',
+                'quantity': selected_ticketsnum,
+            },
+        ],
+        mode='payment',
+        success_url= 'http://127.0.0.1:8000/5/transactions',
+        cancel_url='http://127.0.0.1:8000/5/showing/2023-04-23/',
+        )
+    # print("heeeey", checkout_session.status)
+    # while checkout_session.status != 'succeed':
+    #     print("not done")
+    # else:
+    #     print("now its done", checkout_session.status )
+    return redirect(checkout_session.url, code=303)

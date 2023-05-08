@@ -21,8 +21,10 @@ urlpatterns = [
 
     path('view/<str:pk>/<str:message>/?', views.view_film, name='view-film-error-st'),
 
-    path('logout/', views.user_logout, name='user-logout-st')
+    path('logout/', views.user_logout, name='user-logout-st'),
     
+    path('payment/', views.payment, name='payment-st'),
+
     #path('<str:message>/?', views.login, name='login-error') ,
 
     
