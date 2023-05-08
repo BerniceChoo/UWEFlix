@@ -1,0 +1,36 @@
+{% extends 'cinema_manager/base.html' %}
+
+{% block title %}
+    <title>Edit</title>
+   
+{% endblock title %}
+
+{% block content %}
+  
+
+    <div class="w3-container w3-margin w3-center"> 
+        
+
+    <form action="" method="POST" enctype="multipart/form-data" >
+        <div class=" w3-blue-grey w3-card w3-round w3-margin w3-padding"> 
+        <h1 style="text-align: center; padding-top: 1em; padding-bottom: 1em;">Add Showing</h1>
+        {% for i in film %}
+        {% csrf_token %}
+        <label for="filmname">Film Name:</label><br>
+        <input type="text" name="filmname" id="filmname" value="{{ i.Name }}"><br><br>
+
+        <label for="showing_time">Showing Time:</label><br>
+        <input type="datetime-local" id="showing_time" name="showing_time" required><br><br>
+
+        <label for="theater_location">Screen Number:</label><br>
+        <input type="text" id="theater_location" name="theater_location" required><br><br>
+        <br><br>
+
+        <a href="{% url 'select-showing' %}"><button type="button" class="w3-button w3-red button4">Go back</button></a>
+
+        <input type="submit" class="w3-button w3-green button4 w3-margin" value="Confirm Showing">
+        {% endfor %}
+    </form>
+</div>
+</div>
+{% endblock content %}

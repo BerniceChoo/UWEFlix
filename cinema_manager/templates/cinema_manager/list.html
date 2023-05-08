@@ -15,6 +15,7 @@
         <a href="{% url 'clubs-list' %}" class="w3-button w3-blue">Clubs</a>
         <a href="{% url 'screens-list' %}" class="w3-button w3-white" >Screen </a>
         <a href="{% url 'films-list' %}" class="w3-button w3-white w3-hide-small" >Film </a>
+        <a href="{% url 'showing-list' %}" class="w3-button w3-white" >Showing </a>
         <a href="{% url 'user-logout-cm'  %}" class="w3-button w3-white">Log Out</a>
         
         <!-- Search section  -->
@@ -38,7 +39,6 @@
     <table class="">
         <thead>
             <tr>
-                <th scope="col" class="w3-indigo ">Images</th>
                 <th scope="col" class="w3-indigo">Club Name</th>
                 <th scope="col" class="w3-indigo ">Address No.</th>
                 <th scope="col" class="w3-indigo">Address Street</th>
@@ -57,9 +57,6 @@
             {% for i in data %}
 
                 <tr>
-                    <th scope="row">
-                        <img style="height: 100px; width: auto;" src="{{ todos.name }}" class="card-img-top" alt="...">
-                    </th>
                     <th scope="row">{{ i.Name }}</th>
                     <td>{{ i.HouseNumber }}</td>
                     <td>{{ i.Street }}</td>

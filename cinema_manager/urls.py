@@ -22,6 +22,10 @@ urlpatterns = [
     path('film/edit/<str:pk>/', views.edit_film, name='edit-film'),
     path('film/delete/<str:pk>/', views.delete_film, name='delete-film'),
 
+    path('showing/', views.showing_list, name='showing-list'),
+    path('showing/select/', views.select_showing, name='select-showing'),
+    path('showing/select/<str:pk>/', views.add_showing, name='add-showing'),
+
     path('logout-cm/', views.user_logout, name='user-logout-cm')
 
     

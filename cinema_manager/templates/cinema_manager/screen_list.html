@@ -14,6 +14,7 @@
         <a href="{% url 'clubs-list' %}" class="w3-button w3-white">Clubs </a>
         <a href="{% url 'screens-list' %}" class="w3-button w3-blue" >Screen </a>
         <a href="{% url 'films-list' %}" class="w3-button w3-white w3-hide-small" >Film </a>
+        <a href="{% url 'showing-list' %}" class="w3-button w3-white" >Showing </a>
         <a href="{% url 'user-logout-cm'  %}" class="w3-button w3-white">Log Out</a>
 
         <!-- Search section  -->
@@ -33,7 +34,6 @@
     <table class="">
         <thead>
             <tr>
-                <th scope="col" class="w3-indigo">Images</th>
                 <th scope="col" class="w3-indigo">Screen Name</th>
                 <th scope="col" class="w3-indigo">Seat Capacity</th>
                 <th scope="col" class="w3-indigo">Social Distancing</th>
@@ -44,9 +44,6 @@
         <tbody>
             {% for i in data %}
                 <tr>
-                    <th scope="row">
-                        <img style="height: 100px; width: auto;" src="{{ todos.name }}" class="card-img-top" alt="...">
-                    </th>
                     <th scope="row">{{ i.Name }}</th>
                     <td>{{ i.Capacity }}</td>
                     <td>

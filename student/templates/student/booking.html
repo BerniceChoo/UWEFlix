@@ -1,0 +1,94 @@
+{% extends "club_rep/base.html" %}
+
+{% block title %}
+    <title>Cinema Manager</title>
+{% endblock title %}
+
+{% block content %}
+<div>
+    <header class="w3-container w3-black w3-center " style="padding:50px 16px">
+        <h1 class="w3-margin w3-jumbo">Student</h1>
+    </header>
+    <div class="w3-section w3-bottombar w3-padding-16  ">
+        <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
+        <a href="{% url 'select-date-cr' %}" class="w3-button w3-black">Select Date </a>
+        <a href="{% url 'showings_list-cr' date  %}" class="w3-button w3-black" >Showings </a>
+        {% if showing_id %}
+        <a href="{% url 'view-film' showing_id %}" class="w3-button w3-black">Ticket </a>
+        <a href="{% url 'view-booking' showing_id numb_of_tickets %}" class="w3-button w3-blue" >Checkout </a>
+        <a href="{% url 'user-logout'  %}" class="w3-button w3-white">Log Out</a>
+        {% endif %}
+
+
+</div>
+
+<div class="w3-container w3-card w3-round">
+        
+    <h1 class="w3-margin ">Checkout</h1>
+    
+        <table class="">
+            <thead>
+                <tr>
+                    <th scope="col" class="w3-teal">Images</th>
+                    <th scope="col" class="w3-teal">Film Name</th>
+                    <th scope="col" class="w3-teal">Age Rating</th>
+                    <th scope="col" class="w3-teal">Duration</th>
+                    <th scope="col" class="w3-teal">Trailer Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in cursor %}
+                    <tr>
+                        <th scope="row">
+                            <img style="height: 100px; width: auto;" src="{{ todos.name }}" class="card-img-top" alt="...">
+                        </th>
+                        <th scope="row">{{ i.Name }}</th>
+                        <td>{{ i.Rating }}</td>
+                        <td>{{ i.Duration }}</td>
+                        <td>{{ i.TrailerDescription }}</td>
+
+                       
+
+                        
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    <br>
+
+    <div class="w3-center">
+
+        <table class="">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <input type="Number" name="tickets" id="tickets" value="{{numb_of_tickets}}" readonly hidden>
+
+                <label for="payment">Payment system:</label>
+                <select id="payment" name="payment">
+                    <option value="Club Account">Club Account</option>
+                    <option value="Debit ard">Debit card</option>
+                    <option value="Paypal">Paypal</option>
+                    <option value="Stripe">Stripe</option>
+                </select>
+
+                <br> <br>
+                <div class="w3-container w3-card w3-white w3-center w3-padding">
+                <h1 class="w3-margin"> Total </h1>
+                <h5 class="w3-margin"> {{numb_of_tickets}} tickets x £10 = £{{price_before}} </h5>
+                <h5 class="w3-margin w3-green"> Club rep discount 25% </h5>
+                <h1 class="w3-margin"> £{{price_after}} </h1>
+                </div>
+
+
+
+
+                <a href="{% url 'view-film' showing_id %}"><button type="button" class="w3-button w3-red button4">Go back</button></a>
+                <input class="w3-button w3-green button4 w3-margin" type="submit" value="Confirm">
+            </form>
+        </table>
+
+    </div>
+    <br>
+</div>
+{% endblock content %}
