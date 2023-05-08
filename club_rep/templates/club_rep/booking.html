@@ -64,12 +64,9 @@
                 {% csrf_token %}
                 <input type="Number" name="tickets" id="tickets" value="{{numb_of_tickets}}" readonly hidden>
 
-                <label for="payment">Payment system:</label>
+                <label for="payment">Payment Method:</label>
                 <select id="payment" name="payment">
-                    <option value="Club Account">Club Account</option>
-                    <option value="Debit ard">Debit card</option>
-                    <option value="Paypal">Paypal</option>
-                    <option value="Stripe">Stripe</option>
+                    <option value="Club Account" >Club Account</option>
                 </select>
 
                 <br> <br>
@@ -83,7 +80,7 @@
 
 
 
-                <a href="{% url 'view-film' showing_id %}"><button type="button" class="w3-button w3-red button4">Go back</button></a>
+                <a href="{% url 'view-film' showing_id %}"><button type="button" class="w3-button w3-red button4"> Cancel</button></a>
                 <input class="w3-button w3-green button4 w3-margin" type="submit" value="Confirm">
             </form>
         </table>

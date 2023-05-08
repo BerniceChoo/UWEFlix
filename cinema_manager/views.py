@@ -619,6 +619,15 @@ def user_logout(request):
     return redirect('/login/')
     #return redirect('home-page')
 
+
+
+
+
+
+
+
+
+
 def showing_list(request):
     if request.session.get('loggedin', False):
 

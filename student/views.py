@@ -43,7 +43,7 @@ def select_date(request):
                 'cursor': cursor,
                 'selected_date': selected_date,
             }
-            return redirect('showings_list-cr',selected_date )
+            return redirect('showings_list-st',selected_date )
             
         
         return render(request, 'student/select_date.html')
@@ -112,7 +112,7 @@ def view_film(request, pk, message=None):
             if numb_of_tickets > tickets_available:
                 print("not ennough tickets")
                 message = (f"There are not enough tickets available. \n Tickets Available: {tickets_available} ")
-                return redirect('view-film-error',pk=pk , message=message)
+                return redirect('view-film-error-st',pk=pk , message=message)
             
             elif numb_of_tickets <= tickets_available:
 
@@ -127,9 +127,9 @@ def view_film(request, pk, message=None):
 
                 if int(balance) < int(price_after):
                     message = (f"Insufficient balance in club account. \n Club Balance: £{balance} ")
-                    return redirect('view-film-error' ,pk=pk , message=message )
+                    return redirect('view-film-error-st' ,pk=pk , message=message )
                 else:
-                    return redirect('view-booking', pk=pk ,numb_of_tickets=numb_of_tickets)
+                    return redirect('view-booking-st', pk=pk ,numb_of_tickets=numb_of_tickets)
 
         
 
@@ -211,24 +211,21 @@ def view_booking(request, pk, numb_of_tickets):
 
             Bookings.insert_one(document2)
 
+            '''
             club_id = ObjectId(request.session['ClubID'])
-
             results = Clubs.find_one({'_id': club_id})
             balance = results['Balance']
-            new_balance = int(balance) - int(price_after)
-
-                        
-            document={"Balance": new_balance,
-                        }
-            
+            new_balance = int(balance) - int(price_after)           
+            document={"Balance": new_balance,}
             result = Clubs.update_one({'_id': club_id},{'$set': document} )
+            '''
 
 
             if result.modified_count == 1:
                 # Document successfully updated
                 print(f"Document with _id updated.")
                 message = "Your login credentials were not found. Please try again."
-                return redirect('view-all-transactions'  )
+                return redirect('view-all-transactions-st'  )
             else:
                 # Document not found
                 print(f"No document found with _id.")
@@ -382,100 +379,12 @@ def view_transactions(request , selected_month=None):
 
 
 
-
-
-
-
-
-
-def club_balance(request ):
-    if request.session.get('loggedin', False):
-
-
-        club_id = ObjectId(request.session['ClubID'])
-        print(club_id)
-        
-        
-                            
-        #cursor = Clubs.find({"Number": number})
-
-
-
-        #joins 2 collections together and matches the by local and foreign id
-        pipeline = [
-            {
-            '$match': {
-                'Club_id': club_id  # Replace <club_id> with the ID of the club you want to filter by
-            }
-            },
-
-            {
-                '$lookup': {
-                    'from': 'Clubs',
-                    'localField': 'Club_id',
-                    'foreignField': '_id',
-                    'as': 'clubs'
-                }
-            },
-        
-            {
-                '$project': {
-                    '_id': 1,
-                    'FirstName': 1,
-                    'LastName': 1,
-                    'DOB': 1,
-                    'clubs._id': 1,
-                    'clubs.Name': 1,
-                    'clubs.HouseNumber': 1,
-                    'clubs.Street': 1,
-                    'clubs.City': 1,
-                    'clubs.PostCode': 1,
-                    'clubs.TelephoneNumber': 1,
-                    'clubs.PhoneNumber': 1,
-                    'clubs.Email': 1,
-                    'clubs.Balance': 1,
-                }
-            }
-        ]
-
-        result = client['test']['Accounts'].aggregate(pipeline)
-
-        data = [doc for doc in result]
-        #print(data)
-
-        if request.POST.get('funds'):
-            funds = request.POST.get('funds')
-
-
-            results = Clubs.find_one({'_id': club_id})
-            balance = results['Balance']
-            new_balance = int(balance) + int(funds)
-
-                        
-            document={"Balance": new_balance,
-                        }
-            
-            result = Clubs.update_one({'_id': club_id},{'$set': document} )
-
-
-            return redirect( 'club_balance')
-
-        context = {
-            'data': data,
-        }
-        return render(request, 'student/club.html', context)
-    else:
-        return redirect('/login/')
-
-
-
 def user_logout(request):
     del request.session['loggedin']
     namey2 = request.session['Name']
     print(namey2)
     del request.session['UserID']
     del request.session['Name']
-    del request.session['ClubID']
     return redirect('/login/')
     #return redirect('home-page')
 
