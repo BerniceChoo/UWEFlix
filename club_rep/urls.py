@@ -14,6 +14,7 @@ urlpatterns = [
     path('selectdate/', views.select_date, name='select-date-cr'),
 
     path('club-balance/', views.club_balance, name='club_balance'),
+    path('club-balance/payment/', views.payment, name='payment'),
 
     path('transactions', views.view_transactions, name='view-all-transactions'),
     path('transactions/<str:selected_month>/?', views.view_transactions, name='view-month-transactions'),

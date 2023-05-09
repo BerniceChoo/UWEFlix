@@ -379,7 +379,11 @@ def payment(request):
 
 
         numb_of_tickets = int(numb_of_tickets)
+<<<<<<< HEAD
         payment = "stripe"
+=======
+        payment = request.POST.get('payment')
+>>>>>>> origin/newbranch
         tickets_available = results["ticketsLeft"]
         tickets_sold = results["ticketsSold"]
         tickets_sold = tickets_sold + numb_of_tickets

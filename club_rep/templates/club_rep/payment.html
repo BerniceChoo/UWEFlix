@@ -1,0 +1,18 @@
+<!-- Payment form template -->
+{% extends "club_rep/base.html" %}
+
+
+{% block title %}
+    <title>Club Representative</title>
+{% endblock title %}
+
+{% block content %}
+<body>
+{% csrf_token %}
+<form method="POST" action="{% url 'payment' %}">
+    {% csrf_token %}
+    <button type="submit" id="checkout-button">Pay</button>
+</form>
+</body>
+
+{% endblock content %}
