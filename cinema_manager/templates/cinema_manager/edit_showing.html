@@ -1,0 +1,63 @@
+{% extends 'cinema_manager/base.html' %}
+
+{% block title %}
+    <title>Edit</title>
+   
+{% endblock title %}
+
+{% block content %}
+  
+<style>
+body {
+    font-family: helvetica;
+    z-index: 1;
+    background: linear-gradient(-45deg, #36090c, #db0021, #4d0008, #f70000);
+    background-size: 400% 400%;
+    width: 100%;
+    height: 20%;
+    animation: animate 15s ease infinite;
+    text-align: center;        
+    }
+</style>
+
+
+    <div class="w3-container w3-margin w3-center"> 
+        
+
+    <form action="" method="POST" enctype="multipart/form-data" >
+        <div class=" w3-blue-grey w3-card w3-round w3-margin w3-padding button4"> 
+        <h1 style="text-align: center; padding-top: 1em; padding-bottom: 1em;">Edit Showing Information</h1>
+        {% for i in showing %}
+        {% csrf_token %}
+
+        <label for="filmname">Film Name:</label><br>
+        <input type="text" name="filmname" id="filmname" value="{{ i.filmTitle }}"><br><br>
+
+        <label for="agerating">Age Rating:</label><br>
+        <input type="text" name="agerating" id="agerating" value="{{ i.ageRating }}"><br><br>
+
+        <label for="duration">Duration:</label><br>
+        <input type="text" name="duration" id="duration" value="{{ i.filmDuration }}"><br><br>
+
+        <label for="trailerdesc">Trailer Description:</label><br>
+        <input type="text" name="trailerdesc" id="trailerdesc" value="{{ i.trailerDescription }}"><br><br>
+        <br><br>
+
+        <label for="showing_date">Showing Date:</label><br>
+        <input type="date" id="showing_date" name="showing_date" value="{{ i.date}}"><br><br>
+
+        <label for="showing_time">Showing Time:</label><br>
+        <input type="time" id="showing_time" name="showing_time" value="{{ i.showingTime }}"><br><br>
+
+        <label for="Screen">Screen Number:</label><br>
+        <input type="text" id="Screen" name="Screen" value="{{ i.Screen }}"><br><br>
+        <br><br>
+
+        <a href="{% url 'showing-list' %}"><button type="button" class="w3-button w3-red button4">Go back</button></a>
+
+        <input type="submit" class="w3-button w3-green button4 w3-margin" value="Update">
+        {% endfor %}
+    </form>
+</div>
+</div>
+{% endblock content %}

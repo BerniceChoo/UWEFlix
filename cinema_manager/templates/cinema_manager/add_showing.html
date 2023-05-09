@@ -19,11 +19,24 @@
         <label for="filmname">Film Name:</label><br>
         <input type="text" name="filmname" id="filmname" value="{{ i.Name }}"><br><br>
 
-        <label for="showing_time">Showing Time:</label><br>
-        <input type="datetime-local" id="showing_time" name="showing_time" required><br><br>
+        <label for="agerating">Age Rating:</label><br>
+        <input type="text" name="agerating" id="agerating" value="{{ i.Rating }}"><br><br>
 
-        <label for="theater_location">Screen Number:</label><br>
-        <input type="text" id="theater_location" name="theater_location" required><br><br>
+        <label for="duration">Duration:</label><br>
+        <input type="text" name="duration" id="duration" value="{{ i.Duration }}"><br><br>
+
+        <label for="trailerdesc">Trailer Description:</label><br>
+        <input type="text" name="trailerdesc" id="trailerdesc" value="{{ i.TrailerDescription }}"><br><br>
+        <br><br>
+
+        <label for="showing_date">Showing Date:</label><br>
+        <input type="date" id="showing_date" name="showing_date"><br><br>
+
+        <label for="showing_time">Showing Time:</label><br>
+        <input type="time" id="showing_time" name="showing_time"><br><br>
+
+        <label for="Screen">Screen Number:</label><br>
+        <input type="text" id="Screen" name="Screen"><br><br>
         <br><br>
 
         <a href="{% url 'select-showing' %}"><button type="button" class="w3-button w3-red button4">Go back</button></a>

@@ -25,6 +25,9 @@ urlpatterns = [
     path('showing/', views.showing_list, name='showing-list'),
     path('showing/select/', views.select_showing, name='select-showing'),
     path('showing/select/<str:pk>/', views.add_showing, name='add-showing'),
+    path('showing/edit/<str:pk>/', views.edit_showing, name='edit-showing'),
+    path('showing/delete/<str:pk>/', views.delete_showing, name='delete-showing'),
+    
 
     path('logout-cm/', views.user_logout, name='user-logout-cm')
 
