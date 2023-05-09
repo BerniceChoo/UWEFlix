@@ -50,7 +50,13 @@ body {
         <input type="time" id="showing_time" name="showing_time" value="{{ i.showingTime }}"><br><br>
 
         <label for="Screen">Screen Number:</label><br>
-        <input type="text" id="Screen" name="Screen" value="{{ i.Screen }}"><br><br>
+        <select name="Screen" id="Screen" name="Screen" required>
+            <option value="Screen One">Screen One</option>
+            <option value="Screen Two">Screen Two</option>
+            <option value="Screen Three">Screen Three</option>
+            <option value="Screen Four">Screen Four</option>
+            <option value="Screen Five">Screen Five</option>
+        </select>
         <br><br>
 
         <a href="{% url 'showing-list' %}"><button type="button" class="w3-button w3-red button4">Go back</button></a>
