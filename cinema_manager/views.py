@@ -794,10 +794,14 @@ def add_showing(request, pk):
             showing_date = request.POST['showing_date']
             showing_time = request.POST['showing_time']
             Screen = request.POST['Screen']
+<<<<<<< HEAD
 
             data = Screens.find_one({'Name': Screen})
 
             Capacity = int(data['Capacity'])
+=======
+            
+>>>>>>> 50e36e1f258215d219f290618136450dc9e46a6c
 
             document={"filmTitle": filmname,
                     "ageRating": agerating,
@@ -806,8 +810,11 @@ def add_showing(request, pk):
                     "date": showing_date,
                     "showingTime": showing_time,
                     "Screen": Screen,
+<<<<<<< HEAD
                     "ticketsSold":0,
                     "ticketsLeft":Capacity,
+=======
+>>>>>>> 50e36e1f258215d219f290618136450dc9e46a6c
                         }
             
             Showings.insert_one(document)
