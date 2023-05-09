@@ -35,9 +35,6 @@
                     <th scope="col" class="w3-indigo">Film Title</th>
                     <th scope="col" class="w3-indigo">Showing Time</th>
                     <th scope="col" class="w3-indigo">Showing Date</th>
-
-                    <th scope="col" class="w3-indigo">Payer Name</th>
-                    <th scope="col" class="w3-indigo">Club Name</th>
                 </tr>
             </thead>
             <tbody>
@@ -47,7 +44,9 @@
                         <td>{{ x.TotalCost }}</td>
                         <td>{{ x.PaymentMethod }}</td>
                         <td>{{ x.DateOfTransaction }}</td>
-                        <td>{{ x.filmTitle }}</td>
+                        <td>{{ x.showings.0.filmTitle }}</td>
+                        <td>{{ x.showings.0.showingTime }}</td>
+                        <td>{{ x.showings.0.date }}</td>
                     </tr>
                 {% endfor %}
                     

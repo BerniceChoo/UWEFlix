@@ -36,15 +36,13 @@
         <input type="time" id="showing_time" name="showing_time"><br><br>
 
         <label for="Screen">Screen Number:</label><br>
-        <select name="Screen" required>
+        <select name="Screen" id="Screen" name="Screen" required>
             <option value="Screen One">Screen One</option>
             <option value="Screen Two">Screen Two</option>
             <option value="Screen Three">Screen Three</option>
             <option value="Screen Four">Screen Four</option>
             <option value="Screen Five">Screen Five</option>
         </select>
-
-        <input type="text" id="Screen" name="Screen"><br><br>
         <br><br>
 
         <a href="{% url 'select-showing' %}"><button type="button" class="w3-button w3-red button4">Go back</button></a>
