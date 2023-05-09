@@ -14,6 +14,7 @@ urlpatterns = [
     path('selectdate/', views.select_date, name='select-date-cr'),
 
     path('club-balance/', views.club_balance, name='club_balance'),
+    path('club-balance/payment/', views.payment, name='payment'),
 
     path('transactions', views.view_transactions, name='view-all-transactions'),
     path('transactions/<str:selected_month>/?', views.view_transactions, name='view-month-transactions'),
@@ -27,9 +28,6 @@ urlpatterns = [
     
     #path('<str:message>/?', views.login, name='login-error') ,
 
-    # APIs
-    path('api/screens/create/', views.CreateScreenView.as_view(), name='create_screen'),
-    path('api/screens/<str:pk>/edit/', views.EditScreenView.as_view(), name='edit_screen'),
-    path('api/screens/<str:pk>/delete/', views.DeleteScreenView.as_view(), name='delete_screen'),
+    
 
 ]

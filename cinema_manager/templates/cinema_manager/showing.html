@@ -14,7 +14,7 @@
         <a href="{% url 'clubs-list' %}" class="w3-button w3-white">Clubs </a>
         <a href="{% url 'screens-list' %}" class="w3-button w3-white" >Screen </a>
         <a href="{% url 'films-list' %}" class="w3-button w3-white"  >Film </a>
-        <a href="{% url 'films-list' %}" class="w3-button w3-blue w3-hide-small" >Showing </a>
+        <a href="{% url 'showing-list' %}" class="w3-button w3-blue w3-hide-small" >Showing </a>
         <a href="{% url 'user-logout-cm'  %}" class="w3-button w3-white">Log Out</a>
 
         <!-- Search section  -->
@@ -35,10 +35,13 @@
         <thead>
             <tr>
                 <th scope="col" class="w3-indigo">Images</th>
-                <th scope="col" class="w3-indigo">showing</th>
+                <th scope="col" class="w3-indigo">Showing</th>
                 <th scope="col" class="w3-indigo">Age Rating</th>
                 <th scope="col" class="w3-indigo">Duration</th>
                 <th scope="col" class="w3-indigo">Trailer Description</th>
+                <th scope="col" class="w3-indigo">Date </th>
+                <th scope="col" class="w3-indigo">Time </th>
+                <th scope="col" class="w3-indigo">Screen</th>
                 <th scope="col" class="w3-indigo">Upcoming Showings?</th>
                 <th scope="col" class="w3-indigo"></th>
             </tr>
@@ -53,6 +56,9 @@
                     <td>{{ i.ageRating }}</td>
                     <td>{{ i.filmDuration }}</td>
                     <td>{{ i.trailerDescription }}</td>
+                    <td>{{ i.date }}</td>
+                    <td>{{ i.showingTime }}</td>
+                    <td>{{ i.Screen }}</td>
                     <td>
                         {% if i.showings.0.filmTitle %}
                         yes
@@ -64,11 +70,11 @@
 
                     <td>
                         {% load custom_filters %}
-                        <a class="w3-button w3-green button4" style="margin-right: 10px;" href="{% url 'edit-film' i|get_id %}">Edit</a>
+                        <a class="w3-button w3-green button4" style="margin-right: 10px;" href="{% url 'edit-showing' i|get_id %}">Edit</a>
                         <br>
                         {% if i.showings.0.filmTitle %}
                         {% elif not i.showings.0.filmTitle %}
-                        <a class="w3-button w3-red button4" style="margin-right: 10px; margin-top: 7px;" href="{% url 'delete-film' i|get_id %}">Remove Showing</a>
+                        <a class="w3-button w3-red button4" style="margin-right: 10px; margin-top: 7px;" href="{% url 'delete-showing' i|get_id %}">Remove Showing</a>
          
       
 
@@ -85,5 +91,8 @@
     <div class="w3-center">
         <a href="{% url 'select-showing' %}"><button type="button" class="w3-button w3-green button4 ">Add New Showing</button></a>
     </div>
+    <br>
+    <br>
+    <br>
 </div>
 {% endblock content %}

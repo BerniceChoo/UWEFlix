@@ -11,10 +11,9 @@
     </header>
     <div class="w3-section w3-bottombar w3-padding-16  ">
         <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
-        <a href="{% url 'select-date-cr'  %}" class="w3-button w3-white">Select Date </a>
-        <a href="{% url 'view-all-transactions'   %}" class="w3-button w3-blue">View transactions</a>
-        <a href="{% url 'club_balance'   %}" class="w3-button w3-white">Club Balance</a>
-        <a href="{% url 'user-logout'  %}" class="w3-button w3-white">Log Out</a>
+        <a href="{% url 'select-date-st'  %}" class="w3-button w3-white">Select Date </a>
+        <a href="{% url 'view-all-transactions-st'   %}" class="w3-button w3-blue">View transactions</a>
+        <a href="{% url 'user-logout-st'  %}" class="w3-button w3-white">Log Out</a>
 
 
 
@@ -82,7 +81,7 @@
                     </select>
                 <br>
                 
-                <a href="{% url 'select-date-cr' %}"><button type="button" class="w3-button w3-red button4">Go back</button></a>
+                <a href="{% url 'select-date-st' %}"><button type="button" class="w3-button w3-red button4">Go back</button></a>
                 <input class="w3-button w3-green button4 w3-margin" type="submit" value="View">
             </form>
         </table>

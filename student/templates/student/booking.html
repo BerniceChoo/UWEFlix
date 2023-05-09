@@ -11,12 +11,12 @@
     </header>
     <div class="w3-section w3-bottombar w3-padding-16  ">
         <a href="{% url 'home-page' %}" class="w3-button w3-black">UWEFLIX</a>
-        <a href="{% url 'select-date-cr' %}" class="w3-button w3-black">Select Date </a>
-        <a href="{% url 'showings_list-cr' date  %}" class="w3-button w3-black" >Showings </a>
+        <a href="{% url 'select-date-st' %}" class="w3-button w3-black">Select Date </a>
+        <a href="{% url 'showings_list-st' date  %}" class="w3-button w3-black" >Showings </a>
         {% if showing_id %}
-        <a href="{% url 'view-film' showing_id %}" class="w3-button w3-black">Ticket </a>
-        <a href="{% url 'view-booking' showing_id numb_of_tickets %}" class="w3-button w3-blue" >Checkout </a>
-        <a href="{% url 'user-logout'  %}" class="w3-button w3-white">Log Out</a>
+        <a href="{% url 'view-film-st' showing_id %}" class="w3-button w3-black">Ticket </a>
+        <a href="{% url 'view-booking-st' showing_id numb_of_tickets %}" class="w3-button w3-blue" >Checkout </a>
+        <a href="{% url 'user-logout-st'  %}" class="w3-button w3-white">Log Out</a>
         {% endif %}
 
 
@@ -66,9 +66,6 @@
 
                 <label for="payment">Payment system:</label>
                 <select id="payment" name="payment">
-                    <option value="Club Account">Club Account</option>
-                    <option value="Debit ard">Debit card</option>
-                    <option value="Paypal">Paypal</option>
                     <option value="Stripe">Stripe</option>
                 </select>
 
@@ -83,7 +80,7 @@
 
 
 
-                <a href="{% url 'view-film' showing_id %}"><button type="button" class="w3-button w3-red button4">Go back</button></a>
+                <a href="{% url 'view-film-st' showing_id %}"><button type="button" class="w3-button w3-red button4">Go back</button></a>
                 <input class="w3-button w3-green button4 w3-margin" type="submit" value="Confirm">
             </form>
         </table>

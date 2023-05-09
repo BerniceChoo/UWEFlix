@@ -8,6 +8,13 @@ import string
 import random
 from django.contrib.auth import authenticate, login, logout
 
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+from stripe import api_key
+import stripe
+
+
 client = pymongo.MongoClient("mongodb+srv://daniel2fernandes:skelJ6UzCVlG36Ei@uweflix.l8xahep.mongodb.net/?retryWrites=true&w=majority")
 # database
 db = client.test
@@ -43,7 +50,7 @@ def select_date(request):
                 'cursor': cursor,
                 'selected_date': selected_date,
             }
-            return redirect('showings_list-cr',selected_date )
+            return redirect('showings_list-st',selected_date )
             
         
         return render(request, 'student/select_date.html')
@@ -112,7 +119,7 @@ def view_film(request, pk, message=None):
             if numb_of_tickets > tickets_available:
                 print("not ennough tickets")
                 message = (f"There are not enough tickets available. \n Tickets Available: {tickets_available} ")
-                return redirect('view-film-error',pk=pk , message=message)
+                return redirect('view-film-error-st',pk=pk , message=message)
             
             elif numb_of_tickets <= tickets_available:
 
@@ -127,9 +134,9 @@ def view_film(request, pk, message=None):
 
                 if int(balance) < int(price_after):
                     message = (f"Insufficient balance in club account. \n Club Balance: £{balance} ")
-                    return redirect('view-film-error' ,pk=pk , message=message )
+                    return redirect('view-film-error-st' ,pk=pk , message=message )
                 else:
-                    return redirect('view-booking', pk=pk ,numb_of_tickets=numb_of_tickets)
+                    return redirect('view-booking-st', pk=pk ,numb_of_tickets=numb_of_tickets)
 
         
 
@@ -177,63 +184,23 @@ def view_booking(request, pk, numb_of_tickets):
             tickets_sold = tickets_sold + numb_of_tickets
             tickets_left= tickets_available - numb_of_tickets
 
-            clubrep_id = ObjectId(request.session['UserID'])
+            #------------------------------stripe------------------------
+            stripe.api_key = settings.STRIPE_SECRET_KEY
 
-            document={"id": results["id"],
-                    "ageRating": results["ageRating"],
-                    "filmDuration": results["filmDuration"],
-                    "filmTitle": results["filmTitle"],
-                    "showingTime": results["showingTime"],
-                    "ticketsSold": tickets_sold,
-                    "trailerDescription": results["trailerDescription"],
-                    "date": results["date"],
-                    "ticketsLeft": tickets_left,
-                    }
+            checkout_session = stripe.checkout.Session.create(
+                line_items=[
+                    {
+                        # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+                        'price': 'price_1N5Xl5IPj7kzkHPxkY2059nU',
+                        'quantity': numb_of_tickets,
+                    },
+                ],
+                mode='payment',
+                success_url= f'http://127.0.0.1:8000/5/payment/?payment_status=success&numb_of_tickets={numb_of_tickets}&pk={pk}',
+                cancel_url='http://127.0.0.1:8000/5/showing/2023-04-23/',
+                )
+            return redirect(checkout_session.url, code=303)
             
-            result = Showings.update_one({'_id': Showings_id},{'$set': document} )
-
-            now = datetime.now()
-            #dt_string = now.strftime("%d/%m/%Y")
-            #https://www.programiz.com/python-programming/datetime/current-datetime
-
-            
-
-            document2={"AccountID": clubrep_id,
-                    "ShowingID": Showings_id,
-                    "NumberOfTickets": numb_of_tickets,
-                    "TotalCost": price_after,
-                    "PaymentMethod": payment,
-                    "DateOfTransaction": now,
-                    }
-            
-            
-
-
-            Bookings.insert_one(document2)
-
-            club_id = ObjectId(request.session['ClubID'])
-
-            results = Clubs.find_one({'_id': club_id})
-            balance = results['Balance']
-            new_balance = int(balance) - int(price_after)
-
-                        
-            document={"Balance": new_balance,
-                        }
-            
-            result = Clubs.update_one({'_id': club_id},{'$set': document} )
-
-
-            if result.modified_count == 1:
-                # Document successfully updated
-                print(f"Document with _id updated.")
-                message = "Your login credentials were not found. Please try again."
-                return redirect('view-all-transactions'  )
-            else:
-                # Document not found
-                print(f"No document found with _id.")
-                #return redirect('view-film', pk=pk , error ="" )
-
 
 
         context = {
@@ -382,102 +349,78 @@ def view_transactions(request , selected_month=None):
 
 
 
-
-
-
-
-
-
-def club_balance(request ):
-    if request.session.get('loggedin', False):
-
-
-        club_id = ObjectId(request.session['ClubID'])
-        print(club_id)
-        
-        
-                            
-        #cursor = Clubs.find({"Number": number})
-
-
-
-        #joins 2 collections together and matches the by local and foreign id
-        pipeline = [
-            {
-            '$match': {
-                'Club_id': club_id  # Replace <club_id> with the ID of the club you want to filter by
-            }
-            },
-
-            {
-                '$lookup': {
-                    'from': 'Clubs',
-                    'localField': 'Club_id',
-                    'foreignField': '_id',
-                    'as': 'clubs'
-                }
-            },
-        
-            {
-                '$project': {
-                    '_id': 1,
-                    'FirstName': 1,
-                    'LastName': 1,
-                    'DOB': 1,
-                    'clubs._id': 1,
-                    'clubs.Name': 1,
-                    'clubs.HouseNumber': 1,
-                    'clubs.Street': 1,
-                    'clubs.City': 1,
-                    'clubs.PostCode': 1,
-                    'clubs.TelephoneNumber': 1,
-                    'clubs.PhoneNumber': 1,
-                    'clubs.Email': 1,
-                    'clubs.Balance': 1,
-                }
-            }
-        ]
-
-        result = client['test']['Accounts'].aggregate(pipeline)
-
-        data = [doc for doc in result]
-        #print(data)
-
-        if request.POST.get('funds'):
-            funds = request.POST.get('funds')
-
-
-            results = Clubs.find_one({'_id': club_id})
-            balance = results['Balance']
-            new_balance = int(balance) + int(funds)
-
-                        
-            document={"Balance": new_balance,
-                        }
-            
-            result = Clubs.update_one({'_id': club_id},{'$set': document} )
-
-
-            return redirect( 'club_balance')
-
-        context = {
-            'data': data,
-        }
-        return render(request, 'student/club.html', context)
-    else:
-        return redirect('/login/')
-
-
-
 def user_logout(request):
     del request.session['loggedin']
     namey2 = request.session['Name']
     print(namey2)
     del request.session['UserID']
     del request.session['Name']
-    del request.session['ClubID']
     return redirect('/login/')
     #return redirect('home-page')
 
 
 
+
+def payment(request):
+    payment_status = request.GET.get('payment_status')
+    numb_of_tickets = request.GET.get('numb_of_tickets')
+    pk = request.GET.get('pk')
+    if payment_status == 'success':
+        # execute database operations here
+        Showings_id = ObjectId(pk)
+
+        results = Showings.find_one({ "_id" : Showings_id })
+
+
+        price_before = int(numb_of_tickets) * 10
+        price_after = price_before * 0.75
+        
+
+
+
+        numb_of_tickets = int(numb_of_tickets)
+        payment = request.POST.get('payment')
+        tickets_available = results["ticketsLeft"]
+        tickets_sold = results["ticketsSold"]
+        tickets_sold = tickets_sold + numb_of_tickets
+        tickets_left= tickets_available - numb_of_tickets
+        
+        clubrep_id = ObjectId(request.session['UserID'])
+
+
+
+        document={"id": results["id"],
+                "ageRating": results["ageRating"],
+                "filmDuration": results["filmDuration"],
+                "filmTitle": results["filmTitle"],
+                "showingTime": results["showingTime"],
+                "ticketsSold": tickets_sold,
+                "trailerDescription": results["trailerDescription"],
+                "date": results["date"],
+                "ticketsLeft": tickets_left,
+                }
+        
+        result = Showings.update_one({'_id': Showings_id},{'$set': document} )
+
+        now = datetime.now()
+        #dt_string = now.strftime("%d/%m/%Y")
+        #https://www.programiz.com/python-programming/datetime/current-datetime
+
+        
+
+        document2={"AccountID": clubrep_id,
+                "ShowingID": Showings_id,
+                "NumberOfTickets": numb_of_tickets,
+                "TotalCost": price_after,
+                "PaymentMethod": payment,
+                "DateOfTransaction": now,
+                }
+        
+        
+
+
+        Bookings.insert_one(document2)
+        return redirect('view-all-transactions-st')
+    return render(request, 'student/select_date.html')
+       
+    

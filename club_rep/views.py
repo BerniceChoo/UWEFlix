@@ -7,6 +7,13 @@ import re
 import string
 import random
 from django.contrib.auth import authenticate, login, logout
+from django.urls import reverse
+from django.shortcuts import render
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+from stripe import api_key
+import stripe
 
 client = pymongo.MongoClient("mongodb+srv://daniel2fernandes:skelJ6UzCVlG36Ei@uweflix.l8xahep.mongodb.net/?retryWrites=true&w=majority")
 # database
@@ -479,74 +486,28 @@ def user_logout(request):
     return redirect('/login/')
     #return redirect('home-page')
 
-# REST APIs
-from rest_framework import generics, status
-from rest_framework.response import Response
-from .serializers import ScreenSerializer, DeleteScreenSerializer, EditScreenSerializer
-
-
-class CreateScreenView(generics.CreateAPIView):
-    serializer_class = ScreenSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            screensname = serializer.validated_data.get('name')
-            capacity = serializer.validated_data.get('capacity')
-            social_distancing = serializer.validated_data.get('social_distancing')
-            document = {
-                "Name": screensname,
-                "Capacity": capacity,
-                "SocialDistancing": social_distancing
-            }
-            Screens.insert_one(document)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    
-
-
-class EditScreenView(generics.UpdateAPIView):
-    serializer_class = EditScreenSerializer
-
-    def put(self, request, *args, **kwargs):
-        screen_id = ObjectId(kwargs['pk'])
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            screensname = serializer.validated_data.get('name')
-            capacity = serializer.validated_data.get('capacity')
-            social_distancing = serializer.validated_data.get('social_distancing')
-            document = {
-                "Name": screensname,
-                "Capacity": capacity,
-                "SocialDistancing": social_distancing
-            }
-            result = Screens.update_one({'_id': screen_id}, {'$set': document})
-
-            if result.modified_count == 1:
-                # Document successfully updated
-                print(f"Document with _id '{screen_id}' updated.")
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                # Document not found
-                print(f"No document found with _id '{screen_id}'.")
-                return Response({'detail': f"No document found with _id '{screen_id}'."}, status=status.HTTP_404_NOT_FOUND)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class DeleteScreenView(generics.DestroyAPIView):
-    serializer_class = DeleteScreenSerializer
-
-    def delete(self, request, *args, **kwargs):
-        screen_id = ObjectId(kwargs['pk'])
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-            confirm = serializer.validated_data.get('confirm')
-
-            if confirm:
-                result = Screens.delete_one({"_id": screen_id})
-                return Response({'message': f"Screen with id {screen_id} is deleted successfully!"}, status=status.HTTP_204_NO_CONTENT)
-            else:
-                return Response({'error': f"No screen found with id {screen_id}."}, status=status.HTTP_404_NOT_FOUND)
+def payment(request):
+    amount = request.GET.get('funds')
+    #stripe.api_key = 'sk_test_51MreTZEAy08SY67AuRf9elHrmFnL4yBktiRpiZ29iuuUvC5icNfYLv9XuVmggtVml6bUKSuvylsi5B9VPSuRe8PX00PvyX47Oh'
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    #print(settings.STRIPE_SECRET_KEY)
+    #payment = Ticket.objects.get(pk = booking_id)
+    checkout_session = stripe.checkout.Session.create(
+        line_items=[
+            {
+                # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+                'price': 'price_1N5arHIPj7kzkHPxwklw6O9B',
+                'quantity': amount,
+            },
+        ],
+        mode='payment',
+        success_url= 'http://127.0.0.1:8000/4/club-balance/',
+        cancel_url='http://127.0.0.1:8000/2/select_date/',
+        )
+    # print("heeeey", checkout_session.status)
+    # while checkout_session.status != 'succeed':
+    #     print("not done")
+    # else:
+    #     print("now its done", checkout_session.status )
+    return redirect(checkout_session.url, code=303)
 

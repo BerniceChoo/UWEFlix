@@ -619,6 +619,15 @@ def user_logout(request):
     return redirect('/login/')
     #return redirect('home-page')
 
+
+
+
+
+
+
+
+
+
 def showing_list(request):
     if request.session.get('loggedin', False):
 
@@ -750,30 +759,108 @@ def add_showing(request, pk):
     
         if request.method == 'POST':
             filmname = request.POST['filmname']
-            showing_time = datetime.strptime(request.POST.get('showing_time'), '%Y-%m-%d %H:%M:%S')
+            agerating = request.POST['agerating']
+            duration = request.POST['duration']
+            trailerdesc = request.POST['trailerdesc']
+            showing_date = request.POST['showing_date']
+            showing_time = request.POST['showing_time']
+            Screen = request.POST['Screen']
 
-            
+            data = Screens.find_one({'Name': Screen})
+
+            Capacity = int(data['Capacity'])
 
             document={"filmTitle": filmname,
-                      'showingTime': showing_time,
+                    "ageRating": agerating,
+                    "filmDuration": duration,
+                    "trailerDescription": trailerdesc,
+                    "date": showing_date,
+                    "showingTime": showing_time,
+                    "Screen": Screen,
+                    "ticketsSold":0,
+                    "ticketsLeft":Capacity,
                         }
             
-            result = Showings.update_one({'_id': film_id},{'$set': document} )
+            Showings.insert_one(document)
 
-            if result.modified_count == 1:
-                # Document successfully updated
-                print(f"Document with _id '{film_id}' updated.")
-                return redirect('showing')
-            else:
-                # Document not found
-                print(f"No document found with _id '{film_id}'.")
-
-            return redirect('select-showing')
+            return redirect('showing-list')
+        
     
         cursor = Films.find({"_id" : film_id})
         context = {
             'film': cursor,
         }
         return render(request, 'cinema_manager/add_showing.html', context)
+    else:
+        return redirect('/login/')
+    
+def delete_showing(request, pk):
+    if request.session.get('loggedin', False):
+    
+        #convert string to objectId (format of mongoDB _id variable)
+        showing_id = ObjectId(pk)
+        
+
+        if request.method == 'POST':
+
+            result = Showings.delete_one( { "_id" : showing_id } )
+            if result.deleted_count == 1:
+                # Document successfully deleted
+                print(f"Document with _id '{showing_id}' deleted.")
+                return redirect('showing-list')
+            else:
+                # Document not found
+                print(f"No document found with _id '{showing_id}'.")
+            return redirect('showing-list')
+        
+        cursor = Showings.find({"_id" : showing_id})
+        context = {
+            'film': cursor,
+        }
+        return render(request, 'cinema_manager/delete_showing.html', context)
+    else:
+        return redirect('/login/')
+    
+def edit_showing(request, pk):
+    if request.session.get('loggedin', False):
+
+        shoiwng_id = ObjectId(pk)
+    
+        if request.method == 'POST':
+            filmname = request.POST['filmname']
+            agerating = request.POST['agerating']
+            duration = request.POST['duration']
+            trailerdesc = request.POST['trailerdesc']
+            showing_date = request.POST['showing_date']
+            showing_time = request.POST['showing_time']
+            Screen = request.POST['Screen']
+            
+
+            document={"filmTitle": filmname,
+                    "ageRating": agerating,
+                    "filmDuration": duration,
+                    "trailerDescription": trailerdesc,
+                    "date": showing_date,
+                    "showingTime": showing_time,
+                    "Screen": Screen,
+                        }
+            
+            result = Showings.update_one({'_id': shoiwng_id},{'$set': document} )
+
+            if result.modified_count == 1:
+                # Document successfully updated
+                print(f"Document with _id '{shoiwng_id}' updated.")
+                return redirect('showing-list')
+            else:
+                # Document not found
+                print(f"No document found with _id '{shoiwng_id}'.")
+
+            return redirect('showing-list')
+    
+        cursor = Showings.find({"_id" : shoiwng_id})
+        context = {
+            'showing': cursor,
+        }
+        return render(request, 'cinema_manager/edit_showing.html', context)
     else:
         return redirect('/login/')

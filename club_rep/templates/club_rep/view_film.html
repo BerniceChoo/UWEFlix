@@ -60,6 +60,8 @@
                 {% csrf_token %}
                 {% if message is not None %}
                 <p class="w3-red">{{ message }}</p>
+                <a href="{% url 'club_balance' %}"><button type="button" class="w3-button w3-blue-grey button4">Top Up</button></a>
+                <br><br>
                 {% endif %}
                 <label for="date">Select Number of tickets:</label>
                 <input type="Number" name="tickets" id="tickets" min="10" max="50">
