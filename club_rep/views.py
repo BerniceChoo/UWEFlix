@@ -452,20 +452,35 @@ def club_balance(request ):
 
         if request.POST.get('funds'):
             funds = request.POST.get('funds')
-
-
             results = Clubs.find_one({'_id': club_id})
             balance = results['Balance']
+            str_club_id = str(club_id)
+
+            stripe.api_key = settings.STRIPE_SECRET_KEY
+            checkout_session = stripe.checkout.Session.create(
+                line_items=[
+                    {
+                        # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+                        'price': 'price_1N5arHIPj7kzkHPxwklw6O9B',
+                        'quantity': funds,
+                    },
+                ],
+                mode='payment',
+                success_url= f'http://127.0.0.1:8000/4/club-balance/?payment_status=success&funds={funds}',
+                cancel_url='http://127.0.0.1:8000/4/club-balance/',
+                )
+
+
             new_balance = int(balance) + int(funds)
 
-                        
-            document={"Balance": new_balance,
-                        }
+            document={"Balance": new_balance}
             
+                
             result = Clubs.update_one({'_id': club_id},{'$set': document} )
+            return redirect(checkout_session.url, code=303)
+        
 
 
-            return redirect( 'club_balance')
 
         context = {
             'data': data,
@@ -487,27 +502,23 @@ def user_logout(request):
     #return redirect('home-page')
 
 def payment(request):
-    amount = request.GET.get('funds')
-    #stripe.api_key = 'sk_test_51MreTZEAy08SY67AuRf9elHrmFnL4yBktiRpiZ29iuuUvC5icNfYLv9XuVmggtVml6bUKSuvylsi5B9VPSuRe8PX00PvyX47Oh'
-    stripe.api_key = settings.STRIPE_SECRET_KEY
-    #print(settings.STRIPE_SECRET_KEY)
-    #payment = Ticket.objects.get(pk = booking_id)
-    checkout_session = stripe.checkout.Session.create(
-        line_items=[
-            {
-                # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                'price': 'price_1N5arHIPj7kzkHPxwklw6O9B',
-                'quantity': amount,
-            },
-        ],
-        mode='payment',
-        success_url= 'http://127.0.0.1:8000/4/club-balance/',
-        cancel_url='http://127.0.0.1:8000/2/select_date/',
-        )
-    # print("heeeey", checkout_session.status)
-    # while checkout_session.status != 'succeed':
-    #     print("not done")
-    # else:
-    #     print("now its done", checkout_session.status )
-    return redirect(checkout_session.url, code=303)
+    payment_status = request.GET.get('payment_status')
+    if payment_status == 'success':
+        funds = request.GET.get('funds')
+        club_id = ObjectId(request.session['ClubID'])
+
+        results = Clubs.find_one({'_id': club_id})
+        balance = results['Balance']
+        new_balance = int(balance) + int(funds)
+
+                    
+        document={"Balance": new_balance,
+                    }
+    
+        
+        result = Clubs.update_one({'_id': club_id},{'$set': document} )
+        return redirect('club_balance')
+
+    return redirect('club_balance')
+    
 
