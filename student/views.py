@@ -124,11 +124,10 @@ def view_film(request, pk, message=None):
             elif numb_of_tickets <= tickets_available:
 
 
-                club_id = ObjectId(request.session['ClubID'])
                 price_before = int(numb_of_tickets) * 10
                 price_after = price_before * 0.75
-                results = Clubs.find_one({'_id': club_id})
-                balance = results['Balance']
+    
+                balance = "1000"
                 print(balance)
                 print(price_after)
 
