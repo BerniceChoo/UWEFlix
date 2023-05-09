@@ -477,18 +477,6 @@ def films_list(request):
         query = {'Name': {'$regex': regex}}
         cursor = Films.find(query)
 
-        image_list = []
-        for document in cursor:
-            image_data = document.get('Image')
-            if image_data:
-                try:
-                    encoded_image = base64.b64encode(image_data).decode('utf-8')  # decode image data from Binary format
-                    img = Image.open(io.BytesIO(encoded_image.encode('latin1'))).convert('RGB')  # create Image instance from decoded image data
-                    image_dict = {'Image': img}
-                    image_list.append(image_dict)
-                    print("added")
-                except Exception as e:
-                    print(f'Error processing image "{image_data}": {e}')
 
         #joins showings and films collection, soo that we can see if a film is out for a showing, if it is the film cant be deleted
         pipeline = [
@@ -529,7 +517,6 @@ def films_list(request):
             'cursor': cursor,
             'search_query': search_query,
             'data': data,
-            'image_list': image_list,
         }
         return render(request, 'cinema_manager/film_list.html', context)
     else:
@@ -545,20 +532,10 @@ def create_film(request):
             duration = request.POST['duration']
             trailerdesc = request.POST['trailerdesc']
 
-
-            image_file = request.FILES['image']
-            img = Image.open(image_file)
-            img_io = io.BytesIO()
-            img.save(img_io, format='PNG')
-            img_io.seek(0)
-            image_data = img_io.read()
-            encoded_image = Binary(image_data)
-
             document={"Name": filmname,
                     "Rating": agerating,
                     "Duration": duration,
                     "TrailerDescription": trailerdesc,
-                    "Image": encoded_image,
                         }
             Films.insert_one(document)
 
@@ -567,6 +544,7 @@ def create_film(request):
         return render(request, 'cinema_manager/create_film.html')
     else:
         return redirect('/login/')
+
 
 
 def edit_film(request, pk):
@@ -794,14 +772,11 @@ def add_showing(request, pk):
             showing_date = request.POST['showing_date']
             showing_time = request.POST['showing_time']
             Screen = request.POST['Screen']
-<<<<<<< HEAD
 
             data = Screens.find_one({'Name': Screen})
 
             Capacity = int(data['Capacity'])
-=======
             
->>>>>>> 50e36e1f258215d219f290618136450dc9e46a6c
 
             document={"filmTitle": filmname,
                     "ageRating": agerating,
@@ -810,11 +785,9 @@ def add_showing(request, pk):
                     "date": showing_date,
                     "showingTime": showing_time,
                     "Screen": Screen,
-<<<<<<< HEAD
+
                     "ticketsSold":0,
                     "ticketsLeft":Capacity,
-=======
->>>>>>> 50e36e1f258215d219f290618136450dc9e46a6c
                         }
             
             Showings.insert_one(document)
