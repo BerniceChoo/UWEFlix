@@ -379,7 +379,7 @@ def payment(request):
 
 
         numb_of_tickets = int(numb_of_tickets)
-        payment = request.POST.get('payment')
+        payment = "stripe"
         tickets_available = results["ticketsLeft"]
         tickets_sold = results["ticketsSold"]
         tickets_sold = tickets_sold + numb_of_tickets

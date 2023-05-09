@@ -22,8 +22,12 @@ body {
     <div class="w3-container w3-margin w3-center "> 
     <form action="" method="POST" enctype="multipart/form-data">
         <div class=" w3-blue-grey w3-card w3-round w3-margin w3-padding button4"> 
-        <h1 style="text-align: center; padding-top: 1em; padding-bottom: 1em;">Add New Screen Information</h1>
+        <h1 style="text-align: center; padding-top: 1em; padding-bottom: 1em;">Add New Film</h1>
         {% csrf_token %}
+
+        <label for="filmname">Image:</label>
+        <input type="file" name="image" id="image"><br><br>
+
         <label for="filmname">Film Name:</label><br>
         <input type="text" name="filmname" id="filmname" value="Spider-man"><br><br>
 

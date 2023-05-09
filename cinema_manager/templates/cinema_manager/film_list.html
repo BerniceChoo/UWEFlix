@@ -45,9 +45,10 @@
         </thead>
         <tbody>
             {% for i in data %}
+            {% for image in image_list %}
                 <tr>
                     <td scope="row">
-                        <img style="height: 100px; width: auto;" src="{{ todos.name }}" class="card-img-top" alt="...">
+                        <img style="height: 100px; width: auto;" src="data:image/jpeg;base64,{{ image.Image }}" class="card-img-top" alt="...">
                     </td>
                     <td scope="row">{{ i.Name }}</td>
                     <td>{{ i.Rating }}</td>
@@ -77,6 +78,8 @@
 
                     
                 </tr>
+                
+            {% endfor %}
             {% endfor %}
         </tbody>
     </table>

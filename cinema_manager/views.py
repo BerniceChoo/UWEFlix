@@ -7,6 +7,12 @@ import re
 import string
 import random
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+from bson.binary import Binary
+import io
+from PIL import Image
+from django.core.files.uploadedfile import InMemoryUploadedFile
+import base64
 
 client = pymongo.MongoClient("mongodb+srv://daniel2fernandes:skelJ6UzCVlG36Ei@uweflix.l8xahep.mongodb.net/?retryWrites=true&w=majority")
 # database
@@ -471,6 +477,19 @@ def films_list(request):
         query = {'Name': {'$regex': regex}}
         cursor = Films.find(query)
 
+        image_list = []
+        for document in cursor:
+            image_data = document.get('Image')
+            if image_data:
+                try:
+                    encoded_image = base64.b64encode(image_data).decode('utf-8')  # decode image data from Binary format
+                    img = Image.open(io.BytesIO(encoded_image.encode('latin1'))).convert('RGB')  # create Image instance from decoded image data
+                    image_dict = {'Image': img}
+                    image_list.append(image_dict)
+                    print("added")
+                except Exception as e:
+                    print(f'Error processing image "{image_data}": {e}')
+
         #joins showings and films collection, soo that we can see if a film is out for a showing, if it is the film cant be deleted
         pipeline = [
             {
@@ -506,11 +525,11 @@ def films_list(request):
         result = client['test']['Films'].aggregate(pipeline)
 
         data = [doc for doc in result]
-    
         context = {
             'cursor': cursor,
             'search_query': search_query,
             'data': data,
+            'image_list': image_list,
         }
         return render(request, 'cinema_manager/film_list.html', context)
     else:
@@ -526,10 +545,20 @@ def create_film(request):
             duration = request.POST['duration']
             trailerdesc = request.POST['trailerdesc']
 
+
+            image_file = request.FILES['image']
+            img = Image.open(image_file)
+            img_io = io.BytesIO()
+            img.save(img_io, format='PNG')
+            img_io.seek(0)
+            image_data = img_io.read()
+            encoded_image = Binary(image_data)
+
             document={"Name": filmname,
                     "Rating": agerating,
                     "Duration": duration,
                     "TrailerDescription": trailerdesc,
+                    "Image": encoded_image,
                         }
             Films.insert_one(document)
 
