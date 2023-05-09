@@ -7,7 +7,7 @@ urlpatterns = [
     path('select_date/', views.select_date, name='selectdate'),
     path('view_data/', views.view_data, name='view_data'),
 
-    path('view_data/ticket/', views.ticket, name='ticket'),
+    path('view_data/ticket/<str:pk>/', views.ticket, name='ticket'),
     path('view_data/ticket/book_tickets/', views.book_tickets, name='book_tickets'),
     path('view_data/ticket/book_tickets/payment/', views.payment, name='payment'),
     path('view_data/ticket/book_tickets/booking_confirmation/', views.confirmation, name='confirmation'),

@@ -22,37 +22,33 @@
 <br>
 
 <div class="w3-container w3-card w3-round">
-    <p>Selected Movie: {{ selected_data }} </p>
+    <p>Selected Movie: </p>
     <table class="">
         <thead>
             <tr>
-                <th scope="col">Images</th>
-                <th scope="col">Date</th>
-                <th scope="col">Time</th>
-                <th scope="col">Film Title</th>
-                <th scope="col">Trailer Description</th>
-                <th scope="col">Age Rating</th>
-                <th scope="col">Duration</th>
+                <th scope="col" class="w3-blue">Images</th>
+                <th scope="col" class="w3-blue">Film Name</th>
+                <th scope="col" class="w3-blue">Age Rating</th>
+                <th scope="col" class="w3-blue">Duration</th>
+                <th scope="col" class="w3-blue">Trailer Description</th>
             </tr>
         </thead>
         <tbody>
-            {% for i in results %}
-
+            {% for i in cursor %}
                 <tr>
-                    <td scope="row">
+                    <th scope="row">
                         <img style="height: 100px; width: auto;" src="{{ todos.name }}" class="card-img-top" alt="...">
-                    </td>
-                    <td>{{ i.date }}</td>
-                    <td>{{ i.showingTime }}</td>
-                    <td>{{ i.filmTitle }}</td>
-                    <td>{{ i.trailerDescription }}</td>
-                    <td>{{ i.ageRating }}</td>
-                    <td>{{ i.filmDuration }}</td>
+                    </th>
+                    <th scope="row">{{ i.Name }}</th>
+                    <td>{{ i.Rating }}</td>
+                    <td>{{ i.Duration }}</td>
+                    <td>{{ i.TrailerDescription }}</td>
+
+                   
 
                     
                 </tr>
             {% endfor %}
-            
         </tbody>
     </table>
     <br>
@@ -62,7 +58,7 @@
             <input type="number" name="tickets" id="tickets" min="1" max="10" value="1">
             <br>
             <p> </p>
-            <button type="submit" class="w3-button w3-green button4" style="margin-right: 10px;" href="{% url 'cust:payment'%}"> Proceed to Booking</button>
+            <button type="submit" class="w3-button w3-green button4" style="margin-right: 10px;" href="{% url 'cust:payment'%}"> Proceed to Payment</button>
         </center></form>
     {% comment %} </table>
         <table class="">

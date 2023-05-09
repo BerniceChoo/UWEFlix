@@ -24,13 +24,14 @@
     <table class="">
         <thead>
             <tr>
-                <th scope="col">Images</th>
-                <th scope="col">Date</th>
-                <th scope="col">Time</th>
-                <th scope="col">Film Title</th>
-                <th scope="col">Trailer Description</th>
-                <th scope="col">Age Rating</th>
-                <th scope="col">Duration</th>
+                <th scope="col" class="w3-blue">Images</th>
+                <th scope="col" class="w3-blue">Date</th>
+                <th scope="col" class="w3-blue">Time</th>
+                <th scope="col" class="w3-blue">Film Title</th>
+                <th scope="col" class="w3-blue">Trailer Description</th>
+                <th scope="col" class="w3-blue">Age Rating</th>
+                <th scope="col" class="w3-blue">Duration</th>
+                <th scope="col" class="w3-blue"></th>
             </tr>
         </thead>
         <tbody>
@@ -46,30 +47,17 @@
                     <td>{{ i.trailerDescription }}</td>
                     <td>{{ i.ageRating }}</td>
                     <td>{{ i.filmDuration }}</td>
+                    <td>
+                        {% load custom_filters %}
+                        <a class="w3-button w3-green button4" style="margin-right: 10px;" href="{% url 'cust:ticket' i|get_id %}">Select Showing</a>
+                        <br>
+                    </td>
                     
 
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-    <p><center> Select a Movie</center></p>
-                        <table class="">
-                            {% comment %} <form action="{% url 'test' %}" method="get">
-                                <label>Select:</label>
-                                <input type="stringformat" name="data" id="data">
-                                <br>
-                                <button type="submit">View Data</button>
-                            </form> {% endcomment %}
-                            <form action="{% url 'cust:ticket' %}" method="get"><center>
-                                <select name="data" id="data">
-                                    {% for movie in movies %}
-                                    <option value="{{ movie.filmTitle }}">{{ movie.filmTitle }}</option>
-                                    {% endfor %}
-                                </select>
-                                <p> </p>
-                                <input class="w3-button w3-green button4" style="margin-right: 10px;" type="submit" value="Submit">
-                            </center></form>
-                        </table>
      <br>
     {% elif not data %}
     <h1 class="w3-margin"><center>There are no showings on the {{selected_date}}</center></h1>

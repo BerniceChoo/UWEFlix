@@ -83,16 +83,50 @@ def view_data(request):
     context = {'results': results, 'selected_date': selected_date, 'movies': movies, 'data': data}
     return render(request, 'cust/data_view.html', context)
 
+def ticket(request, pk, message=None):
+        
+        Showings_id = ObjectId(pk)
+
+        results = Showings.find_one({ "_id" : Showings_id })
+        #selected_data = request.GET.get('data')
+        film_name = results["filmTitle"]
+        showing_date = results["date"]
+        
+        regex = re.compile(film_name, re.IGNORECASE)
+        query = {'Name': {'$regex': regex}}
+
+        cursor = Films.find(query)
+
+        if request.POST.get('tickets'):
+            numb_of_tickets = int(request.POST.get('tickets'))
+
+            tickets_available = results["ticketsLeft"]
+
+
+            if numb_of_tickets > tickets_available:
+                print("not ennough tickets")
+                message = (f"There are not enough tickets available. \n Tickets Available: {tickets_available} ")
+                return redirect('view-film-error-st',pk=pk , message=message)
+
+    
+        context = {
+            'cursor': cursor,
+            'film_id': pk,
+            'date': showing_date,
+            'message': message,
+            'results': results,
+        }
+        return render(request, 'cust/ticket.html', context)
 
 def confirmation(request):
     number = random.randint(1, 10000000)
     return render(request, 'cust/confirmation.html', {'number': number})
 
-def ticket(request):
-    selected_data = request.GET.get('data')
-    results = Showings.find({'filmTitle': selected_data})
-    context = {'results': results, 'selected_data': selected_data}
-    return render(request, 'cust/ticket.html', context)
+# def ticket(request):
+#     selected_data = request.GET.get('data')
+#     results = Showings.find({'filmTitle': selected_data})
+#     context = {'results': results, 'selected_data': selected_data}
+#     return render(request, 'cust/ticket.html', context)
 
 def book_tickets(request):
     selected_ticketsnum = request.GET.get('tickets')
